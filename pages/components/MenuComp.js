@@ -6,8 +6,6 @@ import { Button, Switch, Card, Chip, Spinner, Spacer } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTruckFast } from "@fortawesome/free-solid-svg-icons";
-import { LoginForm, useLoginModal } from "./LoginForm";
-import DynamicModal from "./DynamicModal";
 
 const MenuComp = () => {
   const [isLoggedInTF] = useCookies(["isLoggedInTF"]);
@@ -18,15 +16,6 @@ const MenuComp = () => {
   const [switchStates, setSwitchStates] = useState({});
 
   const router = useRouter();
-
-  const {
-    isLoginModalOpen,
-    isLoggedIn,
-    openLoginModal,
-    closeModal,
-    modalContent,
-    modalTitle,
-  } = useLoginModal();
 
   useEffect(() => {
     async function fetchData() {
@@ -53,6 +42,7 @@ const MenuComp = () => {
     fetchData();
   }, []);
 
+  //MARK: Switch Handle
   const handleSwitchChange = (day, menuId, value) => {
     console.log("Menu ID:", menuId);
     console.log("Value:", value);
@@ -131,6 +121,7 @@ const MenuComp = () => {
                       </p>
                     </div>
                     <div className="flex  items-center justify-between border rounded-full mt-2 pr-2">
+                      {/* MARK: Switch */}
                       <Switch
                         size="lg"
                         color="success"
@@ -144,6 +135,7 @@ const MenuComp = () => {
                           // Check if the user is logged in
                           const isLoggedIn =
                             document.cookie.includes("isLoggedInTF=true");
+
                           console.log("Is logged in:", isLoggedIn);
                           if (isLoggedIn) {
                             // Proceed with handling the switch change and pass 'day' as an argument
@@ -153,8 +145,7 @@ const MenuComp = () => {
                               value
                             );
                           } else {
-                            // Show login modal if the user is not logged in
-                            openLoginModal();
+                            router.push("/login");
                           }
                         }}
                       >
@@ -209,13 +200,6 @@ const MenuComp = () => {
           </div>
         </Card>
       ))}
-      <DynamicModal
-        isOpen={isLoginModalOpen}
-        onClose={closeModal}
-        title={modalTitle}
-      >
-        {modalContent}
-      </DynamicModal>
     </div>
   );
 };

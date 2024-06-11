@@ -30,4 +30,33 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .text_heading {
+  }
+
+  .text_subheading {
+    font-weight: 500;
+    font-size: 1.25rem /* 20px */;
+    line-height: 1.75rem /* 28px */;
+  }
+
+  .text_body {
+  }
+
+  .text_tiny {
+  }
+
+  .mb_akm {
+    margin-bottom: 0.75rem /* 12px */;
+  }
+  .mt_akm {
+    margin-top: 0.75rem /* 12px */;
+  }
+}
+
+@font-face {
+  font-family: "budge";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/Budge-Regular.otf") format("opentype");
 }

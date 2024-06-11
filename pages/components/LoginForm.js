@@ -1,55 +1,12 @@
-// LoginForm.js
+// ./components/LoginForm.js
 import React, { useState, useMemo } from "react";
 import { Input, Button as ModalButton } from "@nextui-org/react";
-import UserProfileForm from "./UserProfileForm";
 
-const useLoginModal = () => {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
-  const [modalTitle, setModalTitle] = useState("");
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setIsLoginModalOpen(false);
-  };
-
-  const openLoginModal = () => {
-    setModalTitle("Log in");
-    setModalContent(<LoginForm onLogin={handleLogin} />);
-    setIsLoginModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsLoginModalOpen(false);
-    setModalContent(null);
-    setModalTitle("");
-  };
-
-  return {
-    isLoginModalOpen,
-    isLoggedIn,
-    openLoginModal,
-    closeModal,
-    modalContent,
-    modalTitle,
-  };
-};
-
-const LoginForm = ({ onLogin }) => {
+const LoginForm = () => {
   const [value, setValue] = useState("");
   const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [error, setError] = useState(null);
-
-  const {
-    isLoginModalOpen,
-    isLoggedIn,
-    openLoginModal,
-    closeModal,
-    modalContent,
-    modalTitle,
-  } = useLoginModal();
 
   const validatePhoneNumber = (value) => /^(01)\d{9}$/.test(value);
   const isInvalid = useMemo(() => {
@@ -57,6 +14,7 @@ const LoginForm = ({ onLogin }) => {
     return !validatePhoneNumber(value);
   }, [value]);
 
+  //MARK: SendOTP
   const handleSendOTP = async () => {
     if (isInvalid) return;
 
@@ -91,6 +49,7 @@ const LoginForm = ({ onLogin }) => {
     }
   };
 
+  //MARK: VerifyOTP
   const handleVerifyOTP = async (setModalContent) => {
     try {
       const response = await fetch(
@@ -110,17 +69,8 @@ const LoginForm = ({ onLogin }) => {
       console.log("OTP verification result:", data);
 
       if (data.status === "success") {
-        // Store the session token securely in local storage
-        localStorage.setItem("sessionTokenTF", data.token);
-
         // Set user as logged in
-        document.cookie = "isLoggedInTF=true; path=/; secure; samesite=strict";
-
-        // Call onLogin prop to set user as logged in
-        onLogin();
-
-        // Set the modal content to UserProfileForm component
-        setModalContent(<UserProfileForm />);
+        document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict`;
       } else {
         setError(data.message || "Failed to verify OTP. Please try again.");
       }
@@ -132,15 +82,6 @@ const LoginForm = ({ onLogin }) => {
 
   return (
     <div>
-      {/* <div
-        class="flex items-center bg-blue-500 text-white text-sm  px-4 py-3"
-        role="alert"
-      >
-        <p>
-          {" "}
-          Please login and recharge your TummyFull wallet to enable this order.
-        </p>
-      </div> */}
       <div className=" text_subheading mb_akm ">Login</div>
       <div>
         <Input
@@ -193,4 +134,4 @@ const LoginForm = ({ onLogin }) => {
   );
 };
 
-export { LoginForm, useLoginModal };
+export default LoginForm; // Making LoginForm the default export
