@@ -16,14 +16,23 @@
   }
 }
 
+@font-face {
+  font-family: "montserrat";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/montserrat/Montserrat-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "budge";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/Budge-Regular.otf") format("opentype");
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: "montserrat";
 }
 
 @layer utilities {
@@ -52,11 +61,23 @@ body {
   .mt_akm {
     margin-top: 0.75rem /* 12px */;
   }
-}
 
-@font-face {
-  font-family: "budge";
-  font-style: normal;
-  font-weight: 400;
-  src: url("/fonts/Budge-Regular.otf") format("opentype");
+  .text_black {
+    color: #1f2937;
+  }
+
+  .bg_green {
+    background-color: #004225;
+  }
+  .bg_beige {
+    background-color: #f5f5dc;
+  }
+
+  .bg_orange {
+    background-color: #ffb000;
+  }
+
+  .bg_light_orange {
+    background-color: #ffcf9d;
+  }
 }

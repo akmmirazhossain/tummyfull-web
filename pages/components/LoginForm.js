@@ -1,12 +1,15 @@
 // ./components/LoginForm.js
 import React, { useState, useMemo } from "react";
 import { Input, Button as ModalButton } from "@nextui-org/react";
+import { useRouter } from "next/router";
 
 const LoginForm = () => {
   const [value, setValue] = useState("");
   const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [error, setError] = useState(null);
+
+  const router = useRouter();
 
   const validatePhoneNumber = (value) => /^(01)\d{9}$/.test(value);
   const isInvalid = useMemo(() => {
@@ -71,6 +74,7 @@ const LoginForm = () => {
       if (data.status === "success") {
         // Set user as logged in
         document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict`;
+        router.push("/profile");
       } else {
         setError(data.message || "Failed to verify OTP. Please try again.");
       }

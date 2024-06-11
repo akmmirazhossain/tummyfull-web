@@ -2,10 +2,12 @@
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Providers } from "./providers";
+import Link from "next/link";
 
 const Layout = ({ children, title }) => {
   return (
-    <>
+    <div className="bg_light_orange text_black">
       <Head>
         <title>{title ? title : "TummyFull"}</title>
         {/* Other head meta tags, stylesheets, scripts, etc. */}
@@ -17,7 +19,7 @@ const Layout = ({ children, title }) => {
       <footer>
         <Footer />
       </footer>
-    </>
+    </div>
   );
 };
 
