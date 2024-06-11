@@ -2,8 +2,6 @@
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Providers } from "./providers";
-import Link from "next/link";
 
 const Layout = ({ children, title }) => {
   return (
