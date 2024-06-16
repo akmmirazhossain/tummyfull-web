@@ -5,7 +5,7 @@ export default function Menu({ menu }) {
   return (
     <>
       <Layout>
-        <div>Wallter page</div>
+        <div>Wallet page</div>
       </Layout>
     </>
   );

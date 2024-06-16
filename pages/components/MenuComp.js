@@ -26,9 +26,15 @@ const MenuComp = () => {
   useEffect(() => {
     async function fetchData() {
       try {
+        const tokenQueryParam = cookies.TFLoginToken
+          ? `?TFLoginToken=${cookies.TFLoginToken}`
+          : "";
+
+        // Fetch menu data
         const menuRes = await fetch(
-          "http://192.168.0.216/tf-lara/public/api/menu"
+          `http://192.168.0.216/tf-lara/public/api/menu${tokenQueryParam}`
         );
+
         const menuData = await menuRes.json();
         setMenu(menuData);
 
@@ -51,22 +57,14 @@ const MenuComp = () => {
   //MARK: SwitchStatus
   useEffect(() => {
     async function fetchSwitchStates() {
-      // Simulate fetching the initial switch states
-      // For now, we'll just set a dummy value. Replace this with an actual API call.
-      const initialStates = {
-        // Assuming you have menu IDs to check their state
-        // For example:
-        menu_id_1: true,
-        menu_id_2: false,
-        // Add more as needed
-      };
-      setSwitchStates(initialStates);
+      console.log("Inside fetchSwitchStates");
     }
     fetchSwitchStates();
   }, []);
 
   //MARK: SwitchChange
   const handleSwitchChange = async (day, menuId, value) => {
+    console.log("Inside handleSwitchChange");
     setSwitchStates((prev) => ({
       ...prev,
       [menuId]: value,
@@ -74,7 +72,6 @@ const MenuComp = () => {
     // Prepare data for API call
     const data = {
       menuId,
-      TFLoginToken: cookies.TFLoginToken,
       date: menu[day].date,
       makeOrder: value,
     };
@@ -240,7 +237,6 @@ const MenuComp = () => {
                         startContent={
                           <FontAwesomeIcon icon={faCheck} size="2x" />
                         }
-                        isSelected={switchStates[menu[day].menu_id_lunch]}
                         onValueChange={(value) => {
                           const TFLoginToken =
                             cookies.TFLoginToken && cookies.TFLoginToken !== "";

@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUtensils,
   faUser,
-  faWallet,
+  faBell,
   faRightToBracket,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
@@ -32,8 +32,8 @@ export default function NavbarTop() {
     },
     {
       href: "#",
-      icon: faWallet,
-      text: "Wallet",
+      icon: faBell,
+      text: "Notifications",
     },
   ];
   return (

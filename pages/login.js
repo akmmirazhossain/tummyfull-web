@@ -1,8 +1,8 @@
-// pages/login.js
+// pages/index.js
 import Layout from "./layout/Layout";
 import LoginForm from "./components/LoginForm";
 
-export default function Login() {
+export default function Menu() {
   return (
     <>
       <Layout>

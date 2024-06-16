@@ -1,8 +1,8 @@
 // pages/index.js
 import Layout from "./layout/Layout";
-import MenuComp from "./components/MenuComp";
+import MenuComp from "./components/menu2";
 
-export default function Menu({ menu }) {
+export default function Menu() {
   return (
     <>
       <Layout>
