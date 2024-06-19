@@ -72,6 +72,7 @@ const MenuComp = () => {
     // Prepare data for API call
     const data = {
       menuId,
+      TFLoginToken: cookies.TFLoginToken,
       date: menu[day].date,
       makeOrder: value,
     };
@@ -244,6 +245,7 @@ const MenuComp = () => {
                             handleSwitchChange(
                               day,
                               menu[day].menu_id_lunch,
+
                               value
                             );
                           } else {
