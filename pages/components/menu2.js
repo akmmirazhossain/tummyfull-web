@@ -23,6 +23,8 @@ const MenuComp = () => {
   const [lunchOrderAcceptText, setLunchOrderAcceptText] = useState(true);
   const [dinnerOrderAcceptText, setDinnerOrderAcceptText] = useState(true);
   const [disabledSwitches, setDisabledSwitches] = useState({});
+  const [totalPrices, setTotalPrices] = useState({});
+
   useEffect(() => {
     //MARK: Fetch API
     async function fetchData() {
@@ -65,7 +67,7 @@ const MenuComp = () => {
 
     if (updatedMenuData[day].lunch.status === "disabled") {
       updatedMenuData[day].lunch.status = "enabled";
-      //updatedMenuData[day].lunch.quantity = 1; // Set quantity to 1 when enabling
+      updatedMenuData[day].lunch.quantity = 1; // Set quantity to 1 when enabling
       setLunchOrderAcceptText(false);
     } else {
       updatedMenuData[day].lunch.status = "disabled";
@@ -205,10 +207,8 @@ const MenuComp = () => {
     //BUTTON DISABLER
     const action = change > 0 ? "increment" : "decrement";
     const switchKey = `${day}-${menuId}-${action}`;
-
     // Check if the switch/button is disabled
     if (disabledSwitches[switchKey]) return;
-
     // Disable the specific switch/button
     setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
 
@@ -216,11 +216,32 @@ const MenuComp = () => {
     const currentQuantity = updatedMenuData[day][mealType].quantity;
 
     // SET QUANTITY RANGE
-    const newQuantity = Math.max(1, Math.min(5, currentQuantity + change));
+    const newQuantity = Math.max(
+      1,
+      Math.min(5, parseInt(currentQuantity, 10) + parseInt(change, 10))
+    );
+
+    // console.log("QuantityChange -> currentQuantity", currentQuantity);
+    // console.log("QuantityChange -> change", change);
+    // console.log("QuantityChange -> updatedMenuData", updatedMenuData);
+    // console.log("QuantityChange -> newQuantity", newQuantity);
 
     updatedMenuData[day][mealType].quantity = newQuantity;
 
     setMenuData(updatedMenuData);
+
+    console.log(
+      "QuantityChange -> Updated Price:",
+      updatedMenuData[day][mealType].price
+    );
+
+    //CALL CALCULATOR
+    // await calculateTotalPrice(
+    //   updatedMenuData[day][mealType].price,
+    //   newQuantity,
+    //   menuId,
+    //   date
+    // );
 
     // API CALLER
     const data = {
@@ -230,7 +251,7 @@ const MenuComp = () => {
       quantityValue: newQuantity,
     };
 
-    console.log("Quantity Data:", data);
+    console.log("QuantityChange -> Quantity Data:", data);
 
     try {
       const response = await fetch(
@@ -260,6 +281,7 @@ const MenuComp = () => {
     }
   };
 
+  //MARK: Price Calc
   const calculateTotalPrice = (price, quantity) => {
     const totalPrice = price * quantity;
 
@@ -310,9 +332,9 @@ const MenuComp = () => {
                       {menuData[day].lunch.price} BDT
                     </div>
                     <div className="mt-1">
-                      <span className="font-semibold">Status:</span>
                       <Switch
                         //MARK: Lunch Switch
+                        size="lg"
                         isSelected={menuData[day].lunch.status === "enabled"}
                         onValueChange={(value) => {
                           console.log("Lunch Switch triggered for day:", day);
@@ -331,58 +353,68 @@ const MenuComp = () => {
                           ? "Meal Enabled"
                           : "Enable Meal"}
                       </Switch>
-                      {firstDay === day && lunchOrderAcceptText && (
-                        <p className="text-gray-500 text-sm mt-1">
-                          Accepting this order till {settings.time_limit_lunch}
-                        </p>
-                      )}
+                      {firstDay === day &&
+                        lunchOrderAcceptText &&
+                        menuData[day].lunch.status !== "enabled" && (
+                          <p className="text-gray-500 text-sm mt-1">
+                            Accepting this order till{" "}
+                            {settings.time_limit_lunch}
+                          </p>
+                        )}
                       {menuData[day].lunch.status === "enabled" && (
                         <div className="mt-2">
-                          <span className="font-semibold">Quantity:</span>{" "}
-                          {menuData[day].lunch.quantity}
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              radius="full"
-                              isIconOnly
-                              isDisabled={
-                                disabledSwitches[
-                                  `${day}-${menuData[day].lunch.id}-decrement`
-                                ]
-                              }
-                              className="bg-blue-500 text-white"
-                              onClick={() =>
-                                handleQuantityChange(
-                                  day,
-                                  "lunch",
-                                  -1,
-                                  menuData[day].lunch.id,
-                                  menuData[day].date
-                                )
-                              }
-                            >
-                              -
-                            </Button>
-                            <Button
-                              radius="full"
-                              isIconOnly
-                              isDisabled={
-                                disabledSwitches[
-                                  `${day}-${menuData[day].lunch.id}-increment`
-                                ]
-                              }
-                              className="bg-blue-500 text-white"
-                              onClick={() =>
-                                handleQuantityChange(
-                                  day,
-                                  "lunch",
-                                  1,
-                                  menuData[day].lunch.id,
-                                  menuData[day].date
-                                )
-                              }
-                            >
-                              +
-                            </Button>
+                          <div className="grid grid-cols-2">
+                            <div>
+                              <span className="font-semibold">Quantity:</span>{" "}
+                              {menuData[day].lunch.quantity}
+                              <div className="flex items-center space-x-2">
+                                <Button
+                                  radius="full"
+                                  isIconOnly
+                                  isDisabled={
+                                    disabledSwitches[
+                                      `${day}-${menuData[day].lunch.id}-decrement`
+                                    ]
+                                  }
+                                  className="bg-blue-500 text-white"
+                                  onClick={() =>
+                                    handleQuantityChange(
+                                      day,
+                                      "lunch",
+                                      -1,
+                                      menuData[day].lunch.id,
+                                      menuData[day].date
+                                    )
+                                  }
+                                >
+                                  -
+                                </Button>
+                                <Button
+                                  radius="full"
+                                  isIconOnly
+                                  isDisabled={
+                                    disabledSwitches[
+                                      `${day}-${menuData[day].lunch.id}-increment`
+                                    ]
+                                  }
+                                  className="bg-blue-500 text-white"
+                                  onClick={() =>
+                                    handleQuantityChange(
+                                      day,
+                                      "lunch",
+                                      1,
+                                      menuData[day].lunch.id,
+                                      menuData[day].date
+                                    )
+                                  }
+                                >
+                                  +
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="flex items-center">
+                              <Checkbox>Auto order every week</Checkbox>
+                            </div>
                           </div>
                           <div className="mt-2">
                             <span className="font-semibold">Total Price:</span>{" "}
