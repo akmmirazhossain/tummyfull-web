@@ -15,6 +15,7 @@ import {
   faBell,
   faRightToBracket,
   faRightFromBracket,
+  faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
@@ -26,9 +27,9 @@ export default function NavbarTop() {
       text: "Menu",
     },
     {
-      href: "/profile",
-      icon: faUser,
-      text: "Profile",
+      href: "/settings",
+      icon: faGear,
+      text: "Settings",
     },
     {
       href: "#",

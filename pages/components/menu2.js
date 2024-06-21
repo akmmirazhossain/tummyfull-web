@@ -11,6 +11,7 @@ import {
   Spinner,
   Spacer,
   Checkbox,
+  Skeleton,
 } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassEnd } from "@fortawesome/free-solid-svg-icons";
@@ -59,12 +60,10 @@ const MenuComp = () => {
   };
 
   //MARK: Lunch Status
-  const handleLunchStatusChange = async (day, menuId, date, value) => {
+  const handleLunchStatusChange = async (day, menuId, date, value, price) => {
     checkAndRedirect(); // Ensure the user is authenticated
-
     //SWITCH STATUS CHANGER
     const updatedMenuData = { ...menuData };
-
     if (updatedMenuData[day].lunch.status === "disabled") {
       updatedMenuData[day].lunch.status = "enabled";
       updatedMenuData[day].lunch.quantity = 1; // Set quantity to 1 when enabling
@@ -73,6 +72,64 @@ const MenuComp = () => {
       updatedMenuData[day].lunch.status = "disabled";
       //updatedMenuData[day].lunch.quantity = 0; // Reset quantity to 0 when disabling
       setLunchOrderAcceptText(true);
+    }
+    setMenuData(updatedMenuData);
+    //SWITCH DISABLER
+    const switchKey = `${day}-${menuId}`;
+    if (disabledSwitches[switchKey]) return;
+    // Disable the specific switch
+    setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
+    // API CALLER
+    const data = {
+      menuId: menuId,
+      date: date,
+      TFLoginToken: cookies.TFLoginToken,
+      switchValue: value,
+      price: price,
+      quantity: 1,
+    };
+    console.log("API Data:", data);
+    try {
+      const response = await fetch(
+        "http://192.168.0.216/tf-lara/public/api/order-place",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to send data to the API");
+      }
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+    } catch (error) {
+      console.error("Error sending data to the API:", error.message);
+    } finally {
+      // SWITCH ENABLER
+      setTimeout(() => {
+        setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
+      }, 100);
+    }
+  };
+
+  //MARK: Dinner Status
+  const handleDinnerStatusChange = async (day, menuId, date, value, price) => {
+    checkAndRedirect(); // Ensure the user is authenticated
+
+    //SWITCH STATUS CHANGER
+    const updatedMenuData = { ...menuData };
+
+    if (updatedMenuData[day].dinner.status === "disabled") {
+      updatedMenuData[day].dinner.status = "enabled";
+      updatedMenuData[day].dinner.quantity = 1;
+      setDinnerOrderAcceptText(false);
+    } else {
+      updatedMenuData[day].dinner.status = "disabled";
+      //updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
+      setDinnerOrderAcceptText(true);
     }
     setMenuData(updatedMenuData);
 
@@ -84,10 +141,12 @@ const MenuComp = () => {
 
     // API CALLER
     const data = {
-      menuId,
-      date,
+      menuId: menuId,
+      date: date,
       TFLoginToken: cookies.TFLoginToken,
       switchValue: value,
+      price: price,
+      quantity: 1,
     };
 
     console.log("API Data:", data);
@@ -118,88 +177,6 @@ const MenuComp = () => {
         setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
       }, 100);
     }
-  };
-
-  //MARK: Dinner Status
-  // const handleDinnerStatusChange = async (day, menuId, date, value) => {
-  //   checkAndRedirect(); // Ensure the user is authenticated
-
-  //   //SWITCH STATUS CHANGER
-  //   const updatedMenuData = { ...menuData };
-
-  //   if (updatedMenuData[day].dinner.status === "disabled") {
-  //     updatedMenuData[day].dinner.status = "enabled";
-  //     updatedMenuData[day].dinner.quantity = 1; // Set quantity to 1 when enabling
-  //     setdinnerOrderAcceptText(false);
-  //   } else {
-  //     updatedMenuData[day].dinner.status = "disabled";
-  //     updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
-  //     setdinnerOrderAcceptText(true);
-  //   }
-  //   setMenuData(updatedMenuData);
-
-  //   //SWITCH DISABLER
-  //   const switchKey = `${day}-${menuId}`;
-  //   if (disabledSwitches[switchKey]) return; // Check if the specific switch is already disabled
-  //   // Disable the specific switch
-  //   setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
-
-  //   // Prepare data for API call
-  //   const data = {
-  //     menuId,
-  //     date,
-  //     TFLoginToken: cookies.TFLoginToken,
-  //     switchValue: value,
-  //   };
-
-  //   console.log("API Data:", data);
-
-  //   try {
-  //     const response = await fetch(
-  //       "http://192.168.0.216/tf-lara/public/api/order-place",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data),
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to send data to the API");
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log("API Response:", responseData);
-  //   } catch (error) {
-  //     console.error("Error sending data to the API:", error.message);
-  //   } finally {
-  //     setTimeout(() => {
-  //       // SWITCH ENABLER
-  //       setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
-  //     }, 200);
-  //   }
-  // };
-
-  // //MARK: Dinner Status
-  const handleDinnerStatusChange = (day) => async () => {
-    checkAndRedirect(); // Ensure the user is authenticated
-
-    // Create a copy of the menu data to update the state
-    const updatedMenuData = { ...menuData };
-
-    if (updatedMenuData[day].dinner.status === "disabled") {
-      updatedMenuData[day].dinner.status = "enabled";
-      updatedMenuData[day].dinner.quantity = 1; // Set quantity to 1 when enabling
-      setDinnerOrderAcceptText(false);
-    } else {
-      updatedMenuData[day].dinner.status = "disabled";
-      updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
-      setDinnerOrderAcceptText(true);
-    }
-
-    setMenuData(updatedMenuData);
   };
 
   //MARK: Quantity Chng
@@ -236,12 +213,12 @@ const MenuComp = () => {
     );
 
     //CALL CALCULATOR
-    // await calculateTotalPrice(
-    //   updatedMenuData[day][mealType].price,
-    //   newQuantity,
-    //   menuId,
-    //   date
-    // );
+    const totalPrice = calculateTotalPrice(
+      updatedMenuData[day][mealType].price,
+      newQuantity
+    );
+
+    console.log("QuantityChange -> calcprice:", totalPrice);
 
     // API CALLER
     const data = {
@@ -249,6 +226,7 @@ const MenuComp = () => {
       date,
       TFLoginToken: cookies.TFLoginToken,
       quantityValue: newQuantity,
+      totalPrice: totalPrice,
     };
 
     console.log("QuantityChange -> Quantity Data:", data);
@@ -291,22 +269,74 @@ const MenuComp = () => {
     return Math.floor(discountedPrice); // Round down to nearest integer
   };
 
+  const dayMap = {
+    fri: "Friday",
+    sat: "Saturday",
+    sun: "Sunday",
+    mon: "Monday",
+    tue: "Tuesday",
+    wed: "Wednesday",
+    thu: "Thursday",
+  };
+
   if (!menuData || !settings) {
-    return <div>Loading...</div>; // You can show a loading indicator while fetching data
+    return (
+      <div>
+        <h1 className="text-3xl font-bold text-center my-6">Weekly Menu</h1>
+        <Card className="h-96 p-6 mb-6">
+          <div>
+            <Skeleton className="rounded-lg h-8 w-60 "></Skeleton>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6 mt-6 h-full">
+            <div>
+              <Skeleton className="rounded-lg h-full"></Skeleton>
+            </div>
+            <div>
+              <Skeleton className="rounded-lg h-full"></Skeleton>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="h-96 p-6">
+          <div>
+            <Skeleton className="rounded-lg h-8 w-60 "></Skeleton>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6 mt-6 h-full">
+            <div>
+              <Skeleton className="rounded-lg h-full"></Skeleton>
+            </div>
+            <div>
+              <Skeleton className="rounded-lg h-full"></Skeleton>
+            </div>
+          </div>
+        </Card>
+      </div>
+    ); // You can show a loading indicator while fetching data
   }
 
   const days = Object.keys(menuData);
   const firstDay = days[0];
 
   return (
-    <div className="p-6 text-gray-900">
-      <h1 className="text-3xl font-bold text-center mb-6">Weekly Menu</h1>
+    <div className=" ">
+      <h1 className="text-3xl font-bold text-center my-6">Weekly Menu</h1>
       <div className="space-y-8">
         {days.map((day) => (
           <div key={day} className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold text-blue-600 mb-4">
-              {menuData[day].date} - {menuData[day].menu_of}
-            </h2>
+            <div className="flex items-center">
+              <div className="text-2xl font-semibold text-blue-600">
+                {menuData[day].menu_of}
+              </div>
+              <Chip
+                radius="full"
+                variant="shadow"
+                className="ml-2 px-2 py-4 text-md bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
+              >
+                {dayMap[day]}, {menuData[day].date}
+              </Chip>
+            </div>
             <div className="grid grid-cols-2 gap-6">
               {/* Lunch */}
               <div>
@@ -342,7 +372,8 @@ const MenuComp = () => {
                             day,
                             menuData[day].lunch.id,
                             menuData[day].date,
-                            value
+                            value,
+                            menuData[day].lunch.price
                           );
                         }}
                         isDisabled={
@@ -418,10 +449,13 @@ const MenuComp = () => {
                           </div>
                           <div className="mt-2">
                             <span className="font-semibold">Total Price:</span>{" "}
-                            {calculateTotalPrice(
-                              menuData[day].lunch.price,
-                              menuData[day].lunch.quantity
-                            )}{" "}
+                            {
+                              //MARK: Total Price
+                              calculateTotalPrice(
+                                menuData[day].lunch.price,
+                                menuData[day].lunch.quantity
+                              )
+                            }{" "}
                             BDT
                             {menuData[day].lunch.quantity > 1 && (
                               <span className="text-gray-500">
@@ -466,40 +500,97 @@ const MenuComp = () => {
                   {menuData[day].dinner.price} BDT
                 </div>
                 <div className="mt-1">
-                  <span className="font-semibold">Status:</span>{" "}
                   <Switch
                     //MARK: Dinner Switch
+                    size="lg"
                     isSelected={menuData[day].dinner.status === "enabled"}
-                    onValueChange={handleDinnerStatusChange(day)}
+                    onValueChange={(value) => {
+                      console.log("Dinner Switch triggered for day:", day);
+                      handleDinnerStatusChange(
+                        day,
+                        menuData[day].dinner.id,
+                        menuData[day].date,
+                        value,
+                        menuData[day].dinner.price
+                      );
+                    }}
+                    isDisabled={
+                      disabledSwitches[`${day}-${menuData[day].dinner.id}`]
+                    }
                   >
                     {menuData[day].dinner.status === "enabled"
                       ? "Meal Enabled"
                       : "Enable Meal"}
                   </Switch>
-                  {firstDay === day && dinnerOrderAcceptText && (
-                    <p className="text-gray-500 text-sm mt-1">
-                      Accepting this order till {settings.time_limit_dinner}
-                    </p>
-                  )}
+                  {firstDay === day &&
+                    dinnerOrderAcceptText &&
+                    menuData[day].dinner.status !== "enabled" && (
+                      <p className="text-gray-500 text-sm mt-1">
+                        Accepting this order till {settings.time_limit_dinner}
+                      </p>
+                    )}
                   {menuData[day].dinner.status === "enabled" && (
                     <div className="mt-2">
                       <span className="font-semibold">Quantity:</span>{" "}
                       {menuData[day].dinner.quantity}
                       <div className="flex items-center space-x-2">
-                        <button
+                        {/* <button
                           className="bg-blue-500 text-white px-2 py-1 rounded"
                           onClick={() =>
                             handleQuantityChange(day, "dinner", -1)
                           }
                         >
                           -
-                        </button>
-                        <button
+                        </button> */}
+                        <Button
+                          radius="full"
+                          isIconOnly
+                          isDisabled={
+                            disabledSwitches[
+                              `${day}-${menuData[day].dinner.id}-decrement`
+                            ]
+                          }
+                          className="bg-blue-500 text-white"
+                          onClick={() =>
+                            handleQuantityChange(
+                              day,
+                              "dinner",
+                              -1,
+                              menuData[day].dinner.id,
+                              menuData[day].date
+                            )
+                          }
+                        >
+                          -
+                        </Button>
+                        {/* <button
                           className="bg-blue-500 text-white px-2 py-1 rounded"
                           onClick={() => handleQuantityChange(day, "dinner", 1)}
                         >
                           +
-                        </button>
+                        </button> */}
+
+                        <Button
+                          radius="full"
+                          isIconOnly
+                          isDisabled={
+                            disabledSwitches[
+                              `${day}-${menuData[day].dinner.id}-increment`
+                            ]
+                          }
+                          className="bg-blue-500 text-white"
+                          onClick={() =>
+                            handleQuantityChange(
+                              day,
+                              "dinner",
+                              1,
+                              menuData[day].dinner.id,
+                              menuData[day].date
+                            )
+                          }
+                        >
+                          +
+                        </Button>
                       </div>
                       <div className="mt-2">
                         <span className="font-semibold">Total Price:</span>{" "}

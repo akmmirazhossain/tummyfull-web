@@ -74,7 +74,7 @@ const LoginForm = () => {
       if (data.status === "success") {
         // Set user as logged in
         document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict`;
-        router.push("/profile");
+        router.push("/settings");
       } else {
         setError(data.message || "Failed to verify OTP. Please try again.");
       }

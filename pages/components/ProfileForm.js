@@ -1,9 +1,11 @@
 // components/ProfileForm.js
-import { Button, Input, Spacer } from "@nextui-org/react";
+import { Button, Input, Spacer, Tooltip } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router"; // Import useRouter
 import React from "react";
 import { useCookies } from "react-cookie";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 // Function to fetch user data using the token
 const fetchUserData = async (token) => {
@@ -115,11 +117,13 @@ const ProfileForm = () => {
         onSubmit={handleSubmit}
         style={{ maxWidth: "400px", margin: "0 auto" }}
       >
-        <h3 className="text-3xl">User Form</h3>
+        <h3 className="text-2xl">Profile Settings</h3>
         <span>Name</span>
         <Input
           clearable
+          required
           underlined
+          placeholder="Your full name"
           labelPlaceholder="Name"
           fullWidth
           name="name"
@@ -127,10 +131,16 @@ const ProfileForm = () => {
           onChange={handleChange}
         />
         <Spacer y={1} />
-        <span>Phone</span>
+        <div className="flex items-center">
+          <span>Phone</span>
+          <Tooltip color="foreground" content="Phone number verified">
+            <FontAwesomeIcon
+              icon={faCircleCheck}
+              className="text-md text-green-600 ml-1"
+            />
+          </Tooltip>
+        </div>
         <Input
-          clearable
-          underlined
           labelPlaceholder="Phone"
           fullWidth
           name="phone"
@@ -142,15 +152,21 @@ const ProfileForm = () => {
         <span>Address</span>
         <Input
           clearable
+          required
           underlined
           labelPlaceholder="Address"
+          placeholder="Flat no, House no, Road no, Block"
           fullWidth
           name="address"
           value={formData.address}
           onChange={handleChange}
         />
+        <span className="text-sm">
+          (Our service is limited within Bashundhara R/A only, soon we will
+          expand all over Dhaka.)
+        </span>
         <Spacer y={2} />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Update</Button>
       </form>
     </React.Fragment>
   );
