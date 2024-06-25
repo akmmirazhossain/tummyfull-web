@@ -29,24 +29,29 @@ const MealSettings = () => {
     }
   };
 
-  //MARK: lunchboxSw
-  const lunchboxSwitchChange = async (value) => {
+  //MARK: mealboxSw
+  const mealboxSwitchChange = async (value) => {
     checkAndRedirect();
     setIsOn(value);
     if (value == true) {
-      setPopOverOpen = true;
+      setPopOverOpen(true);
+      setTimeout(() => {
+        setPopOverOpen(false);
+      }, 8000);
+    } else {
+      setPopOverOpen(false);
     }
     try {
       const response = await axios.post(
-        "http://192.168.0.216/tf-lara/public/api/lunchbox-switch",
+        "http://192.168.0.216/tf-lara/public/api/mealbox-switch",
         {
           switchValue: value,
           TFLoginToken: cookies.TFLoginToken,
         }
       );
-      console.log("lunchboxSwitchChange -> API Response:", response.data);
+      console.log("mealboxSwitchChange -> API Response:", response.data);
     } catch (error) {
-      console.error("lunchboxSwitchChange -> API Error:", error);
+      console.error("mealboxSwitchChange -> API Error:", error);
     }
   };
 
@@ -64,11 +69,11 @@ const MealSettings = () => {
           },
         }
       );
-      const lunchboxStatus = response.data.data.mrd_user_lunchbox;
+      const mealboxStatus = response.data.data.mrd_user_mealbox;
 
       //console.log(isOn);
       // console.log("Phone:", response.data.data.phone);
-      setIsOn(lunchboxStatus);
+      setIsOn(mealboxStatus);
     } catch (error) {
       console.error("fetchUserData -> API Error:", error);
     }
@@ -86,7 +91,7 @@ const MealSettings = () => {
           <Image
             isBlurred
             width={240}
-            src="https://nextui-docs-v2.vercel.app/images/album-cover.png"
+            src="/images/tiffin_carrier.jpg"
             alt="NextUI Album Cover"
             className="m-5"
           />
@@ -94,14 +99,16 @@ const MealSettings = () => {
         <div className="col-span-4">
           <div className="flex justify-between border-b-2 p-2">
             <div className="flex items-center justify-center">
-              <h3 className="text-2xl">Activate mealbox</h3>
+              <h3 className="text-2xl">Activate personal mealbox</h3>
               <span className="ml-2 text-xl">(৳150)</span>
             </div>
-            <div className="relative ">
+            <div className=" ">
               <Popover
-                showArrow={false}
+                showArrow
                 color="foreground"
                 isOpen={popOverOpen}
+                offset={26}
+                crossOffset={22}
               >
                 <PopoverTrigger>
                   <Switch
@@ -110,11 +117,11 @@ const MealSettings = () => {
                     size="lg"
                     color="success"
                     onValueChange={(value) => {
-                      lunchboxSwitchChange(value);
+                      mealboxSwitchChange(value);
                     }}
                   ></Switch>
                 </PopoverTrigger>
-                <PopoverContent className="w-64 -top-[90px] -left-24 absolute">
+                <PopoverContent className="w-64 ">
                   <div className="px-1 py-2">
                     <div className="text-small font-bold">
                       Mealbox activated!
@@ -128,15 +135,18 @@ const MealSettings = () => {
             </div>
           </div>
           <div className="p-3">
-            We encourage our customers to make orders regularly and recive them
-            is food grade lunchboxes, here are the reasons why:
+            Why you should have a mealbox?
             <ul className="list-disc p-4">
               <li>
-                Healther alternative than one time use plastic containers.
+                Healthier alternative than one time use plastic containers.
               </li>
               <li>
-                The container's price (৳150) will be refunded if you wish
-                discontinue our service.
+                Total two mealboxes will be assigned to you, our delivery person
+                will collect the previous (empty) one and deliver you the new
+                one with food on each delivery.
+              </li>
+              <li>
+                ৳150 will be refunded if you deactivate the mealbox anytime.
               </li>
             </ul>
           </div>

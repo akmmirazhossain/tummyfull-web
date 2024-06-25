@@ -16,6 +16,7 @@ import {
   faRightToBracket,
   faRightFromBracket,
   faGear,
+  faListCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
@@ -26,15 +27,16 @@ export default function NavbarTop() {
       icon: faUtensils,
       text: "Menu",
     },
+
+    {
+      href: "/mealbook",
+      icon: faListCheck,
+      text: "Meal Book",
+    },
     {
       href: "/settings",
       icon: faGear,
       text: "Settings",
-    },
-    {
-      href: "#",
-      icon: faBell,
-      text: "Notifications",
     },
   ];
   return (
