@@ -21,6 +21,26 @@ const MealSettings = () => {
   const [cookies] = useCookies(["TFLoginToken"]);
   const router = useRouter();
 
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    // Fetch config.json on component mount
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("../../config.json"); // Adjust URL as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch config");
+        }
+        const data = await response.json();
+        setConfig(data);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+
+    fetchConfig();
+  }, []);
+
   const checkAndRedirect = () => {
     if (!cookies.TFLoginToken) {
       router.push("/login"); // Redirect to login page if the cookie is not available
@@ -42,46 +62,43 @@ const MealSettings = () => {
       setPopOverOpen(false);
     }
     try {
-      const response = await axios.post(
-        "http://192.168.0.216/tf-lara/public/api/mealbox-switch",
-        {
-          switchValue: value,
-          TFLoginToken: cookies.TFLoginToken,
-        }
-      );
+      const response = await axios.post(`${config.apiBaseUrl}mealbox-switch`, {
+        switchValue: value,
+        TFLoginToken: cookies.TFLoginToken,
+      });
       console.log("mealboxSwitchChange -> API Response:", response.data);
     } catch (error) {
       console.error("mealboxSwitchChange -> API Error:", error);
     }
   };
 
-  //MARK: FETCH USER
-  const fetchUserData = async () => {
-    const token = cookies.TFLoginToken;
+  useEffect(() => {
+    //MARK: FETCH USER
+    const fetchUserData = async () => {
+      if (!config) return; // Exit early if config is not yet fetched
 
-    try {
-      const response = await axios.get(
-        "http://192.168.0.216/tf-lara/public/api/user-fetch",
-        {
+      const { apiBaseUrl } = config;
+      const token = cookies.TFLoginToken;
+
+      try {
+        const response = await axios.get(`${apiBaseUrl}user-fetch`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
-      const mealboxStatus = response.data.data.mrd_user_mealbox;
+        });
+        const mealboxStatus = response.data.data.mrd_user_mealbox;
 
-      //console.log(isOn);
-      // console.log("Phone:", response.data.data.phone);
-      setIsOn(mealboxStatus);
-    } catch (error) {
-      console.error("fetchUserData -> API Error:", error);
-    }
-  };
+        //console.log(isOn);
+        // console.log("Phone:", response.data.data.phone);
+        setIsOn(mealboxStatus);
+      } catch (error) {
+        console.error("fetchUserData -> API Error:", error);
+      }
+    };
 
-  useEffect(() => {
     fetchUserData();
-  }, []);
+  }, [config]);
 
   return (
     <div className="w-4/5 py-10 mx-auto">

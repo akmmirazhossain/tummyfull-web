@@ -1,15 +1,35 @@
 // ./components/LoginForm.js
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Input, Button as ModalButton } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
 
 const LoginForm = () => {
   const [value, setValue] = useState("");
   const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [error, setError] = useState(null);
+  const [config, setConfig] = useState(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    // Fetch config.json on component mount
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("../../config.json"); // Adjust URL as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch config");
+        }
+        const data = await response.json();
+        setConfig(data);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+
+    fetchConfig();
+  }, []);
 
   const validatePhoneNumber = (value) => /^(01)\d{9}$/.test(value);
   const isInvalid = useMemo(() => {
@@ -22,16 +42,13 @@ const LoginForm = () => {
     if (isInvalid) return;
 
     try {
-      const response = await fetch(
-        "http://192.168.0.216/tf-lara/public/api/send-otp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ phoneNumber: value }),
-        }
-      );
+      const response = await fetch(`${config.apiBaseUrl}send-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phoneNumber: value }),
+      });
 
       console.log("Response status:", response.status);
 
@@ -55,26 +72,33 @@ const LoginForm = () => {
   //MARK: VerifyOTP
   const handleVerifyOTP = async (setModalContent) => {
     try {
-      const response = await fetch(
-        "http://192.168.0.216/tf-lara/public/api/verify-otp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ phoneNumber: value, otp: otp }),
-        }
-      );
+      const response = await fetch(`${config.apiBaseUrl}verify-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phoneNumber: value, otp: otp }),
+      });
 
-      console.log("Response status:", response.status);
+      console.log("handleVerifyOTP -> Response status:", response.status);
 
       const data = await response.json();
-      console.log("OTP verification result:", data);
+      console.log("handleVerifyOTP -> OTP verification result:", data);
 
       if (data.status === "success") {
         // Set user as logged in
         //document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict`;
-        document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict; HttpOnly`;
+        //document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict; HttpOnly`;
+
+        console.log(
+          "handleVerifyOTP -> data.status === success > token",
+          data.token
+        );
+        const token = data.token;
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 60); // Set expiry date 7 days from now
+
+        document.cookie = `TFLoginToken=${token}; expires=${expiryDate.toUTCString()}; path=/;`;
 
         router.push("/settings");
       } else {

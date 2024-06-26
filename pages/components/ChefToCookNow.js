@@ -3,12 +3,33 @@ import axios from "axios";
 
 const OrderList = () => {
   const [orderData, setOrderData] = useState(null);
-  const apiUrl = "http://192.168.0.216/tf-lara/public/api/orderlist-chef-now";
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    // Fetch config.json on component mount
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("../../config.json"); // Adjust URL as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch config");
+        }
+        const data = await response.json();
+        setConfig(data);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+
+    fetchConfig();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!config) return; // Exit early if config is not yet fetched
+
+      const { apiBaseUrl } = config;
       try {
-        const response = await axios.get(apiUrl);
+        const response = await axios.get(`${apiBaseUrl}orderlist-chef-now`);
         setOrderData(response.data);
       } catch (error) {
         console.error("Error fetching order data:", error);
@@ -16,7 +37,7 @@ const OrderList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [config]);
 
   return (
     <div className="p-4">

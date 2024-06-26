@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassEnd } from "@fortawesome/free-solid-svg-icons";
 
 const MenuComp = () => {
+  const [config, setConfig] = useState(null);
   const [menuData, setMenuData] = useState(null);
   const [cookies] = useCookies(["TFLoginToken"]);
   const router = useRouter();
@@ -24,33 +25,53 @@ const MenuComp = () => {
   const [lunchOrderAcceptText, setLunchOrderAcceptText] = useState(true);
   const [dinnerOrderAcceptText, setDinnerOrderAcceptText] = useState(true);
   const [disabledSwitches, setDisabledSwitches] = useState({});
-  const [totalPrices, setTotalPrices] = useState({});
+  // const [totalPrices, setTotalPrices] = useState({});
 
   useEffect(() => {
-    //MARK: Fetch API
-    async function fetchData() {
+    // Fetch config.json on component mount
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("../../config.json"); // Adjust URL as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch config");
+        }
+        const data = await response.json();
+        setConfig(data);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+
+    fetchConfig();
+  }, []);
+
+  useEffect(() => {
+    // Fetch data when cookies.TFLoginToken changes or config is fetched
+    const fetchData = async () => {
+      if (!config) return; // Exit early if config is not yet fetched
+
+      const { apiBaseUrl, imageBaseUrl } = config;
+
       try {
         // Fetch menu data
-        const res = await fetch(
-          `http://192.168.0.216/tf-lara/public/api/menu?TFLoginToken=${cookies.TFLoginToken}`
+        const menuRes = await fetch(
+          `${apiBaseUrl}menu?TFLoginToken=${cookies.TFLoginToken}`
         );
-        const data = await res.json();
-        setMenuData(data);
+        const menuData = await menuRes.json();
+        setMenuData(menuData);
 
         // Fetch settings data
-        const settingsRes = await fetch(
-          "http://192.168.0.216/tf-lara/public/api/setting"
-        );
+        const settingsRes = await fetch(`${apiBaseUrl}setting`);
         const settingsData = await settingsRes.json();
-        setSettings(settingsData); // Assuming setSettings is defined elsewhere in your code
+        setSettings(settingsData);
       } catch (error) {
         console.error("Error fetching data:", error);
         // Handle error as needed
       }
-    }
+    };
 
     fetchData();
-  }, [cookies.TFLoginToken]);
+  }, [config, cookies.TFLoginToken]);
   // Dependency array ensures useEffect runs when TFLoginToken changes
 
   const checkAndRedirect = () => {
@@ -90,16 +111,13 @@ const MenuComp = () => {
     };
     console.log("API Data:", data);
     try {
-      const response = await fetch(
-        "http://192.168.0.216/tf-lara/public/api/order-place",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(`${config.apiBaseUrl}order-place`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       if (!response.ok) {
         throw new Error("Failed to send data to the API");
       }
@@ -152,16 +170,13 @@ const MenuComp = () => {
     console.log("API Data:", data);
 
     try {
-      const response = await fetch(
-        "http://192.168.0.216/tf-lara/public/api/order-place",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(`${config.apiBaseUrl}order-place`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to send data to the API");
@@ -232,16 +247,13 @@ const MenuComp = () => {
     console.log("QuantityChange -> Quantity Data:", data);
 
     try {
-      const response = await fetch(
-        "http://192.168.0.216/tf-lara/public/api/quantity-changer",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(`${config.apiBaseUrl}quantity-changer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to send data to the API");
@@ -349,8 +361,8 @@ const MenuComp = () => {
                       {menuData[day].lunch.foods.map((food, index) => (
                         <div key={index} className="flex items-center">
                           <img
-                            src={`http://192.168.0.216/tf-lara/public/assets/images/${food.food_image}`}
-                            alt={food.food_name}
+                            src={`${config.imageBaseUrl}${food.food_image}`}
+                            alt={food.name}
                             className="w-12 h-12 rounded-full mr-4"
                           />
                           <span>{food.food_name}</span>
@@ -487,8 +499,8 @@ const MenuComp = () => {
                   {menuData[day].dinner.foods.map((food, index) => (
                     <div key={index} className="flex items-center">
                       <img
-                        src={`http://192.168.0.216/tf-lara/public/assets/images/${food.food_image}`}
-                        alt={food.food_name}
+                        src={`${config.imageBaseUrl}${food.food_image}`}
+                        alt={food.name}
                         className="w-12 h-12 rounded-full mr-4"
                       />
                       <span>{food.food_name}</span>
