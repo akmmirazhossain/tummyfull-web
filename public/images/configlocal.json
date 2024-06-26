@@ -1,0 +1,5 @@
+
+{
+  "apiBaseUrl": "http://192.168.0.216/tf-lara/public/api/",
+  "imageBaseUrl": "http://192.168.0.216/tf-lara/public/assets/images/"
+}
