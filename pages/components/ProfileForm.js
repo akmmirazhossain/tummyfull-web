@@ -3,13 +3,13 @@ import { Button, Input, Spacer, Tooltip } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router"; // Import useRouter
 import React from "react";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 const ProfileForm = () => {
   const router = useRouter();
-  const [cookies] = useCookies(["TFLoginToken"]);
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -19,7 +19,7 @@ const ProfileForm = () => {
   const [config, setConfig] = useState(null);
 
   useEffect(() => {
-    // Fetch config.json on component mount
+    checkAndRedirect();
     const fetchConfig = async () => {
       try {
         const response = await fetch("../../config.json"); // Adjust URL as needed
@@ -37,9 +37,10 @@ const ProfileForm = () => {
   }, []);
 
   useEffect(() => {
+    console.log("ProfileForm: useEffect > fetchUserData");
     const fetchUserData = async () => {
-      const token = cookies.TFLoginToken;
-
+      const token = Cookies.get("TFLoginToken");
+      console.log("fetchUserData -->".token);
       if (!config) return;
       const { apiBaseUrl } = config;
 
@@ -72,7 +73,17 @@ const ProfileForm = () => {
     };
 
     fetchUserData();
-  }, [cookies, router, config]);
+  }, [config]);
+
+  const checkAndRedirect = () => {
+    const token = Cookies.get("TFLoginToken");
+    if (!token) {
+      router.push("/login"); // Redirect to login page if the cookie is not available
+    } else {
+      //return cookies.TFLoginToken;
+      console.log("MealSettings: checkAndRedirect -> Token found");
+    }
+  };
 
   // Function to fetch user data using the token
 

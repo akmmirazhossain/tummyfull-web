@@ -7,7 +7,7 @@ const Layout = ({ children, title }) => {
   return (
     <div className="bg_light_orange text_black">
       <Head>
-        <title>{title ? title : "TummyFull"}</title>
+        <title>{title ? title : "খেয়েছ?"}</title>
         {/* Other head meta tags, stylesheets, scripts, etc. */}
       </Head>
       <header className="fixed w-full z-20">

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import {
   Image,
   Switch,
@@ -18,12 +18,12 @@ import { faBox, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 const MealSettings = () => {
   const [isOn, setIsOn] = useState(false);
   const [popOverOpen, setPopOverOpen] = useState(false);
-  const [cookies] = useCookies(["TFLoginToken"]);
   const router = useRouter();
 
   const [config, setConfig] = useState(null);
 
   useEffect(() => {
+    checkAndRedirect();
     // Fetch config.json on component mount
     const fetchConfig = async () => {
       try {
@@ -41,11 +41,42 @@ const MealSettings = () => {
     fetchConfig();
   }, []);
 
+  useEffect(() => {
+    //MARK: FETCH USER
+    const fetchUserData = async () => {
+      if (!config) return; // Exit early if config is not yet fetched
+
+      const { apiBaseUrl } = config;
+      const token = Cookies.get("TFLoginToken");
+
+      try {
+        const response = await axios.get(`${apiBaseUrl}user-fetch`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const mealboxStatus = response.data.data.mrd_user_mealbox;
+
+        //console.log(isOn);
+        // console.log("Phone:", response.data.data.phone);
+        setIsOn(mealboxStatus);
+      } catch (error) {
+        console.error("fetchUserData -> API Error:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [config]);
+
+  //REDIRECT IF NOT LOGGED IN
   const checkAndRedirect = () => {
-    if (!cookies.TFLoginToken) {
+    const token = Cookies.get("TFLoginToken");
+    if (!token) {
       router.push("/login"); // Redirect to login page if the cookie is not available
     } else {
-      return cookies.TFLoginToken;
+      //return cookies.TFLoginToken;
+      console.log("MealSettings: checkAndRedirect -> Token found");
     }
   };
 
@@ -71,34 +102,6 @@ const MealSettings = () => {
       console.error("mealboxSwitchChange -> API Error:", error);
     }
   };
-
-  useEffect(() => {
-    //MARK: FETCH USER
-    const fetchUserData = async () => {
-      if (!config) return; // Exit early if config is not yet fetched
-
-      const { apiBaseUrl } = config;
-      const token = cookies.TFLoginToken;
-
-      try {
-        const response = await axios.get(`${apiBaseUrl}user-fetch`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const mealboxStatus = response.data.data.mrd_user_mealbox;
-
-        //console.log(isOn);
-        // console.log("Phone:", response.data.data.phone);
-        setIsOn(mealboxStatus);
-      } catch (error) {
-        console.error("fetchUserData -> API Error:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [config]);
 
   return (
     <div className="w-4/5 py-10 mx-auto">

@@ -30,6 +30,14 @@
   src: url("/fonts/Budge-Regular.otf") format("opentype");
 }
 
+@font-face {
+  font-family: "nil-jannati";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/nil-jannati/nill-jannati-matra-bijoy52.ttf")
+    format("truetype");
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   font-family: "montserrat";

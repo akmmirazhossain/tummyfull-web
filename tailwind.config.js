@@ -19,6 +19,7 @@ module.exports = {
     },
     fontFamily: {
       budge: ["Budge"],
+      niljannati: ["nil-jannati"],
     },
   },
   darkMode: "class",

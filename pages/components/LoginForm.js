@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Input, Button as ModalButton } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 
 const LoginForm = () => {
   const [value, setValue] = useState("");
@@ -86,19 +86,11 @@ const LoginForm = () => {
       console.log("handleVerifyOTP -> OTP verification result:", data);
 
       if (data.status === "success") {
-        // Set user as logged in
-        //document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict`;
-        //document.cookie = `TFLoginToken=${data.token}; path=/; secure; samesite=strict; HttpOnly`;
-
         console.log(
           "handleVerifyOTP -> data.status === success > token",
           data.token
         );
-        const token = data.token;
-        const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 60); // Set expiry date 7 days from now
-
-        document.cookie = `TFLoginToken=${token}; expires=${expiryDate.toUTCString()}; path=/;`;
+        Cookies.set("TFLoginToken", data.token, { expires: 60, path: "/" });
 
         router.push("/settings");
       } else {
