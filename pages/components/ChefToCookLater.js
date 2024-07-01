@@ -1,88 +1,48 @@
-import { useEffect, useState } from "react";
+// components/MealList.js
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const OrderList = () => {
-  const [orderData, setOrderData] = useState(null);
-  const [config, setConfig] = useState(null);
+const MealList = () => {
+  const [meals, setMeals] = useState({});
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Fetch config.json on component mount
-    const fetchConfig = async () => {
-      try {
-        const response = await fetch("../../config.json"); // Adjust URL as needed
-        if (!response.ok) {
-          throw new Error("Failed to fetch config");
-        }
-        const data = await response.json();
-        setConfig(data);
-      } catch (error) {
-        console.error("Error fetching config:", error);
-      }
-    };
-
-    fetchConfig();
+    axios
+      .get("http://localhost/tf-lara/public/api/orderlist-chef-later")
+      .then((response) => {
+        setMeals(response.data);
+      })
+      .catch((error) => {
+        setError("Failed to fetch data");
+      });
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!config) return; // Exit early if config is not yet fetched
-
-      const { apiBaseUrl } = config;
-      try {
-        const response = await axios.get(`${apiBaseUrl}orderlist-chef-now`);
-        setOrderData(response.data);
-        console.log("🚀 ~ fetchData ~ response:", response);
-      } catch (error) {
-        console.error("Error fetching order data:", error);
-      }
-    };
-
-    fetchData();
-  }, [config]);
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">To cook now:</h1>
-      {orderData ? (
-        <div className="space-y-8">
-          {Object.keys(orderData).map((date) => (
-            <div key={date}>
-              <p className="text-xl">{orderData[date].message}</p>
-              <h2 className="text-xl font-semibold">{date}</h2>
-              <p>
-                <strong>Day:</strong> {orderData[date].day}
-              </p>
-              {["lunch", "dinner"].map(
-                (period) =>
-                  orderData[date][period] && (
-                    <div key={period}>
-                      <p>
-                        <strong>
-                          {period.charAt(0).toUpperCase() + period.slice(1)}:
-                        </strong>
-                      </p>
-                      <ul className="list-disc list-inside">
-                        {orderData[date][period].food_names.map(
-                          (food, index) => (
-                            <li key={index}>{food}</li>
-                          )
-                        )}
-                      </ul>
-                      <p>
-                        <strong>Total Quantity:</strong>{" "}
-                        {orderData[date][period].total_quantity}
-                      </p>
-                    </div>
-                  )
-              )}
-            </div>
-          ))}
+      {Object.entries(meals).map(([date, mealDetails]) => (
+        <div key={date} className="mb-6">
+          <h2 className="text-xl font-bold mb-2">{date}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Object.entries(mealDetails).map(([mealType, details]) => (
+              <div key={mealType} className="border p-4 rounded shadow-md">
+                <h3 className="text-lg font-semibold mb-1">{mealType}</h3>
+                <p className="mb-1">Foods: {details.food_names.join(", ")}</p>
+                <p className="mb-1">Total Quantity: {details.total_quantity}</p>
+                <p className="mb-1">Menu Price: {details.menu_price} Taka</p>
+                <p className="font-bold">
+                  Total Price: {details.total_price} Taka
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      ))}
     </div>
   );
 };
 
-export default OrderList;
+export default MealList;

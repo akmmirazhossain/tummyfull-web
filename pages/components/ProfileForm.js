@@ -80,7 +80,6 @@ const ProfileForm = () => {
     if (!token) {
       router.push("/login"); // Redirect to login page if the cookie is not available
     } else {
-      //return cookies.TFLoginToken;
       console.log("MealSettings: checkAndRedirect -> Token found");
     }
   };
@@ -97,7 +96,7 @@ const ProfileForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = cookies.TFLoginToken;
+    const token = Cookies.get("TFLoginToken");
 
     if (!token) {
       console.error("No login token found, redirecting to login");

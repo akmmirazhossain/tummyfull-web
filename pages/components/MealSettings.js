@@ -75,7 +75,6 @@ const MealSettings = () => {
     if (!token) {
       router.push("/login"); // Redirect to login page if the cookie is not available
     } else {
-      //return cookies.TFLoginToken;
       console.log("MealSettings: checkAndRedirect -> Token found");
     }
   };
@@ -95,7 +94,7 @@ const MealSettings = () => {
     try {
       const response = await axios.post(`${config.apiBaseUrl}mealbox-switch`, {
         switchValue: value,
-        TFLoginToken: cookies.TFLoginToken,
+        TFLoginToken: Cookies.get("TFLoginToken"),
       });
       console.log("mealboxSwitchChange -> API Response:", response.data);
     } catch (error) {

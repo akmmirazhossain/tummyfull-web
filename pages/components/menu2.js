@@ -1,7 +1,7 @@
 // pages/menu2.js
 
 import React, { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import {
   Button,
@@ -19,7 +19,7 @@ import { faHourglassEnd } from "@fortawesome/free-solid-svg-icons";
 const MenuComp = () => {
   const [config, setConfig] = useState(null);
   const [menuData, setMenuData] = useState(null);
-  const [cookies] = useCookies(["TFLoginToken"]);
+  // const [cookies] = useCookies(["TFLoginToken"]);
   const router = useRouter();
   const [settings, setSettings] = useState(null);
   const [lunchOrderAcceptText, setLunchOrderAcceptText] = useState(true);
@@ -46,7 +46,7 @@ const MenuComp = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch data when cookies.TFLoginToken changes or config is fetched
+    // Fetch data when Cookies.get("TFLoginToken") changes or config is fetched
     const fetchData = async () => {
       if (!config) return; // Exit early if config is not yet fetched
 
@@ -55,7 +55,7 @@ const MenuComp = () => {
       try {
         // Fetch menu data
         const menuRes = await fetch(
-          `${apiBaseUrl}menu?TFLoginToken=${cookies.TFLoginToken}`
+          `${apiBaseUrl}menu?TFLoginToken=${Cookies.get("TFLoginToken")}`
         );
         const menuData = await menuRes.json();
         setMenuData(menuData);
@@ -71,11 +71,11 @@ const MenuComp = () => {
     };
 
     fetchData();
-  }, [config, cookies.TFLoginToken]);
+  }, [config, Cookies.get("TFLoginToken")]);
   // Dependency array ensures useEffect runs when TFLoginToken changes
 
   const checkAndRedirect = () => {
-    if (!cookies.TFLoginToken) {
+    if (!Cookies.get("TFLoginToken")) {
       router.push("/login"); // Redirect to login page if the cookie is not available
     }
   };
@@ -104,7 +104,7 @@ const MenuComp = () => {
     const data = {
       menuId: menuId,
       date: date,
-      TFLoginToken: cookies.TFLoginToken,
+      TFLoginToken: Cookies.get("TFLoginToken"),
       switchValue: value,
       price: price,
       quantity: 1,
@@ -161,7 +161,7 @@ const MenuComp = () => {
     const data = {
       menuId: menuId,
       date: date,
-      TFLoginToken: cookies.TFLoginToken,
+      TFLoginToken: Cookies.get("TFLoginToken"),
       switchValue: value,
       price: price,
       quantity: 1,
@@ -239,7 +239,7 @@ const MenuComp = () => {
     const data = {
       menuId,
       date,
-      TFLoginToken: cookies.TFLoginToken,
+      TFLoginToken: Cookies.get("TFLoginToken"),
       quantityValue: newQuantity,
       totalPrice: totalPrice,
     };

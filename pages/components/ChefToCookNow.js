@@ -1,86 +1,107 @@
-import { useEffect, useState } from "react";
+// components/OrderList.js
+
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const OrderList = () => {
   const [orderData, setOrderData] = useState(null);
-  const [config, setConfig] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch config.json on component mount
-    const fetchConfig = async () => {
+    const fetchOrderData = async () => {
       try {
-        const response = await fetch("../../config.json"); // Adjust URL as needed
-        if (!response.ok) {
-          throw new Error("Failed to fetch config");
-        }
-        const data = await response.json();
-        setConfig(data);
-      } catch (error) {
-        console.error("Error fetching config:", error);
+        const response = await axios.get(
+          "http://localhost/tf-lara/public/api/orderlist-chef-now"
+        );
+        setOrderData(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
       }
     };
 
-    fetchConfig();
+    fetchOrderData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!config) return; // Exit early if config is not yet fetched
-
-      const { apiBaseUrl } = config;
-      try {
-        const response = await axios.get(`${apiBaseUrl}orderlist-chef-now`);
-        setOrderData(response.data);
-        console.log("🚀 ~ fetchData ~ response:", response);
-      } catch (error) {
-        console.error("Error fetching order data:", error);
-      }
-    };
-
-    fetchData();
-  }, [config]);
+  if (loading) return <div className="text-center mt-5">Loading...</div>;
+  if (error)
+    return <div className="text-center mt-5 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">To cook now:</h1>
-      {orderData ? (
-        <div className="space-y-8">
-          {Object.keys(orderData).map((date) => (
-            <div key={date}>
-              <p className="text-xl">{orderData[date].message}</p>
-              <h2 className="text-xl font-semibold">{date}</h2>
-              <p>
-                <strong>Day:</strong> {orderData[date].day}
+    <div className="p-6">
+      {Object.entries(orderData).map(([date, details]) => (
+        <div key={date} className="mb-8">
+          <div className="flex items-center">
+            <h2 className="text-3xl font-bold mb-2">Today to cook </h2>
+            <span>({date})</span>
+          </div>
+          <div className="grid grid-cols-2">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold">Lunch</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {details.lunch.food_id.map((food, index) => (
+                  <div key={index} className="border p-4 rounded shadow-md">
+                    {/* <img
+                      src={food.image}
+                      alt={food.name}
+                      className="w-full h-32 object-cover mb-2"
+                    /> */}
+                    <h4 className="font-semibold">{food.name}</h4>
+                    <p>{food.description}</p>
+                    <p className="text-green-500 font-bold">
+                      Price: {food.price} BDT
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-2">
+                Total Quantity: {details.lunch.total_quantity}
               </p>
-              {["lunch", "dinner"].map(
-                (period) =>
-                  orderData[date][period] && (
-                    <div key={period}>
-                      <p>
-                        <strong>
-                          {period.charAt(0).toUpperCase() + period.slice(1)}:
-                        </strong>
-                      </p>
-                      <ul className="list-disc list-inside">
-                        {orderData[date][period].food_names.map(
-                          (food, index) => (
-                            <li key={index}>{food}</li>
-                          )
-                        )}
-                      </ul>
-                      <p>
-                        <strong>Total Quantity:</strong>{" "}
-                        {orderData[date][period].total_quantity}
-                      </p>
-                    </div>
-                  )
-              )}
+              <p className="mt-1">
+                Menu Price: {details.lunch.mrd_menu_price} BDT
+              </p>
+              <p className="mt-1">
+                Order Total Price: {details.lunch.mrd_order_total_price} BDT
+              </p>
             </div>
-          ))}
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold">Dinner</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {details.dinner.food_id.map((food, index) => (
+                  <div key={index} className="border p-4 rounded shadow-md">
+                    {/* <img
+                      src={food.image}
+                      alt={food.name}
+                      className="w-full h-32 object-cover mb-2"
+                    /> */}
+                    <h4 className="font-semibold">{food.name}</h4>
+                    <p>{food.description}</p>
+                    <p className="text-green-500 font-bold">
+                      Price: {food.price} BDT
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-2">
+                Total Quantity: {details.dinner.total_quantity}
+              </p>
+              <p className="mt-1">
+                Menu Price: {details.dinner.mrd_menu_price} BDT
+              </p>
+              <p className="mt-1">
+                Order Total Price: {details.dinner.mrd_order_total_price} BDT
+              </p>
+            </div>
+          </div>
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      ))}
+
+      <div className="flex items-center">
+        <h2 className="text-3xl font-bold mb-2"> To cook later </h2>
+        <span></span>
+      </div>
     </div>
   );
 };
