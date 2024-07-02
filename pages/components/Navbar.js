@@ -69,7 +69,7 @@ export default function NavbarTop() {
           alt={"logo"}
         />
         <Link color="foreground" href="./">
-          <p className=" font-niljannati text-2xl">খেয়েছ?</p>
+          <p className=" font-niljannati text-2xl">ডালভাত</p>
         </Link>
       </NavbarBrand>
       <NavbarContent

@@ -65,6 +65,7 @@ const OrderList = () => {
               <p className="mt-1">
                 Order Total Price: {details.lunch.mrd_order_total_price} BDT
               </p>
+              <p className="mt-1">Mealboxes: {details.lunch.total_mealbox}</p>
             </div>
             <div className="mb-4">
               <h3 className="text-lg font-semibold">Dinner</h3>
@@ -91,7 +92,9 @@ const OrderList = () => {
                 Menu Price: {details.dinner.mrd_menu_price} BDT
               </p>
               <p className="mt-1">
-                Order Total Price: {details.dinner.mrd_order_total_price} BDT
+                <p className="mt-1">
+                  Mealboxes: {details.dinner.total_mealbox}
+                </p>
               </p>
             </div>
           </div>

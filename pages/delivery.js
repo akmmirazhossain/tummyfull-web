@@ -22,7 +22,7 @@ export default function Menu() {
   return (
     <>
       <Layout>
-        <div className="text-2xl border-b-2">Chef page</div>
+        <div className="text-2xl border-b-2">Delivery page</div>
         <OrderList />
         <MealList />
       </Layout>
