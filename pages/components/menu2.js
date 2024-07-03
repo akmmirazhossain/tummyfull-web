@@ -25,6 +25,8 @@ const MenuComp = () => {
   const [lunchOrderAcceptText, setLunchOrderAcceptText] = useState(true);
   const [dinnerOrderAcceptText, setDinnerOrderAcceptText] = useState(true);
   const [disabledSwitches, setDisabledSwitches] = useState({});
+  const [mealboxStatus, setMealboxStatus] = useState(null);
+
   // const [totalPrices, setTotalPrices] = useState({});
 
   useEffect(() => {
@@ -123,6 +125,31 @@ const MenuComp = () => {
       }
       const responseData = await response.json();
       console.log("API Response:", responseData);
+
+      //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
+      const mealboxData = {
+        TFLoginToken: Cookies.get("TFLoginToken"),
+      };
+      const mealboxRes = await fetch(`${config.apiBaseUrl}mealbox-status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mealboxData),
+      });
+
+      if (!mealboxRes.ok) {
+        console.log("🚀 ~ handleLunchStatusChange ~ mealboxRes:", mealboxRes);
+        throw new Error("Failed to send data to the second API");
+      }
+
+      const mealboxResData = await mealboxRes.json();
+      console.log(
+        "🚀 ~ handleLunchStatusChange ~ mealboxResData:",
+        mealboxResData
+      );
+
+      setMealboxStatus(mealboxResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
@@ -184,6 +211,31 @@ const MenuComp = () => {
 
       const responseData = await response.json();
       console.log("API Response:", responseData);
+
+      //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
+      const mealboxData = {
+        TFLoginToken: Cookies.get("TFLoginToken"),
+      };
+      const mealboxRes = await fetch(`${config.apiBaseUrl}mealbox-status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mealboxData),
+      });
+
+      if (!mealboxRes.ok) {
+        console.log("🚀 ~ handleLunchStatusChange ~ mealboxRes:", mealboxRes);
+        throw new Error("Failed to send data to the second API");
+      }
+
+      const mealboxResData = await mealboxRes.json();
+      console.log(
+        "🚀 ~ handleLunchStatusChange ~ mealboxResData:",
+        mealboxResData
+      );
+
+      setMealboxStatus(mealboxResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
@@ -404,8 +456,20 @@ const MenuComp = () => {
                             {settings.time_limit_lunch}
                           </p>
                         )}
+
                       {menuData[day].lunch.status === "enabled" && (
                         <div className="mt-2">
+                          {menuData[day].lunch.mealbox !== null ? (
+                            <div>
+                              Mealbox API: {menuData[day].lunch.mealbox}
+                            </div>
+                          ) : (
+                            mealboxStatus !== null && (
+                              <div>
+                                <div>Mealbox useState: {mealboxStatus}</div>
+                              </div>
+                            )
+                          )}
                           <div className="grid grid-cols-2">
                             <div>
                               <span className="font-semibold">Quantity:</span>{" "}
@@ -541,8 +605,18 @@ const MenuComp = () => {
                         Accepting this order till {settings.time_limit_dinner}
                       </p>
                     )}
+
                   {menuData[day].dinner.status === "enabled" && (
                     <div className="mt-2">
+                      {menuData[day].dinner.mealbox !== null ? (
+                        <div>Mealbox API: {menuData[day].dinner.mealbox}</div>
+                      ) : (
+                        mealboxStatus !== null && (
+                          <div>
+                            <div>Mealbox useState: {mealboxStatus}</div>
+                          </div>
+                        )
+                      )}
                       <span className="font-semibold">Quantity:</span>{" "}
                       {menuData[day].dinner.quantity}
                       <div className="flex items-center space-x-2">

@@ -1,7 +1,7 @@
 // pages/index.js
 import Layout from "./layout/Layout";
-import OrderList from "./components/ChefToCookNow";
-import MealList from "./components/ChefToCookLater";
+import Deliveries from "./components/DeliverySchedule";
+
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 
@@ -23,8 +23,7 @@ export default function Menu() {
     <>
       <Layout>
         <div className="text-2xl border-b-2">Delivery page</div>
-        <OrderList />
-        <MealList />
+        <Deliveries />
       </Layout>
     </>
   );

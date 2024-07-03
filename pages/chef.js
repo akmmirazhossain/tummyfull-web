@@ -5,7 +5,7 @@ import MealList from "./components/ChefToCookLater";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 
-export default function Menu() {
+export default function chef() {
   useEffect(() => {
     checkAndRedirect();
   }, []);

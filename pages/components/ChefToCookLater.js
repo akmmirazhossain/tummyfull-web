@@ -28,7 +28,10 @@ const MealList = () => {
           <h2 className="text-xl font-bold mb-2">{date}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Object.entries(mealDetails).map(([mealType, details]) => (
-              <div key={mealType} className="border p-4 rounded shadow-md">
+              <div
+                key={mealType}
+                className="border p-4 rounded shadow-md bg-white"
+              >
                 <h3 className="text-lg font-semibold mb-1">{mealType}</h3>
                 <p className="mb-1">Foods: {details.food_names.join(", ")}</p>
                 <p className="mb-1">Total Quantity: {details.total_quantity}</p>

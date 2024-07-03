@@ -42,7 +42,10 @@ const OrderList = () => {
               <h3 className="text-lg font-semibold">Lunch</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {details.lunch.food_id.map((food, index) => (
-                  <div key={index} className="border p-4 rounded shadow-md">
+                  <div
+                    key={index}
+                    className="border p-4 rounded shadow-md bg-white"
+                  >
                     {/* <img
                       src={food.image}
                       alt={food.name}
@@ -50,9 +53,6 @@ const OrderList = () => {
                     /> */}
                     <h4 className="font-semibold">{food.name}</h4>
                     <p>{food.description}</p>
-                    <p className="text-green-500 font-bold">
-                      Price: {food.price} BDT
-                    </p>
                   </div>
                 ))}
               </div>
@@ -71,7 +71,10 @@ const OrderList = () => {
               <h3 className="text-lg font-semibold">Dinner</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {details.dinner.food_id.map((food, index) => (
-                  <div key={index} className="border p-4 rounded shadow-md">
+                  <div
+                    key={index}
+                    className="border p-4 rounded shadow-md bg-white"
+                  >
                     {/* <img
                       src={food.image}
                       alt={food.name}
@@ -79,9 +82,6 @@ const OrderList = () => {
                     /> */}
                     <h4 className="font-semibold">{food.name}</h4>
                     <p>{food.description}</p>
-                    <p className="text-green-500 font-bold">
-                      Price: {food.price} BDT
-                    </p>
                   </div>
                 ))}
               </div>
