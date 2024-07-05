@@ -59,7 +59,7 @@ export default function NavbarTop() {
     },
   ];
   return (
-    <Navbar className="text-gray-800 bg_beige" isBlurred={false}>
+    <Navbar className="text-gray-800 bg_beige ">
       <NavbarBrand>
         <Image
           className="mr-1"

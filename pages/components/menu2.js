@@ -5,16 +5,68 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import {
   Button,
-  Switch,
   Card,
   Chip,
-  Spinner,
-  Spacer,
   Checkbox,
   Skeleton,
+  // Switch,
 } from "@nextui-org/react";
+import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassEnd } from "@fortawesome/free-solid-svg-icons";
+import { styled } from "@mui/material/styles";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+const IOSSwitch = styled((props) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" {...props} />
+))(({ theme }) => ({
+  width: 120,
+  height: 64,
+  padding: 0,
+  "& .MuiSwitch-switchBase": {
+    padding: 2,
+    margin: 2,
+    transitionDuration: "300ms",
+    "&.Mui-checked": {
+      transform: "translateX(56px)",
+      color: "#fff",
+      "& + .MuiSwitch-track": {
+        backgroundColor: theme.palette.mode === "dark" ? "#2ECA45" : "#004225",
+        opacity: 1,
+        border: 0,
+      },
+      "&.Mui-disabled + .MuiSwitch-track": {
+        opacity: 0.5,
+      },
+    },
+    "&.Mui-focusVisible .MuiSwitch-thumb": {
+      color: "#33cf4d",
+      border: "6px solid #fff",
+    },
+    "&.Mui-disabled .MuiSwitch-thumb": {
+      color:
+        theme.palette.mode === "light"
+          ? theme.palette.grey[100]
+          : theme.palette.grey[600],
+    },
+    "&.Mui-disabled + .MuiSwitch-track": {
+      opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
+    },
+  },
+  "& .MuiSwitch-thumb": {
+    boxSizing: "border-box",
+    width: 56,
+    height: 56,
+  },
+  "& .MuiSwitch-track": {
+    borderRadius: 64 / 2,
+    backgroundColor: theme.palette.mode === "light" ? "#E9E9EA" : "#39393D",
+    opacity: 1,
+    transition: theme.transitions.create(["background-color"], {
+      duration: 500,
+    }),
+  },
+}));
 
 const MenuComp = () => {
   const [config, setConfig] = useState(null);
@@ -346,7 +398,7 @@ const MenuComp = () => {
   if (!menuData || !settings) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-center my-6">Weekly Menu</h1>
+        <h1 className="text-3xl font-bold text-center mb-6 ">Weekly Menu</h1>
         <Card className="h-96 p-6 mb-6">
           <div>
             <Skeleton className="rounded-lg h-8 w-60 "></Skeleton>
@@ -385,10 +437,13 @@ const MenuComp = () => {
 
   return (
     <div className=" ">
-      <h1 className="text-3xl font-bold text-center my-6">Weekly Menu</h1>
+      <h1 className="h1_akm  ">Weekly Menu</h1>
       <div className="space-y-8">
         {days.map((day) => (
-          <div key={day} className="bg-gray-100 p-4 rounded-lg shadow-md">
+          <div
+            key={day}
+            className="bg-gray-100 pad_akm md:pad_akm mx3_akm md:mx-6 rounded-lg shadow-md"
+          >
             <div className="flex items-center">
               <div className="text-2xl font-semibold text-blue-600">
                 {menuData[day].menu_of}
@@ -425,9 +480,33 @@ const MenuComp = () => {
                       <span className="font-semibold">Price:</span>{" "}
                       {menuData[day].lunch.price} BDT
                     </div>
+                    <div className="flex items-center flex-col justify-center">
+                      <IOSSwitch
+                        sx={{ m: 1 }}
+                        checked={menuData[day].lunch.status === "enabled"} // Use 'checked' instead of 'defaultChecked'
+                        disabled={
+                          disabledSwitches[`${day}-${menuData[day].lunch.id}`]
+                        }
+                        onChange={(event) => {
+                          const { checked } = event.target;
+                          console.log("Lunch Switch triggered for day:", day);
+                          handleLunchStatusChange(
+                            day,
+                            menuData[day].lunch.id,
+                            menuData[day].date,
+                            checked, // Pass 'checked' instead of 'value'
+                            menuData[day].lunch.price
+                          );
+                        }}
+                      />
+                      {menuData[day].lunch.status === "enabled"
+                        ? "Meal Enabled"
+                        : "Tap to enable meal"}
+                    </div>
                     <div className="mt-1">
-                      <Switch
+                      {/* <Switch
                         //MARK: Lunch Switch
+                        shouldBlockScroll="false"
                         size="lg"
                         isSelected={menuData[day].lunch.status === "enabled"}
                         onValueChange={(value) => {
@@ -447,7 +526,8 @@ const MenuComp = () => {
                         {menuData[day].lunch.status === "enabled"
                           ? "Meal Enabled"
                           : "Enable Meal"}
-                      </Switch>
+                      </Switch> */}
+
                       {firstDay === day &&
                         lunchOrderAcceptText &&
                         menuData[day].lunch.status !== "enabled" && (
@@ -519,9 +599,6 @@ const MenuComp = () => {
                                 </Button>
                               </div>
                             </div>
-                            <div className="flex items-center">
-                              <Checkbox>Auto order every week</Checkbox>
-                            </div>
                           </div>
                           <div className="mt-2">
                             <span className="font-semibold">Total Price:</span>{" "}
@@ -576,7 +653,31 @@ const MenuComp = () => {
                   {menuData[day].dinner.price} BDT
                 </div>
                 <div className="mt-1">
-                  <Switch
+                  <div className="flex items-center flex-col justify-center">
+                    <IOSSwitch
+                      sx={{ m: 1 }}
+                      checked={menuData[day].dinner.status === "enabled"} // Use 'checked' instead of 'defaultChecked'
+                      disabled={
+                        disabledSwitches[`${day}-${menuData[day].dinner.id}`]
+                      }
+                      onChange={(event) => {
+                        const { checked } = event.target;
+                        console.log("Lunch Switch triggered for day:", day);
+                        handleDinnerStatusChange(
+                          day,
+                          menuData[day].dinner.id,
+                          menuData[day].date,
+                          checked, // Pass 'checked' instead of 'value'
+                          menuData[day].dinner.price
+                        );
+                      }}
+                    />
+                    {menuData[day].dinner.status === "enabled"
+                      ? "Meal Enabled"
+                      : "Tap to enable meal"}
+                  </div>
+
+                  {/* <Switch
                     //MARK: Dinner Switch
                     size="lg"
                     isSelected={menuData[day].dinner.status === "enabled"}
@@ -597,7 +698,7 @@ const MenuComp = () => {
                     {menuData[day].dinner.status === "enabled"
                       ? "Meal Enabled"
                       : "Enable Meal"}
-                  </Switch>
+                  </Switch> */}
                   {firstDay === day &&
                     dinnerOrderAcceptText &&
                     menuData[day].dinner.status !== "enabled" && (

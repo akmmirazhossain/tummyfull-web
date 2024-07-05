@@ -48,9 +48,6 @@ body {
     text-wrap: balance;
   }
 
-  .text_heading {
-  }
-
   .text_subheading {
     font-weight: 500;
     font-size: 1.25rem /* 20px */;
@@ -68,6 +65,24 @@ body {
   }
   .mt_akm {
     margin-top: 0.75rem /* 12px */;
+  }
+
+  .mx_akm {
+    margin-left: 1.5rem /* 24px */;
+    margin-right: 1.5rem /* 24px */;
+  }
+
+  .mx3_akm {
+    margin-left: 0.75rem /* 12px */;
+    margin-right: 0.75rem /* 12px */;
+  }
+
+  .pad_akm {
+    padding: 1.5rem;
+  }
+
+  .pad3_akm {
+    padding: 0.75rem /* 12px */;
   }
 
   .text_black {
@@ -88,4 +103,12 @@ body {
   .bg_light_orange {
     background-color: #ffcf9d;
   }
+}
+
+.h1_akm {
+  @apply text-2xl py-4 font-semibold  text-center;
+  @apply sm:text-2xl md:py-5;
+  @apply md:text-2xl md:py-5;
+  @apply lg:text-2xl lg:py-6;
+  @apply xl:text-2xl xl:py-6;
 }
