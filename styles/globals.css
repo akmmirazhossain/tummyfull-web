@@ -48,43 +48,6 @@ body {
     text-wrap: balance;
   }
 
-  .text_subheading {
-    font-weight: 500;
-    font-size: 1.25rem /* 20px */;
-    line-height: 1.75rem /* 28px */;
-  }
-
-  .text_body {
-  }
-
-  .text_tiny {
-  }
-
-  .mb_akm {
-    margin-bottom: 0.75rem /* 12px */;
-  }
-  .mt_akm {
-    margin-top: 0.75rem /* 12px */;
-  }
-
-  .mx_akm {
-    margin-left: 1.5rem /* 24px */;
-    margin-right: 1.5rem /* 24px */;
-  }
-
-  .mx3_akm {
-    margin-left: 0.75rem /* 12px */;
-    margin-right: 0.75rem /* 12px */;
-  }
-
-  .pad_akm {
-    padding: 1.5rem;
-  }
-
-  .pad3_akm {
-    padding: 0.75rem /* 12px */;
-  }
-
   .text_black {
     color: #1f2937;
   }
@@ -106,9 +69,119 @@ body {
 }
 
 .h1_akm {
-  @apply text-2xl py-4 font-semibold  text-center;
-  @apply sm:text-2xl md:py-5;
-  @apply md:text-2xl md:py-5;
-  @apply lg:text-2xl lg:py-6;
-  @apply xl:text-2xl xl:py-6;
+  @apply text-2xl sm:text-2xl lg:text-3xl;
+  @apply py-4 lg:py-6;
+  @apply font-semibold text-center;
+}
+
+.h2_akm {
+  @apply text-lg;
+  @apply sm:text-xl;
+  @apply md:text-2xl;
+  @apply lg:text-2xl;
+  @apply xl:text-2xl;
+}
+
+.h3_akm {
+  @apply text-lg;
+  @apply sm:text-lg;
+  @apply md:text-lg;
+  @apply lg:text-xl;
+  @apply xl:text-xl;
+}
+
+.h4_akm {
+  @apply text-xs;
+  @apply lg:text-sm;
+}
+.h4info_akm {
+  @apply text-xs text-gray-500;
+
+  @apply lg:text-sm;
+}
+
+.pad_akm {
+  @apply p-2;
+  @apply sm:p-2;
+  @apply md:p-3;
+  @apply lg:p-4;
+  @apply xl:p-4;
+}
+
+.py_akm {
+  @apply py-2;
+  @apply sm:py-2;
+  @apply md:py-3;
+  @apply lg:py-4;
+}
+
+.px_akm {
+  @apply px-2;
+  @apply sm:px-2;
+  @apply md:px-3;
+  @apply lg:px-4;
+}
+
+.pl_akm {
+  @apply pl-2;
+  @apply sm:pl-2;
+  @apply md:pl-3;
+  @apply lg:pl-4;
+}
+
+.pr_akm {
+  @apply pr-2;
+  @apply sm:pr-2;
+  @apply md:pr-3;
+  @apply lg:pr-4;
+}
+
+.pb_akm {
+  @apply pb-2;
+  @apply sm:pb-2;
+  @apply md:pb-3;
+  @apply lg:pb-4;
+}
+
+.mb_akm {
+  @apply text-xl mb-6 font-semibold text-center;
+  /* @apply sm:text-xl;
+  @apply md:text-xl;
+  @apply lg:text-xl;
+  @apply xl:text-xl; */
+}
+
+.mt_akm {
+  @apply mt-2;
+  /* @apply sm:text-xl;
+  @apply md:text-xl;
+  @apply lg:text-xl;
+  @apply xl:text-xl; */
+}
+
+.mx_akm {
+  @apply mx-6;
+}
+
+.my_akm {
+  @apply mx-6;
+}
+
+.my3_akm {
+  @apply mt-3 mb-3;
+}
+
+.gap_akm {
+  @apply gap-2;
+  /* @apply sm:px-2;
+  @apply md:px-3;
+  @apply lg:px-4;
+  @apply xl:px-6; */
+}
+
+.shadow_akm {
+  @apply shadow-md;
+}
+.rounded_akm {
+  @apply rounded-3xl;
 }

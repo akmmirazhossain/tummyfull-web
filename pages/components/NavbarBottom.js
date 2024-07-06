@@ -6,10 +6,11 @@ import {
   faUtensils,
   faGear,
   faListCheck,
+  faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { Link, Button } from "@nextui-org/react";
+import { Button, ButtonGroup } from "@nextui-org/react";
 
 const NavbarBottom = () => {
   // useEffect(() => {
@@ -47,6 +48,12 @@ const NavbarBottom = () => {
       icon: faGear,
       text: "Settings",
     },
+
+    {
+      href: "/more",
+      icon: faEllipsisVertical,
+      text: "More",
+    },
   ];
 
   return (
@@ -54,18 +61,20 @@ const NavbarBottom = () => {
       <div className="max-w-5xl mx-auto  ">
         <div className="flex justify-center items-center  ">
           <nav className="flex items-center justify-center ">
-            {navbarItems.map((item, index) => (
-              <Button
-                className="py-8"
-                key={index}
-                variant="light"
-                radius="none"
-                startContent={<FontAwesomeIcon icon={item.icon} />}
-                onClick={(event) => handleNavigation(item.href, event)} // Navigate to the corresponding route
-              >
-                {item.text}
-              </Button>
-            ))}
+            <ButtonGroup>
+              {navbarItems.map((item, index) => (
+                <Button
+                  className="py-8"
+                  key={index}
+                  variant="light"
+                  radius="none"
+                  startContent={<FontAwesomeIcon icon={item.icon} />}
+                  onClick={(event) => handleNavigation(item.href, event)} // Navigate to the corresponding route
+                >
+                  {item.text}
+                </Button>
+              ))}
+            </ButtonGroup>
 
             {/* {navbarItems.map((item, index) => (
               <Link
