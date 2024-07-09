@@ -1,8 +1,9 @@
 // ./components/LoginForm.js
 import React, { useState, useEffect, useMemo } from "react";
-import { Input, Button as ModalButton } from "@nextui-org/react";
+import { Input, Spacer, Button as ModalButton } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import Head from "next/head";
 
 const LoginForm = () => {
   const [value, setValue] = useState("");
@@ -104,8 +105,13 @@ const LoginForm = () => {
 
   return (
     <div>
-      <div className=" text_subheading mb_akm ">Login</div>
-      <div>
+      <Head>
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+      </Head>
+      <div className="h1_akm ">Login</div>
+      <div className="card_akm p-8">
+        <div>Log in and provide your address to continue.</div>
+        <Spacer y={3} />
         <Input
           value={value}
           id="phone"
@@ -134,19 +140,11 @@ const LoginForm = () => {
         {error && <p className="text-xs text-red-500">{error}</p>}
         <div className="flex justify-end items-center mt-4">
           {!isOtpSent ? (
-            <ModalButton
-              color="primary"
-              onPress={handleSendOTP}
-              disabled={isInvalid}
-            >
+            <ModalButton onPress={handleSendOTP} disabled={isInvalid}>
               Send OTP
             </ModalButton>
           ) : (
-            <ModalButton
-              color="primary"
-              onPress={handleVerifyOTP}
-              disabled={!otp}
-            >
+            <ModalButton onPress={handleVerifyOTP} disabled={!otp}>
               Verify OTP
             </ModalButton>
           )}

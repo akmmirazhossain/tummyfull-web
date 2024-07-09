@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   Button,
+  Textarea,
 } from "@nextui-org/react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -87,7 +88,7 @@ const MealSettings = () => {
       setPopOverOpen(true);
       setTimeout(() => {
         setPopOverOpen(false);
-      }, 8000);
+      }, 10000);
     } else {
       setPopOverOpen(false);
     }
@@ -103,75 +104,70 @@ const MealSettings = () => {
   };
 
   return (
-    <div className="w-4/5 py-10 mx-auto">
-      <div className=" text-2xl font-bold w-full mb-4">Meal Settings</div>
-      <div className="grid grid-cols-6">
-        <div className="col-span-2">
-          <Image
-            isBlurred
-            width={240}
-            src="/images/tiffin_carrier.jpg"
-            alt="NextUI Album Cover"
-            className="m-5"
-          />
-        </div>
-        <div className="col-span-4">
-          <div className="flex justify-between border-b-2 p-2">
-            <div className="flex items-center justify-center">
-              <h3 className="text-2xl">Activate personal mealbox</h3>
-              <span className="ml-2 text-xl">(৳150)</span>
-            </div>
-            <div className=" ">
-              <Popover
-                showArrow
-                color="foreground"
-                isOpen={popOverOpen}
-                offset={26}
-                crossOffset={22}
-              >
-                <PopoverTrigger>
-                  <Switch
-                    //MARK: MEALBOX SW
-                    isSelected={isOn}
-                    size="lg"
-                    color="success"
-                    onValueChange={(value) => {
-                      mealboxSwitchChange(value);
-                    }}
-                  ></Switch>
-                </PopoverTrigger>
-                <PopoverContent className="w-64 ">
-                  <div className="px-1 py-2">
-                    <div className="text-small font-bold">
-                      Mealbox activated!
-                    </div>
-                    <div className="text-tiny">
-                      You will recieve your upcoming meals in a mealbox.
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
+    <>
+      <div className="h1_akm">Meal Settings</div>
+      <div className="card_akm p-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center ">
+            <span className="h2_akm">Activate mealbox</span>
+            <span className="ml-2 text-xl">(৳150)</span>
           </div>
+          <div className=" ">
+            <Popover
+              color="foreground"
+              isOpen={popOverOpen}
+              offset={26}
+              crossOffset={22}
+            >
+              <PopoverTrigger>
+                <Switch
+                  //MARK: MEALBOX SW
+                  isSelected={isOn}
+                  size="lg"
+                  color="success"
+                  onValueChange={(value) => {
+                    mealboxSwitchChange(value);
+                  }}
+                ></Switch>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 ">
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold">Mealbox activated!</div>
+                  <div className="text-tiny">
+                    Starting tomorrow, your meals will be delivered in a
+                    mealbox.
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <Image
+              isBlurred
+              width={240}
+              src="/images/tiffin_carrier.jpg"
+              alt="NextUI Album Cover"
+              className="m-5"
+            />
+          </div>
+
           <div className="p-3">
-            Why you should have a mealbox?
+            Why choose a mealbox?
             <ul className="list-disc p-4">
+              <li>A healthier alternative to single-use plastic containers.</li>
+
               <li>
-                Healthier alternative than one time use plastic containers.
-              </li>
-              <li>
-                Total two mealboxes will be assigned to you, our delivery person
-                will collect the previous (empty) one and deliver you the new
-                one with food on each delivery.
-              </li>
-              <li>
-                ৳150 will be refunded if you deactivate the mealbox anytime.
+                A refund of ৳150 is available if you deactivate the mealbox at
+                any time.
               </li>
             </ul>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

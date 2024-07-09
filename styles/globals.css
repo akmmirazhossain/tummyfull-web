@@ -71,11 +71,11 @@ body {
 .h1_akm {
   @apply text-2xl sm:text-2xl lg:text-3xl;
   @apply py-4 lg:py-6;
-  @apply font-semibold text-center;
+  @apply font-bold;
 }
 
 .h2_akm {
-  @apply text-lg;
+  @apply text-lg font-semibold;
   @apply sm:text-xl;
   @apply md:text-2xl;
   @apply lg:text-2xl;
@@ -184,4 +184,8 @@ body {
 }
 .rounded_akm {
   @apply rounded-3xl;
+}
+
+.card_akm {
+  @apply bg-gray-50   shadow_akm rounded_akm;
 }

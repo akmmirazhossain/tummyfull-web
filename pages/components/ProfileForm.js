@@ -1,11 +1,12 @@
 // components/ProfileForm.js
-import { Button, Input, Spacer, Tooltip } from "@nextui-org/react";
+import { Button, Input, Spacer, Tooltip, Textarea } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router"; // Import useRouter
 import React from "react";
 import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import Head from "next/head";
 
 const ProfileForm = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const ProfileForm = () => {
     name: "",
     phone: "",
     address: "",
+    delivery_instruction: "",
   });
 
   const [config, setConfig] = useState(null);
@@ -62,6 +64,7 @@ const ProfileForm = () => {
             name: data.data.first_name || "",
             phone: data.data.phone || "",
             address: data.data.address || "",
+            delivery_instruction: data.data.delivery_instruction || "",
           });
         }
 
@@ -116,6 +119,7 @@ const ProfileForm = () => {
         body: JSON.stringify({
           name: formData.name,
           address: formData.address,
+          delivery_instruction: formData.delivery_instruction,
         }),
       });
 
@@ -135,12 +139,12 @@ const ProfileForm = () => {
   };
 
   return (
-    <React.Fragment>
-      <form
-        onSubmit={handleSubmit}
-        style={{ maxWidth: "400px", margin: "0 auto" }}
-      >
-        <h3 className="text-2xl">Profile Settings</h3>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+      </Head>
+      <div className="h1_akm ">Profile Settings</div>
+      <form onSubmit={handleSubmit} className="card_akm p-8">
         <span>Name</span>
         <Input
           clearable
@@ -153,7 +157,7 @@ const ProfileForm = () => {
           value={formData.name}
           onChange={handleChange}
         />
-        <Spacer y={1} />
+        <Spacer y={3} />
         <div className="flex items-center">
           <span>Phone</span>
           <Tooltip color="foreground" content="Phone number verified">
@@ -171,8 +175,11 @@ const ProfileForm = () => {
           onChange={handleChange}
           disabled // Phone field is disabled since it is not being updated
         />
-        <Spacer y={1} />
-        <span>Address</span>
+        <Spacer y={3} />
+        <div>
+          <span>Address </span>
+          <span className="text-red-500">*</span>
+        </div>
         <Input
           clearable
           required
@@ -184,14 +191,38 @@ const ProfileForm = () => {
           value={formData.address}
           onChange={handleChange}
         />
-        <span className="text-sm">
-          (Our service is limited within Bashundhara R/A only, soon we will
-          expand all over Dhaka.)
+        <span className="h4info_akm">
+          Our service is currently available only in Bashundhara R/A. We will
+          expand to all of Dhaka soon and notify you when we reach your area.
+          Stay tuned!
         </span>
-        <Spacer y={2} />
+        <Spacer y={3} />
+
+        <Button type="submit">Update</Button>
+
+        <Spacer y={6} />
+        <div className="flex items-center ">
+          <span className="h2_akm pb_akm">Delivery Guidelines</span>
+        </div>
+        <Textarea
+          label=""
+          placeholder="Guidelines for Our Delivery Personnel"
+          className="max-w-sm"
+          name="delivery_instruction"
+          value={formData.delivery_instruction}
+          onChange={handleChange}
+          address
+        />
+
+        <Spacer y={3} />
+
+        <div>
+          <div></div>
+          <div></div>
+        </div>
         <Button type="submit">Update</Button>
       </form>
-    </React.Fragment>
+    </>
   );
 };
 

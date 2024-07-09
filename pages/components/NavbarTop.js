@@ -8,6 +8,7 @@ import {
   faRightFromBracket,
   faGear,
   faListCheck,
+  faWallet,
 } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
@@ -37,15 +38,21 @@ const NavbarTop = () => {
       text: "Menu",
     },
 
-    {
-      href: "/mealbook",
-      icon: faListCheck,
-      text: "Meal Book",
-    },
+    // {
+    //   href: "/mealbook",
+    //   icon: faListCheck,
+    //   text: "Meal Book",
+    // },
     {
       href: "/settings",
       icon: faGear,
       text: "Settings",
+    },
+
+    {
+      href: "/wallet",
+      icon: faWallet,
+      text: "Wallet",
     },
   ];
 
