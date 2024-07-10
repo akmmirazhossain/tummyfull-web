@@ -5,10 +5,32 @@ const Deliveries = () => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [config, setConfig] = useState(null);
 
   useEffect(() => {
+    // Fetch config.json on component mount
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("../../config.json"); // Adjust URL as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch config");
+        }
+        const data = await response.json();
+        setConfig(data);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+
+    fetchConfig();
+  }, []);
+
+  useEffect(() => {
+    if (!config) return;
+    const { apiBaseUrl, imageBaseUrl } = config;
+
     axios
-      .get("http://localhost/tf-lara/public/api/delivery")
+      .get(`${apiBaseUrl}delivery`)
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -17,7 +39,7 @@ const Deliveries = () => {
         setError(error);
         setLoading(false);
       });
-  }, []);
+  }, [config]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

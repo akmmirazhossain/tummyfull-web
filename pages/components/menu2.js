@@ -100,7 +100,7 @@ const MenuComp = () => {
   useEffect(() => {
     // Fetch data when Cookies.get("TFLoginToken") changes or config is fetched
     const fetchData = async () => {
-      if (!config) return; // Exit early if config is not yet fetched
+      if (!config) return;
 
       const { apiBaseUrl, imageBaseUrl } = config;
 
