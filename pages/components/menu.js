@@ -161,7 +161,7 @@ const MenuComp = () => {
       price: price,
       quantity: 1,
     };
-    console.log("API Data:", data);
+
     try {
       const response = await fetch(`${config.apiBaseUrl}order-place`, {
         method: "POST",
@@ -174,7 +174,7 @@ const MenuComp = () => {
         throw new Error("Failed to send data to the API");
       }
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      console.log("🚀 ~ handleLunchStatusChange ~ responseData:", responseData);
 
       //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
       const mealboxData = {
@@ -189,17 +189,30 @@ const MenuComp = () => {
       });
 
       if (!mealboxRes.ok) {
-        console.log("🚀 ~ handleLunchStatusChange ~ mealboxRes:", mealboxRes);
         throw new Error("Failed to send data to the second API");
       }
 
       const mealboxResData = await mealboxRes.json();
-      console.log(
-        "🚀 ~ handleLunchStatusChange ~ mealboxResData:",
-        mealboxResData
-      );
-
       setMealboxStatus(mealboxResData);
+
+      //NOTIF INSERT
+      const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      console.log("🚀 ~ handleLunchStatusChange ~ body:", body);
+      if (!notifRes.ok) {
+        throw new Error(
+          "🚀 ~ handleLunchStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
+        );
+      }
+
+      const notifResData = await notifRes.json();
+      console.log("🚀 ~ handleLunchStatusChange ~ notifResData:", notifResData);
+      //setMealboxStatus(notifResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
