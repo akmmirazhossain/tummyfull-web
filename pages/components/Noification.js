@@ -1,0 +1,70 @@
+import { ApiContext } from "../contexts/ApiContext";
+import React, { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { formatDistanceToNow } from "date-fns";
+
+const Notification = () => {
+  const router = useRouter();
+  const apiConfig = useContext(ApiContext);
+  const [notif, setNotif] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = Cookies.get("TFLoginToken");
+      try {
+        const response = await axios.get(`${apiConfig.apiBaseUrl}notif-get`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        console.log("🚀 ~ fetchData ~ response:", response.data);
+        setNotif(response.data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (apiConfig) {
+      fetchData();
+    }
+  }, [apiConfig]);
+
+  if (!apiConfig) return <p>Loading configuration...</p>; // Add loading indicator
+
+  if (loading) return <div className="h1_akm ">Notifications</div>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  return (
+    <div>
+      <div className="h1_akm ">Notifications</div>
+      <div className="card_akm p-8">
+        {notif && notif.notifications && notif.notifications.length > 0 ? (
+          <>
+            {notif.notifications.map((notification, index) => (
+              <div className="grid grid-cols-2" key={index}>
+                <div className="mb-1">{notification.mrd_notif_message}</div>
+                <div className="h4info_akm flex justify-end">
+                  {formatDistanceToNow(
+                    new Date(notification.mrd_notif_date_added)
+                  )}{" "}
+                  ago
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <p>No notifications found.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Notification;

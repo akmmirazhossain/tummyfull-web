@@ -1,15 +1,17 @@
 // components/ProfileForm.js
 import { Button, Input, Spacer, Tooltip, Textarea } from "@nextui-org/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router"; // Import useRouter
 import React from "react";
 import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import Head from "next/head";
+import { ApiContext } from "../contexts/ApiContext";
 
 const ProfileForm = () => {
   const router = useRouter();
+  const apiConfig = useContext(ApiContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -47,7 +49,7 @@ const ProfileForm = () => {
       const { apiBaseUrl } = config;
 
       try {
-        const response = await fetch(`${apiBaseUrl}user-fetch`, {
+        const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

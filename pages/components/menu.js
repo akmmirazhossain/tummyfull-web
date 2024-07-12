@@ -203,7 +203,7 @@ const MenuComp = () => {
         },
         body: JSON.stringify(data),
       });
-      console.log("🚀 ~ handleLunchStatusChange ~ body:", body);
+      console.log("🚀 ~ handleLunchStatusChange ~ body:", data);
       if (!notifRes.ok) {
         throw new Error(
           "🚀 ~ handleLunchStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
@@ -449,7 +449,7 @@ const MenuComp = () => {
   const firstDay = days[0];
 
   return (
-    <div className=" ">
+    <div className="">
       {days.map((day) => (
         <>
           <div className="flex items-center justify-between ">

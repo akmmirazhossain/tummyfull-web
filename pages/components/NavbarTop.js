@@ -9,6 +9,7 @@ import {
   faGear,
   faListCheck,
   faWallet,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
@@ -54,6 +55,11 @@ const NavbarTop = () => {
       icon: faWallet,
       text: "Wallet",
     },
+    {
+      href: "/notification",
+      icon: faBell,
+      text: "Notifications",
+    },
   ];
 
   return (
@@ -76,6 +82,7 @@ const NavbarTop = () => {
             {/* Replace with your menu items */}
             {navbarItems.map((item, index) => (
               <Link
+                key={item.text}
                 href={item.href}
                 className="gap-2  flex justify-center items-center"
               >
