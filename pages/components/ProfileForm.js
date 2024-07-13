@@ -20,33 +20,10 @@ const ProfileForm = () => {
     delivery_instruction: "",
   });
 
-  const [config, setConfig] = useState(null);
-
   useEffect(() => {
-    checkAndRedirect();
-    const fetchConfig = async () => {
-      try {
-        const response = await fetch("../../config.json"); // Adjust URL as needed
-        if (!response.ok) {
-          throw new Error("Failed to fetch config");
-        }
-        const data = await response.json();
-        setConfig(data);
-      } catch (error) {
-        console.error("Error fetching config:", error);
-      }
-    };
-
-    fetchConfig();
-  }, []);
-
-  useEffect(() => {
-    console.log("ProfileForm: useEffect > fetchUserData");
     const fetchUserData = async () => {
       const token = Cookies.get("TFLoginToken");
       console.log("fetchUserData -->".token);
-      if (!config) return;
-      const { apiBaseUrl } = config;
 
       try {
         const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
@@ -57,7 +34,7 @@ const ProfileForm = () => {
         });
 
         const data = await response.json();
-        console.log(data.data.first_name);
+        console.log("🚀 ~ fetchUserData ~ data:", data);
 
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
@@ -78,7 +55,7 @@ const ProfileForm = () => {
     };
 
     fetchUserData();
-  }, [config]);
+  }, [apiConfig]);
 
   const checkAndRedirect = () => {
     const token = Cookies.get("TFLoginToken");

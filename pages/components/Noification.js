@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { formatDistanceToNow } from "date-fns";
+import { Skeleton } from "@nextui-org/react";
 
 const Notification = () => {
   const router = useRouter();
@@ -36,20 +37,41 @@ const Notification = () => {
     }
   }, [apiConfig]);
 
-  if (!apiConfig) return <p>Loading configuration...</p>; // Add loading indicator
+  if (!apiConfig)
+    return (
+      <>
+        <div className="h1_akm ">Notifications</div>
+        <div className="card_akm   p-8 min-h-screen  space-y-3">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <Skeleton key={index} className="rounded-lg h-4" />
+          ))}
+        </div>
+      </>
+    ); // Add loading indicator
 
-  if (loading) return <div className="h1_akm ">Notifications</div>;
+  if (loading)
+    return (
+      <>
+        <div className="h1_akm ">Notifications</div>
+        <div className="card_akm   p-8 min-h-screen  space-y-3">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <Skeleton key={index} className="rounded-lg h-4" />
+          ))}
+        </div>
+      </>
+    );
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
       <div className="h1_akm ">Notifications</div>
-      <div className="card_akm p-8">
+      <div className="card_akm p-8 min-h-screen">
         {notif && notif.notifications && notif.notifications.length > 0 ? (
           <>
             {notif.notifications.map((notification, index) => (
-              <div className="grid grid-cols-2" key={index}>
+              <div className="grid grid-cols-3" key={index}>
                 <div className="mb-1">{notification.mrd_notif_message}</div>
+                <div className="mb-1">{notification.mrd_notif_credit_calc}</div>
                 <div className="h4info_akm flex justify-end">
                   {formatDistanceToNow(
                     new Date(notification.mrd_notif_date_added)
