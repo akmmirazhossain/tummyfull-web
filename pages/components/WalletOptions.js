@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
-import { Skeleton } from "@nextui-org/react";
+import { Skeleton, Button } from "@nextui-org/react";
 import Image from "next/image";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -47,9 +47,15 @@ const CreditDisplay = () => {
     <>
       <div className="h1_akm ">Wallet</div>
       <div className="card_akm   p-8">
-        <div className="h3_akm">My current credit</div>
-        <div>
-          ৳<span className="h2_akm">{userCredit}</span>
+        <div className="h3_akm "> Current credit</div>
+        <div className="flex items-center justify-between">
+          <div>
+            ৳<span className="h2_akm">{userCredit}</span>
+          </div>
+          <div>
+            {" "}
+            <Button color="primary">Withdraw</Button>
+          </div>
         </div>
       </div>
 
@@ -149,7 +155,8 @@ const CreditDisplay = () => {
           </div>
         </div>
         <p className="h3_akm font-semibold">
-          We will recharge your wallet within one hour of receiving the money.
+          Note: We will recharge your wallet within one hour of receiving the
+          money.
         </p>
       </div>
     </>

@@ -151,7 +151,7 @@ body {
 }
 
 .mb_akm {
-  @apply text-xl mb-6 font-semibold text-center;
+  @apply mb-6;
   /* @apply sm:text-xl;
   @apply md:text-xl;
   @apply lg:text-xl;

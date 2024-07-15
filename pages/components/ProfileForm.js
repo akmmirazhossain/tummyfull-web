@@ -86,10 +86,8 @@ const ProfileForm = () => {
       return;
     }
 
-    const { apiBaseUrl } = config;
-
     try {
-      const response = await fetch(`${apiBaseUrl}user-update`, {
+      const response = await fetch(`${apiConfig.apiBaseUrl}user-update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

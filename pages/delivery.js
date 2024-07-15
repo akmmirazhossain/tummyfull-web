@@ -22,7 +22,6 @@ export default function Menu() {
   return (
     <>
       <Layout>
-        <div className="text-2xl border-b-2">Delivery page</div>
         <Deliveries />
       </Layout>
     </>

@@ -3,10 +3,26 @@ import Layout from "./layout/Layout"; // Adjust this path based on your structur
 import ProfileForm from "./components/ProfileForm"; // Correct import path
 import Notification from "./components/Noification";
 
-export default function Settings() {
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+
+const NotifPage = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <Layout>
       <Notification />
     </Layout>
   );
-}
+};
+
+const ProtectedPageWithAuth = () => (
+  <AuthProvider>
+    <NotifPage />
+  </AuthProvider>
+);
+
+export default ProtectedPageWithAuth;
