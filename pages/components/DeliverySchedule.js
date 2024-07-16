@@ -88,18 +88,19 @@ const Deliveries = () => {
                     {mealType}
                   </div>
 
-                  <div className="grid grid-cols-7">
+                  <div className="grid grid-cols-8">
                     <div>Mealbox</div>
                     <div>Address</div>
                     <div>Phone</div>
                     <div>Name</div>
                     <div>Quantity</div>
                     <div>Price</div>
+                    <div>Cash to Collect</div>
                     <div>Status</div>
                   </div>
 
                   {meals[mealType].map((item, index) => (
-                    <div key={index} className="grid grid-cols-7">
+                    <div key={index} className="grid grid-cols-8">
                       <div className="border border-gray-200 p-2">
                         {item.mrd_order_mealbox}
                       </div>
@@ -118,6 +119,10 @@ const Deliveries = () => {
                       <div className="border border-gray-200 p-2">
                         {item.mrd_order_total_price}
                       </div>
+                      <div className="border border-gray-200 p-2">
+                        {item.cash_to_get}
+                      </div>
+
                       <div className="border border-gray-200 p-2">
                         {/* //MARK: DROPDOWN */}
                         <Dropdown className="text-black">
