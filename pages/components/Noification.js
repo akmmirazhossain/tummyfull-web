@@ -69,10 +69,19 @@ const Notification = () => {
         {notif && notif.notifications && notif.notifications.length > 0 ? (
           <>
             {notif.notifications.map((notification, index) => (
-              <div className="grid grid-cols-3" key={index}>
-                <div className="mb-1">{notification.mrd_notif_message}</div>
-                <div className="mb-1">{notification.mrd_notif_credit_calc}</div>
-                <div className="h4info_akm flex justify-end">
+              <div className="grid grid-cols-5 " key={index}>
+                <div className="col-span-2 flex items-center mb-3">
+                  {notification.mrd_notif_message}
+                </div>
+                <div className="flex items-center mb-3">
+                  {notification.mrd_notif_quantity !== null &&
+                    `Qty: ${notification.mrd_notif_quantity}`}
+                </div>
+                <div className="flex items-center mb-3">
+                  {notification.mrd_notif_total_price !== null &&
+                    `৳ ${notification.mrd_notif_total_price}`}
+                </div>
+                <div className="h4info_akm flex justify-end mb-3">
                   {formatDistanceToNow(
                     new Date(notification.mrd_notif_date_added)
                   )}{" "}

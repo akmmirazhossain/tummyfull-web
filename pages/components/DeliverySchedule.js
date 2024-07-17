@@ -24,7 +24,7 @@ const Deliveries = () => {
     if (!apiConfig) return;
 
     axios
-      .get(`${apiConfig.apiBaseUrl}delivery`)
+      .get(`${apiConfig.apiBaseUrl}delivery-list`)
       .then((response) => {
         setData(response.data);
         console.log("DeliverySchedule.js ->", response.data);
