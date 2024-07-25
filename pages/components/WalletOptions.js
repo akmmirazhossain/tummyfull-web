@@ -114,7 +114,12 @@ const CreditDisplay = () => {
             </div>
             <div className="pad_akm">
               3) Enter your desired amount (above ৳300) and click on the next
-              arrow <FontAwesomeIcon color="#D93568" icon={faArrowRight} />
+              arrow <FontAwesomeIcon color="#D93568" icon={faArrowRight} />.
+              <br />
+              <span className="h4info_akm">
+                {" "}
+                ৳1000 = 5 to 8 meals (Shipping charge inclusive)
+              </span>
             </div>
           </div>
 

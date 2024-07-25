@@ -328,11 +328,6 @@ const MenuComp = () => {
       Math.min(5, parseInt(currentQuantity, 10) + parseInt(change, 10))
     );
 
-    // console.log("QuantityChange -> currentQuantity", currentQuantity);
-    // console.log("QuantityChange -> change", change);
-    // console.log("QuantityChange -> updatedMenuData", updatedMenuData);
-    // console.log("QuantityChange -> newQuantity", newQuantity);
-
     updatedMenuData[day][mealType].quantity = newQuantity;
 
     setMenuData(updatedMenuData);

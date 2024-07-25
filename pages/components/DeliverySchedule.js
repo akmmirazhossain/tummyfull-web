@@ -47,6 +47,7 @@ const Deliveries = () => {
   ) => {
     const deliveredStatus = Array.from(selectedKey)[0];
 
+    //DELIVERY
     axios({
       method: "get",
       url: `${apiConfig.apiBaseUrl}delivery-update`,
