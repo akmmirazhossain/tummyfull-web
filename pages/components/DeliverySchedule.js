@@ -121,7 +121,7 @@ const Deliveries = () => {
                         {item.mrd_order_total_price}
                       </div>
                       <div className="border border-gray-200 p-2">
-                        {item.cash_to_get}
+                        {item.mrd_order_cash_to_get}
                       </div>
 
                       <div className="border border-gray-200 p-2">
@@ -155,16 +155,22 @@ const Deliveries = () => {
                             }
                           >
                             <DropdownItem key="pending" className="p-2">
-                              pending
+                              Pending
                             </DropdownItem>
                             <DropdownItem key="delivered" className="p-2">
-                              delivered
+                              Delivered
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delivered_with_due"
+                              className="p-2"
+                            >
+                              Delivered with due
                             </DropdownItem>
                             <DropdownItem key="cancelled" className="p-2">
-                              cancelled
+                              Cancelled
                             </DropdownItem>
                             <DropdownItem key="unavailable" className="p-2">
-                              unavailable
+                              Unavailable
                             </DropdownItem>
                           </DropdownMenu>
                         </Dropdown>
