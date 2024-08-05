@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  Checkbox,
 } from "@nextui-org/react";
 
 const Deliveries = () => {
@@ -36,8 +37,12 @@ const Deliveries = () => {
       });
   }, [apiConfig, delivFetchRefresh]);
 
-  //MARK: deliv Stat
+  //MARK: MealboxColl
+  const mealboxCollected = (mrd_order_id) => {
+    console.log(mrd_order_id);
+  };
 
+  //MARK: deliv Stat
   const deliveryStatusUpdate = (
     selectedKey,
     orderId,
@@ -90,13 +95,14 @@ const Deliveries = () => {
                   </div>
 
                   <div className="grid grid-cols-8">
-                    <div>Mealbox</div>
+                    <div>Give mealbox</div>
                     <div>Address</div>
                     <div>Phone</div>
                     <div>Name</div>
                     <div>Quantity</div>
                     <div>Price</div>
                     <div>Cash to Collect</div>
+                    {/* <div>Mealbox collected</div> */}
                     <div>Status</div>
                   </div>
 
@@ -120,11 +126,21 @@ const Deliveries = () => {
                       <div className="border border-gray-200 p-2">
                         {item.mrd_order_total_price}
                       </div>
+
                       <div className="border border-gray-200 p-2">
                         {item.mrd_order_cash_to_get}
                       </div>
 
-                      <div className="border border-gray-200 p-2">
+                      {/* <div className="border border-gray-200 flex items-center justify-center">
+                        <Checkbox
+                          onChange={() => mealboxCollected(item.mrd_order_id)}
+                          size="lg"
+                        >
+                          Yes
+                        </Checkbox>
+                      </div> */}
+
+                      <div className="border border-gray-200 flex items-center justify-center">
                         {/* //MARK: DROPDOWN */}
                         <Dropdown className="text-black">
                           <DropdownTrigger>
