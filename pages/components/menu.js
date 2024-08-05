@@ -224,29 +224,26 @@ const MenuComp = () => {
   };
 
   //MARK: Dinner Status
+
   const handleDinnerStatusChange = async (day, menuId, date, value, price) => {
     checkAndRedirect(); // Ensure the user is authenticated
-
     //SWITCH STATUS CHANGER
     const updatedMenuData = { ...menuData };
-
     if (updatedMenuData[day].dinner.status === "disabled") {
       updatedMenuData[day].dinner.status = "enabled";
-      updatedMenuData[day].dinner.quantity = 1;
-      setDinnerOrderAcceptText(false);
+      updatedMenuData[day].dinner.quantity = 1; // Set quantity to 1 when enabling
+      setLunchOrderAcceptText(false);
     } else {
       updatedMenuData[day].dinner.status = "disabled";
       //updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
       setDinnerOrderAcceptText(true);
     }
     setMenuData(updatedMenuData);
-
     //SWITCH DISABLER
     const switchKey = `${day}-${menuId}`;
     if (disabledSwitches[switchKey]) return;
     // Disable the specific switch
     setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
-
     // API CALLER
     const data = {
       menuId: menuId,
@@ -257,8 +254,6 @@ const MenuComp = () => {
       quantity: 1,
     };
 
-    console.log("API Data:", data);
-
     try {
       const response = await fetch(`${config.apiBaseUrl}order-place`, {
         method: "POST",
@@ -267,13 +262,14 @@ const MenuComp = () => {
         },
         body: JSON.stringify(data),
       });
-
       if (!response.ok) {
         throw new Error("Failed to send data to the API");
       }
-
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      console.log(
+        "🚀 ~ handleDinnerStatusChange ~ responseData:",
+        responseData
+      );
 
       //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
       const mealboxData = {
@@ -288,17 +284,33 @@ const MenuComp = () => {
       });
 
       if (!mealboxRes.ok) {
-        console.log("🚀 ~ handleLunchStatusChange ~ mealboxRes:", mealboxRes);
         throw new Error("Failed to send data to the second API");
       }
 
       const mealboxResData = await mealboxRes.json();
-      console.log(
-        "🚀 ~ handleLunchStatusChange ~ mealboxResData:",
-        mealboxResData
-      );
-
       setMealboxStatus(mealboxResData);
+
+      //NOTIF INSERT
+      const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      console.log("🚀 ~ handleDinnerStatusChange ~ body:", data);
+      if (!notifRes.ok) {
+        throw new Error(
+          "🚀 ~ handleDinnerStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
+        );
+      }
+
+      const notifResData = await notifRes.json();
+      console.log(
+        "🚀 ~ handleDinnerStatusChange ~ notifResData:",
+        notifResData
+      );
+      //setMealboxStatus(notifResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
@@ -308,6 +320,91 @@ const MenuComp = () => {
       }, 100);
     }
   };
+
+  // const handleDinnerStatusChange = async (day, menuId, date, value, price) => {
+  //   checkAndRedirect(); // Ensure the user is authenticated
+
+  //   //SWITCH STATUS CHANGER
+  //   const updatedMenuData = { ...menuData };
+
+  //   if (updatedMenuData[day].dinner.status === "disabled") {
+  //     updatedMenuData[day].dinner.status = "enabled";
+  //     updatedMenuData[day].dinner.quantity = 1;
+  //     setDinnerOrderAcceptText(false);
+  //   } else {
+  //     updatedMenuData[day].dinner.status = "disabled";
+  //     //updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
+  //     setDinnerOrderAcceptText(true);
+  //   }
+  //   setMenuData(updatedMenuData);
+
+  //   //SWITCH DISABLER
+  //   const switchKey = `${day}-${menuId}`;
+  //   if (disabledSwitches[switchKey]) return;
+  //   // Disable the specific switch
+  //   setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
+
+  //   // API CALLER
+  //   const data = {
+  //     menuId: menuId,
+  //     date: date,
+  //     TFLoginToken: Cookies.get("TFLoginToken"),
+  //     switchValue: value,
+  //     price: price,
+  //     quantity: 1,
+  //   };
+
+  //   console.log("API Data:", data);
+
+  //   try {
+  //     const response = await fetch(`${config.apiBaseUrl}order-place`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to send data to the API");
+  //     }
+
+  //     const responseData = await response.json();
+  //     console.log("API Response:", responseData);
+
+  //     //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
+  //     const mealboxData = {
+  //       TFLoginToken: Cookies.get("TFLoginToken"),
+  //     };
+  //     const mealboxRes = await fetch(`${config.apiBaseUrl}mealbox-status`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(mealboxData),
+  //     });
+
+  //     if (!mealboxRes.ok) {
+  //       console.log("🚀 ~ handleLunchStatusChange ~ mealboxRes:", mealboxRes);
+  //       throw new Error("Failed to send data to the second API");
+  //     }
+
+  //     const mealboxResData = await mealboxRes.json();
+  //     console.log(
+  //       "🚀 ~ handleLunchStatusChange ~ mealboxResData:",
+  //       mealboxResData
+  //     );
+
+  //     setMealboxStatus(mealboxResData);
+  //   } catch (error) {
+  //     console.error("Error sending data to the API:", error.message);
+  //   } finally {
+  //     // SWITCH ENABLER
+  //     setTimeout(() => {
+  //       setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
+  //     }, 100);
+  //   }
+  // };
 
   //MARK: Quantity Chng
   const handleQuantityChange = async (day, mealType, change, menuId, date) => {
@@ -644,85 +741,93 @@ const MenuComp = () => {
 
               {/* Dinner */}
 
-              <div className="bg-gray-100   shadow_akm pad_akm rounded_akm">
-                {
-                  menuData[day].dinner && (
-                    <div className="card_akm">
-                      <div className="flex items-center justify-between pad_akm">
-                        <div className="h2_akm pl_akm">
-                          <span>Dinner</span>
-                        </div>
-                        <div className="h4_akm pr_akm">
-                          <FontAwesomeIcon icon={faShippingFast} />{" "}
-                          {settings?.delivery_time_dinner || "N/A"}
-                        </div>
+              {
+                menuData[day].dinner && (
+                  <div className="card_akm">
+                    <div className="flex items-center justify-between pad_akm">
+                      <div className="h2_akm pl_akm">
+                        <span>Dinner</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1">
-                        {menuData[day].dinner.foods.map((food, index) => (
-                          <div
-                            key={index}
-                            className=" flex flex-col justify-center items-center "
-                          >
-                            <img
-                              src={`${config.imageBaseUrl}${food.food_image}`}
-                              alt={food.name}
-                              className="w-28 lg:w-40  rounded-full "
-                            />
-                            <span className="h4_akm text-center">
-                              {food.food_name}
-                            </span>
+                      <div className="h4_akm pr_akm">
+                        <FontAwesomeIcon icon={faShippingFast} />{" "}
+                        {settings?.delivery_time_dinner || "N/A"}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1">
+                      {menuData[day].dinner.foods.map((food, index) => (
+                        <div
+                          key={index}
+                          className=" flex flex-col justify-center items-center "
+                        >
+                          <img
+                            src={`${config.imageBaseUrl}${food.food_image}`}
+                            alt={food.name}
+                            className="w-28 lg:w-40  rounded-full "
+                          />
+                          <span className="h4_akm text-center">
+                            {food.food_name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex justify-center h3_akm py_akm">
+                      <span className="">৳ {menuData[day].dinner.price}</span>
+                    </div>
+                    <div className="flex items-center flex-col justify-center -m-2 pb_akm">
+                      {/* //MARK: Dinner Sw  */}
+                      <IOSSwitch
+                        sx={{ m: 1 }}
+                        checked={menuData[day].dinner.status === "enabled"} // Use 'checked' instead of 'defaultChecked'
+                        disabled={
+                          disabledSwitches[`${day}-${menuData[day].dinner.id}`]
+                        }
+                        onChange={(event) => {
+                          const { checked } = event.target;
+                          console.log("Dinner Switch triggered for day:", day);
+                          handleDinnerStatusChange(
+                            day,
+                            menuData[day].dinner.id,
+                            menuData[day].date,
+                            checked, // Pass 'checked' instead of 'value'
+                            menuData[day].dinner.price
+                          );
+                        }}
+                      />
+                      {menuData[day].dinner.status === "enabled"
+                        ? "Meal ordered"
+                        : "Tap to order"}
+                    </div>
+                    <div className=" px_akm pb_akm">
+                      {firstDay === day &&
+                        dinnerOrderAcceptText &&
+                        menuData[day].dinner.status !== "enabled" && (
+                          <div className=" h4info_akm  px_akm flex justify-center items-center">
+                            Accepting this order till{" "}
+                            {settings.time_limit_dinner}
                           </div>
-                        ))}
-                      </div>
-                      <div className="flex justify-center h3_akm py_akm">
-                        <span className="">৳ {menuData[day].dinner.price}</span>
-                      </div>
-                      <div className="flex items-center flex-col justify-center -m-2 pb_akm">
-                        {/* //MARK: Dinner Sw  */}
-                        <IOSSwitch
-                          sx={{ m: 1 }}
-                          checked={menuData[day].dinner.status === "enabled"} // Use 'checked' instead of 'defaultChecked'
-                          disabled={
-                            disabledSwitches[
-                              `${day}-${menuData[day].dinner.id}`
-                            ]
-                          }
-                          onChange={(event) => {
-                            const { checked } = event.target;
-                            console.log(
-                              "Dinner Switch triggered for day:",
-                              day
-                            );
-                            handleDinnerStatusChange(
-                              day,
-                              menuData[day].dinner.id,
-                              menuData[day].date,
-                              checked, // Pass 'checked' instead of 'value'
-                              menuData[day].dinner.price
-                            );
-                          }}
-                        />
-                        {menuData[day].dinner.status === "enabled"
-                          ? "Meal ordered"
-                          : "Tap to order"}
-                      </div>
-                      <div className=" px_akm pb_akm">
-                        {firstDay === day &&
-                          dinnerOrderAcceptText &&
-                          menuData[day].dinner.status !== "enabled" && (
-                            <div className=" h4info_akm  px_akm flex justify-center items-center">
-                              Accepting this order till{" "}
-                              {settings.time_limit_dinner}
-                            </div>
-                          )}
+                        )}
 
-                        {menuData[day].dinner.status === "enabled" && (
-                          <div className="mt-2 flex flex-col pb_akm">
-                            {menuData[day].dinner.mealbox !== null ? (
+                      {menuData[day].dinner.status === "enabled" && (
+                        <div className="mt-2 flex flex-col pb_akm">
+                          {menuData[day].dinner.mealbox !== null ? (
+                            <div className="h4info_akm flex items-center justify-center py-1">
+                              {/* {menuData[day].dinner.mealbox} */}
+                              Mealbox
+                              {menuData[day]?.dinner?.mealbox === 1 ? (
+                                <span className="text-green-600 ml-1">
+                                  <FontAwesomeIcon icon={faCircleCheck} />
+                                </span>
+                              ) : (
+                                <span className=" ml-1">
+                                  <FontAwesomeIcon icon={faCircleExclamation} />
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            mealboxStatus !== null && (
                               <div className="h4info_akm flex items-center justify-center py-1">
-                                {/* {menuData[day].dinner.mealbox} */}
                                 Mealbox
-                                {menuData[day]?.dinner?.mealbox === 1 ? (
+                                {mealboxStatus === 1 ? (
                                   <span className="text-green-600 ml-1">
                                     <FontAwesomeIcon icon={faCircleCheck} />
                                   </span>
@@ -734,104 +839,87 @@ const MenuComp = () => {
                                   </span>
                                 )}
                               </div>
-                            ) : (
-                              mealboxStatus !== null && (
-                                <div className="h4info_akm flex items-center justify-center py-1">
-                                  Mealbox
-                                  {mealboxStatus === 1 ? (
-                                    <span className="text-green-600 ml-1">
-                                      <FontAwesomeIcon icon={faCircleCheck} />
-                                    </span>
-                                  ) : (
-                                    <span className=" ml-1">
-                                      <FontAwesomeIcon
-                                        icon={faCircleExclamation}
-                                      />
-                                    </span>
-                                  )}
-                                </div>
-                              )
-                            )}
-                            <div className="flex items-center justify-center space-x-2">
-                              <Button
-                                radius="full"
-                                isIconOnly
-                                isDisabled={
-                                  disabledSwitches[
-                                    `${day}-${menuData[day].dinner.id}-decrement`
-                                  ]
-                                }
-                                className="bg-blue-500 text-white"
-                                onClick={() =>
-                                  handleQuantityChange(
-                                    day,
-                                    "dinner",
-                                    -1,
-                                    menuData[day].dinner.id,
-                                    menuData[day].date
-                                  )
-                                }
-                              >
-                                -
-                              </Button>
+                            )
+                          )}
+                          <div className="flex items-center justify-center space-x-2">
+                            <Button
+                              radius="full"
+                              isIconOnly
+                              isDisabled={
+                                disabledSwitches[
+                                  `${day}-${menuData[day].dinner.id}-decrement`
+                                ]
+                              }
+                              className="bg-blue-500 text-white"
+                              onClick={() =>
+                                handleQuantityChange(
+                                  day,
+                                  "dinner",
+                                  -1,
+                                  menuData[day].dinner.id,
+                                  menuData[day].date
+                                )
+                              }
+                            >
+                              -
+                            </Button>
 
-                              <div>{menuData[day].dinner.quantity}</div>
-                              <Button
-                                radius="full"
-                                isIconOnly
-                                isDisabled={
-                                  disabledSwitches[
-                                    `${day}-${menuData[day].dinner.id}-increment`
-                                  ]
-                                }
-                                className="bg-blue-500 text-white"
-                                onClick={() =>
-                                  handleQuantityChange(
-                                    day,
-                                    "dinner",
-                                    1,
-                                    menuData[day].dinner.id,
-                                    menuData[day].date
-                                  )
-                                }
-                              >
-                                +
-                              </Button>
-                            </div>
-                            <div className="mt_akm flex flex-col items-center justify-center">
-                              <span className="font-semibold">
-                                Total:{" "}
-                                {
-                                  //MARK: Total Price
-                                  calculateTotalPrice(
-                                    menuData[day].dinner.price,
-                                    menuData[day].dinner.quantity
-                                  )
-                                }{" "}
-                                BDT
-                              </span>
-                              {menuData[day].dinner.quantity > 1 && (
-                                <span className="h4info_akm">
-                                  {" "}
-                                  (10% discounted)
-                                </span>
-                              )}
-                            </div>
+                            <div>{menuData[day].dinner.quantity}</div>
+                            <Button
+                              radius="full"
+                              isIconOnly
+                              isDisabled={
+                                disabledSwitches[
+                                  `${day}-${menuData[day].dinner.id}-increment`
+                                ]
+                              }
+                              className="bg-blue-500 text-white"
+                              onClick={() =>
+                                handleQuantityChange(
+                                  day,
+                                  "dinner",
+                                  1,
+                                  menuData[day].dinner.id,
+                                  menuData[day].date
+                                )
+                              }
+                            >
+                              +
+                            </Button>
                           </div>
-                        )}
-                      </div>
+                          <div className="mt_akm flex flex-col items-center justify-center">
+                            <span className="font-semibold">
+                              Total:{" "}
+                              {
+                                //MARK: Total Price
+                                calculateTotalPrice(
+                                  menuData[day].dinner.price,
+                                  menuData[day].dinner.quantity
+                                )
+                              }{" "}
+                              BDT
+                            </span>
+                            {menuData[day].dinner.quantity > 1 && (
+                              <span className="h4info_akm">
+                                {" "}
+                                (10% discounted)
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )
-                  // : (
-                  //   <div className="flex items-center justify-center h-full">
-                  //     <FontAwesomeIcon
-                  //       icon={faHourglassEnd}
-                  //       className="text-6xl text-gray-200"
-                  //     />
-                  //   </div>
-                  // )
-                }
-              </div>
+                  </div>
+                )
+                // : (
+                //   <div className="flex items-center justify-center h-full">
+                //     <FontAwesomeIcon
+                //       icon={faHourglassEnd}
+                //       className="text-6xl text-gray-200"
+                //     />
+                //   </div>
+                // )
+              }
             </div>
           </div>
         </>

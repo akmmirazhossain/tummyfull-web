@@ -180,6 +180,7 @@ body {
 
 .gap_akm {
   @apply gap-2;
+  @apply md:gap-4;
   /* @apply sm:px-2;
   @apply md:px-3;
   @apply lg:px-4;
