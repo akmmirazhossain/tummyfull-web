@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUtensils,
-  faGear,
-  faListCheck,
-  faEllipsisVertical,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUtensils, faGear, faBell } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { Button, ButtonGroup } from "@nextui-org/react";
@@ -39,20 +34,14 @@ const NavbarBottom = () => {
     },
 
     {
-      href: "/mealbook",
-      icon: faListCheck,
-      text: "Meal Book",
-    },
-    {
       href: "/settings",
       icon: faGear,
       text: "Settings",
     },
-
     {
-      href: "/more",
-      icon: faEllipsisVertical,
-      text: "More",
+      href: "/notification",
+      icon: faBell,
+      text: "Notifications",
     },
   ];
 

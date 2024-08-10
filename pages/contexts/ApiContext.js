@@ -26,3 +26,7 @@ const ApiProvider = ({ children }) => {
 };
 
 export { ApiContext, ApiProvider };
+
+// Default export a simple React component
+const DefaultComponent = () => <div>ApiContext Placeholder Page</div>;
+export default DefaultComponent;

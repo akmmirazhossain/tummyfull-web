@@ -26,3 +26,7 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+// Default export a simple React component
+const DefaultComponent = () => <div>ApiContext Placeholder Page</div>;
+export default DefaultComponent;

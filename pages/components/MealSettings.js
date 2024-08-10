@@ -105,7 +105,9 @@ const MealSettings = () => {
 
   return (
     <>
-      <div className="h1_akm">Meal Settings</div>
+      <div className="h1_akm" id="mealbox">
+        Meal Settings
+      </div>
       <div className="card_akm p-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center ">
@@ -148,7 +150,7 @@ const MealSettings = () => {
             <Image
               isBlurred
               width={240}
-              src="/images/tiffin_carrier.jpg"
+              src="/images/mealbox.png"
               alt="NextUI Album Cover"
               className="m-5"
             />

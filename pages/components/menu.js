@@ -1,6 +1,7 @@
 // pages/menu2.js
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { Button, Card, Chip, Skeleton } from "@nextui-org/react";
@@ -488,15 +489,15 @@ const MenuComp = () => {
     return Math.floor(discountedPrice); // Round down to nearest integer
   };
 
-  const dayMap = {
-    fri: "Friday",
-    sat: "Saturday",
-    sun: "Sunday",
-    mon: "Monday",
-    tue: "Tuesday",
-    wed: "Wednesday",
-    thu: "Thursday",
-  };
+  // const dayMap = {
+  //   fri: "Friday",
+  //   sat: "Saturday",
+  //   sun: "Sunday",
+  //   mon: "Monday",
+  //   tue: "Tuesday",
+  //   wed: "Wednesday",
+  //   thu: "Thursday",
+  // };
 
   if (!menuData || !settings) {
     return (
@@ -571,7 +572,7 @@ const MenuComp = () => {
                         {settings?.delivery_time_lunch || "N/A"}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1">
+                    <div className="relative grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1 ">
                       {menuData[day].lunch.foods.map((food, index) => (
                         <div
                           key={index}
@@ -587,6 +588,22 @@ const MenuComp = () => {
                           </span>
                         </div>
                       ))}
+
+                      {menuData[day].lunch.status === "enabled" && (
+                        <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm h4_akm slide-up">
+                          <div className=" text-center">
+                            You have pre-ordered this lunch.
+                          </div>
+                          <div className=" text-center flex flex-col">
+                            <span> Delivery time:</span>
+                            <span>
+                              {settings?.delivery_time_lunch || "N/A"} (
+                              {day.charAt(0).toUpperCase() + day.slice(1)},{" "}
+                              {formatDate(menuData[day].date)})
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <div className="flex justify-center h3_akm py_akm">
                       <span className="">৳ {menuData[day].lunch.price}</span>
@@ -628,24 +645,11 @@ const MenuComp = () => {
                       {menuData[day].lunch.status === "enabled" && (
                         <div className="mt-2 flex flex-col pb_akm">
                           {menuData[day].lunch.mealbox !== null ? (
-                            <div className="h4info_akm flex items-center justify-center py-1">
-                              {/* {menuData[day].lunch.mealbox} */}
-                              Mealbox
-                              {menuData[day]?.lunch?.mealbox === 1 ? (
-                                <span className="text-green-600 ml-1">
-                                  <FontAwesomeIcon icon={faCircleCheck} />
-                                </span>
-                              ) : (
-                                <span className=" ml-1">
-                                  <FontAwesomeIcon icon={faCircleExclamation} />
-                                </span>
-                              )}
-                            </div>
-                          ) : (
-                            mealboxStatus !== null && (
+                            <Link href="/settings#mealbox">
                               <div className="h4info_akm flex items-center justify-center py-1">
+                                {/* {menuData[day].lunch.mealbox} */}
                                 Mealbox
-                                {mealboxStatus === 1 ? (
+                                {menuData[day]?.lunch?.mealbox === 1 ? (
                                   <span className="text-green-600 ml-1">
                                     <FontAwesomeIcon icon={faCircleCheck} />
                                   </span>
@@ -657,6 +661,25 @@ const MenuComp = () => {
                                   </span>
                                 )}
                               </div>
+                            </Link>
+                          ) : (
+                            mealboxStatus !== null && (
+                              <Link href="/settings#mealbox">
+                                <div className="h4info_akm flex items-center justify-center py-1">
+                                  Mealbox
+                                  {mealboxStatus === 1 ? (
+                                    <span className="text-green-600 ml-1">
+                                      <FontAwesomeIcon icon={faCircleCheck} />
+                                    </span>
+                                  ) : (
+                                    <span className=" ml-1">
+                                      <FontAwesomeIcon
+                                        icon={faCircleExclamation}
+                                      />
+                                    </span>
+                                  )}
+                                </div>
+                              </Link>
                             )
                           )}
                           <div className="flex items-center justify-center space-x-2">
@@ -753,7 +776,7 @@ const MenuComp = () => {
                         {settings?.delivery_time_dinner || "N/A"}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1">
+                    <div className="relative grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1">
                       {menuData[day].dinner.foods.map((food, index) => (
                         <div
                           key={index}
@@ -769,6 +792,22 @@ const MenuComp = () => {
                           </span>
                         </div>
                       ))}
+
+                      {menuData[day].dinner.status === "enabled" && (
+                        <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm h4_akm slide-up">
+                          <div className=" text-center">
+                            You have pre-ordered this dinner.
+                          </div>
+                          <div className=" text-center flex flex-col">
+                            <span> Delivery time:</span>
+                            <span>
+                              {settings?.delivery_time_dinner || "N/A"} (
+                              {day.charAt(0).toUpperCase() + day.slice(1)},{" "}
+                              {formatDate(menuData[day].date)})
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <div className="flex justify-center h3_akm py_akm">
                       <span className="">৳ {menuData[day].dinner.price}</span>
@@ -810,24 +849,11 @@ const MenuComp = () => {
                       {menuData[day].dinner.status === "enabled" && (
                         <div className="mt-2 flex flex-col pb_akm">
                           {menuData[day].dinner.mealbox !== null ? (
-                            <div className="h4info_akm flex items-center justify-center py-1">
-                              {/* {menuData[day].dinner.mealbox} */}
-                              Mealbox
-                              {menuData[day]?.dinner?.mealbox === 1 ? (
-                                <span className="text-green-600 ml-1">
-                                  <FontAwesomeIcon icon={faCircleCheck} />
-                                </span>
-                              ) : (
-                                <span className=" ml-1">
-                                  <FontAwesomeIcon icon={faCircleExclamation} />
-                                </span>
-                              )}
-                            </div>
-                          ) : (
-                            mealboxStatus !== null && (
+                            <Link href="/settings#mealbox">
                               <div className="h4info_akm flex items-center justify-center py-1">
+                                {/* {menuData[day].dinner.mealbox} */}
                                 Mealbox
-                                {mealboxStatus === 1 ? (
+                                {menuData[day]?.dinner?.mealbox === 1 ? (
                                   <span className="text-green-600 ml-1">
                                     <FontAwesomeIcon icon={faCircleCheck} />
                                   </span>
@@ -839,6 +865,25 @@ const MenuComp = () => {
                                   </span>
                                 )}
                               </div>
+                            </Link>
+                          ) : (
+                            mealboxStatus !== null && (
+                              <Link href="/settings#mealbox">
+                                <div className="h4info_akm flex items-center justify-center py-1">
+                                  Mealbox
+                                  {mealboxStatus === 1 ? (
+                                    <span className="text-green-600 ml-1">
+                                      <FontAwesomeIcon icon={faCircleCheck} />
+                                    </span>
+                                  ) : (
+                                    <span className=" ml-1">
+                                      <FontAwesomeIcon
+                                        icon={faCircleExclamation}
+                                      />
+                                    </span>
+                                  )}
+                                </div>
+                              </Link>
                             )
                           )}
                           <div className="flex items-center justify-center space-x-2">

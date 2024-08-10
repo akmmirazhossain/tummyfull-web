@@ -130,9 +130,14 @@ const NavbarTop = () => {
             )}
 
             {isLoggedIn && (
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-2 lg:gap-4">
                 <Link href="/wallet">
-                  <Button color="primary" variant="light" radius="full">
+                  <Button
+                    variant="light"
+                    isIconOnly
+                    size="lg"
+                    className="text-green-600"
+                  >
                     <div>
                       {isLoading ? (
                         <Spinner size="sm" />

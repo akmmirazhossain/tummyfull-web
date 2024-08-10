@@ -194,6 +194,25 @@ body {
   @apply rounded-3xl;
 }
 
+.rounded_top_akm {
+  @apply rounded-t-3xl;
+}
+
 .card_akm {
   @apply bg-gray-50   shadow_akm rounded_akm;
+}
+
+/* ANIMATIONS */
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.2s ease-out;
 }
