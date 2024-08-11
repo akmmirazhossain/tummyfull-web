@@ -55,6 +55,11 @@ body {
   .bg_green {
     background-color: #004225;
   }
+
+  .text_green {
+    color: #004225;
+  }
+
   .bg_beige {
     background-color: #f5f5dc;
   }
@@ -190,8 +195,22 @@ body {
 .shadow_akm {
   @apply shadow-md;
 }
+
+.shadow_inner_akm {
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shadow_text_akm {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.shadow_text_white_akm {
+  text-shadow: 2px 2px 4px rgba(243, 243, 243, 0.9);
+}
+
 .rounded_akm {
-  @apply rounded-3xl;
+  @apply rounded-2xl;
+  @apply md:rounded-3xl;
 }
 
 .rounded_top_akm {

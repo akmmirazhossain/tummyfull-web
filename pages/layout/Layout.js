@@ -8,7 +8,7 @@ const Layout = ({ children, title }) => {
   return (
     <div className="bg_light_orange text_black">
       <Head>
-        <title>{title ? title : "খেয়েছ?"}</title>
+        <title>{title ? title : "ডালভাত"}</title>
       </Head>
       <header className="fixed w-full z-20">
         <NavbarTop className="" />

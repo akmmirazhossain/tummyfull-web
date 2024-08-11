@@ -110,7 +110,7 @@ const LoginForm = () => {
       </Head>
       <div className="h1_akm ">Login</div>
       <div className="card_akm p-8">
-        <div>Log in and provide your address to continue.</div>
+        <div>Please log in and provide your address to continue.</div>
         <Spacer y={3} />
         <Input
           value={value}

@@ -592,7 +592,7 @@ const MenuComp = () => {
                       {menuData[day].lunch.status === "enabled" && (
                         <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm h4_akm slide-up">
                           <div className=" text-center">
-                            You have pre-ordered this lunch.
+                            You have pre-ordered this Lunch
                           </div>
                           <div className=" text-center flex flex-col">
                             <span> Delivery time:</span>
@@ -796,7 +796,7 @@ const MenuComp = () => {
                       {menuData[day].dinner.status === "enabled" && (
                         <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm h4_akm slide-up">
                           <div className=" text-center">
-                            You have pre-ordered this dinner.
+                            You have pre-ordered this Dinner
                           </div>
                           <div className=" text-center flex flex-col">
                             <span> Delivery time:</span>
@@ -969,6 +969,9 @@ const MenuComp = () => {
           </div>
         </>
       ))}
+      <div className="pad_akm text-center h4info_akm">
+        Menu rotates daily for the upcoming 7 days
+      </div>
     </div>
   );
 };
