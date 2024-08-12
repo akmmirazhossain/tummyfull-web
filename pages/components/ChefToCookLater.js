@@ -7,8 +7,8 @@ const MealList = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost/tf-lara/public/api/orderlist-chef-later")
+    https: axios
+      .get("http://apis.kheyecho.xyz/public/api/orderlist-chef-later")
       .then((response) => {
         setMeals(response.data);
       })

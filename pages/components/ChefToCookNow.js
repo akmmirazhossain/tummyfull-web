@@ -12,7 +12,7 @@ const OrderList = () => {
     const fetchOrderData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost/tf-lara/public/api/orderlist-chef-now"
+          "https://apis.kheyecho.xyz/public/api/orderlist-chef-now"
         );
         setOrderData(response.data);
         setLoading(false);
