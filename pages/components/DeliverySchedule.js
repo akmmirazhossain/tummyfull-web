@@ -9,6 +9,7 @@ import {
   Button,
   Checkbox,
 } from "@nextui-org/react";
+import { useRouter } from "next/router";
 
 const Deliveries = () => {
   const [data, setData] = useState({});
@@ -18,7 +19,7 @@ const Deliveries = () => {
 
   const [selectedKey, setSelectedKey] = useState(null);
   const [orderId, setOrderId] = useState(null);
-
+  const router = useRouter();
   const apiConfig = useContext(ApiContext);
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const Deliveries = () => {
     setDelivFetchRefresh((prev) => prev + 1);
     setSelectedKey(selectedKey);
     setOrderId(orderId);
+    // router.reload();
   };
 
   if (loading) return <div>Loading...</div>;
@@ -144,16 +146,22 @@ const Deliveries = () => {
                         {/* //MARK: DROPDOWN */}
                         <Dropdown className="text-black">
                           <DropdownTrigger>
-                            <Button variant="bordered" className="capitalize">
-                              {
-                                selectedKey === null
-                                  ? item.mrd_order_status
-                                  : orderId === item.mrd_order_id
-                                  ? selectedKey
-                                  : item.mrd_order_status // Handle any other case as needed
+                            <Button
+                              variant="bordered"
+                              className="capitalize"
+                              isDisabled={
+                                item.mrd_order_status === "delivered" ||
+                                item.mrd_order_status === "cancelled"
                               }
+                            >
+                              {selectedKey === null
+                                ? item.mrd_order_status
+                                : orderId === item.mrd_order_id
+                                ? selectedKey
+                                : item.mrd_order_status}
                             </Button>
                           </DropdownTrigger>
+                          {console.log("selectedKey:", selectedKey)}
                           <DropdownMenu
                             aria-label="Single selection example"
                             variant="flat"
@@ -173,7 +181,10 @@ const Deliveries = () => {
                             <DropdownItem key="pending" className="p-2">
                               Pending
                             </DropdownItem>
-                            <DropdownItem key="delivered" className="p-2">
+                            <DropdownItem
+                              key="delivered"
+                              className="p-2 text-green-600 font-bold"
+                            >
                               Delivered
                             </DropdownItem>
                             <DropdownItem

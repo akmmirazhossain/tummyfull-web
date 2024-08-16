@@ -197,23 +197,23 @@ const MenuComp = () => {
       setMealboxStatus(mealboxResData);
 
       //NOTIF INSERT
-      const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log("🚀 ~ handleLunchStatusChange ~ body:", data);
-      if (!notifRes.ok) {
-        throw new Error(
-          "🚀 ~ handleLunchStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
-        );
-      }
+      // const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
+      // console.log("🚀 ~ handleLunchStatusChange ~ body:", data);
+      // if (!notifRes.ok) {
+      //   throw new Error(
+      //     "🚀 ~ handleLunchStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
+      //   );
+      // }
 
-      const notifResData = await notifRes.json();
-      console.log("🚀 ~ handleLunchStatusChange ~ notifResData:", notifResData);
-      //setMealboxStatus(notifResData);
+      // const notifResData = await notifRes.json();
+      // console.log("🚀 ~ handleLunchStatusChange ~ notifResData:", notifResData);
+      // //setMealboxStatus(notifResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
@@ -292,25 +292,25 @@ const MenuComp = () => {
       setMealboxStatus(mealboxResData);
 
       //NOTIF INSERT
-      const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log("🚀 ~ handleDinnerStatusChange ~ body:", data);
-      if (!notifRes.ok) {
-        throw new Error(
-          "🚀 ~ handleDinnerStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
-        );
-      }
+      // const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
+      // console.log("🚀 ~ handleDinnerStatusChange ~ body:", data);
+      // if (!notifRes.ok) {
+      //   throw new Error(
+      //     "🚀 ~ handleDinnerStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
+      //   );
+      // }
 
-      const notifResData = await notifRes.json();
-      console.log(
-        "🚀 ~ handleDinnerStatusChange ~ notifResData:",
-        notifResData
-      );
+      // const notifResData = await notifRes.json();
+      // console.log(
+      //   "🚀 ~ handleDinnerStatusChange ~ notifResData:",
+      //   notifResData
+      // );
       //setMealboxStatus(notifResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);

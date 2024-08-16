@@ -75,6 +75,7 @@ const CreditDisplay = () => {
               <Image
                 className="rounded_akm shadow_akm"
                 src={"/images/payment/bkash/1.png"}
+                alt=""
                 width={500}
                 height={400}
               />
@@ -90,6 +91,7 @@ const CreditDisplay = () => {
               <Image
                 className="rounded_akm shadow_akm"
                 src={"/images/payment/bkash/2.png"}
+                alt=""
                 width={500}
                 height={400}
               />
@@ -108,6 +110,7 @@ const CreditDisplay = () => {
               <Image
                 className="rounded_akm shadow_akm"
                 src={"/images/payment/bkash/3.png"}
+                alt=""
                 width={500}
                 height={400}
               />
@@ -128,6 +131,7 @@ const CreditDisplay = () => {
               <Image
                 className="rounded_akm shadow_akm"
                 src={"/images/payment/bkash/4.png"}
+                alt=""
                 width={500}
                 height={400}
               />
@@ -146,6 +150,7 @@ const CreditDisplay = () => {
                 className="rounded_akm shadow_akm"
                 src={"/images/payment/bkash/5.png"}
                 width={500}
+                alt=""
                 height={400}
               />
             </div>
