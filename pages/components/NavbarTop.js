@@ -144,7 +144,7 @@ const NavbarTop = () => {
                       ) : userData !== null ? (
                         `৳${userData}`
                       ) : (
-                        "Couldnt load credit"
+                        "৳"
                       )}
                     </div>
                   </Button>

@@ -1,112 +1,102 @@
-// components/OrderList.js
-
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-const OrderList = () => {
-  const [orderData, setOrderData] = useState(null);
+export default function Meals() {
+  const [meals, setMeals] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchOrderData = async () => {
-      try {
-        const response = await axios.get(
-          "https://apis.kheyecho.xyz/public/api/orderlist-chef-now"
-        );
-        setOrderData(response.data);
+    axios
+      .get("http://localhost/tf-lara/public/api/orderlist-chef-now")
+      .then((response) => {
+        setMeals(response.data);
         setLoading(false);
-      } catch (err) {
-        setError(err.message);
+      })
+      .catch((error) => {
+        setError(error.message);
         setLoading(false);
-      }
-    };
-
-    fetchOrderData();
+      });
   }, []);
 
-  if (loading) return <div className="text-center mt-5">Loading...</div>;
-  if (error)
-    return <div className="text-center mt-5 text-red-500">Error: {error}</div>;
+  function formatDateInBangla(dateString) {
+    const date = new Date(dateString);
+
+    const optionsDay = { weekday: "long" };
+    const optionsFullDate = { year: "numeric", month: "long", day: "numeric" };
+
+    const day = date.toLocaleDateString("bn-BD", optionsDay);
+    const fullDate = date.toLocaleDateString("bn-BD", optionsFullDate);
+
+    return `${day} (${fullDate})`;
+  }
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="p-6">
-      {Object.entries(orderData).map(([date, details]) => (
-        <div key={date} className="mb-8">
-          <div className="flex items-center">
-            <h2 className="text-3xl font-bold mb-2">Today to cook </h2>
-            <span>({date})</span>
-          </div>
-          <div className="grid grid-cols-2">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">Lunch</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {details.lunch.food_id.map((food, index) => (
-                  <div
-                    key={index}
-                    className="border p-4 rounded shadow-md bg-white"
-                  >
-                    {/* <img
-                      src={food.image}
-                      alt={food.name}
-                      className="w-full h-32 object-cover mb-2"
-                    /> */}
-                    <h4 className="font-semibold">{food.name}</h4>
-                    <p>{food.description}</p>
+    <div className="container mx-auto ">
+      {Object.entries(meals).map(([date, mealData]) => (
+        <>
+          <h2 className="h1_akm card_akm pad_akm mb_akm">
+            {formatDateInBangla(date)}
+          </h2>
+          <div
+            key={date}
+            className="mb-8 grid grid-cols-1 md:grid-cols-2 gap_akm"
+          >
+            {Object.entries(mealData).map(([mealType, mealDetails]) => (
+              <div key={mealType} className="mb-4 card_akm pad_akm">
+                <h3 className="h1_akm capitalize">{mealType}</h3>
+                <div className=" grid grid-cols-2 mb-4 gap_akm">
+                  <div className="flex flex-col items-center justify-center gap_akm pad_akm border rounded_akm shadow_akm">
+                    <p>
+                      <strong>Quantity</strong>
+                    </p>
+                    <p className="text-5xl">{mealDetails.total_quantity}</p>
                   </div>
-                ))}
-              </div>
-              <p className="mt-2">
-                Total Quantity: {details.lunch.total_quantity}
-              </p>
-              <p className="mt-1">
-                Menu Price: {details.lunch.mrd_menu_price} BDT
-              </p>
-              <p className="mt-1">
-                Order Total Price: {details.lunch.mrd_order_total_price} BDT
-              </p>
-              <p className="mt-1">Mealboxes: {details.lunch.total_mealbox}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">Dinner</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {details.dinner.food_id.map((food, index) => (
-                  <div
-                    key={index}
-                    className="border p-4 rounded shadow-md bg-white"
-                  >
-                    {/* <img
-                      src={food.image}
-                      alt={food.name}
-                      className="w-full h-32 object-cover mb-2"
-                    /> */}
-                    <h4 className="font-semibold">{food.name}</h4>
-                    <p>{food.description}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-2">
-                Total Quantity: {details.dinner.total_quantity}
-              </p>
-              <p className="mt-1">
-                Menu Price: {details.dinner.mrd_menu_price} BDT
-              </p>
-              <p className="mt-1">
-                <p className="mt-1">
-                  Mealboxes: {details.dinner.total_mealbox}
-                </p>
-              </p>
-            </div>
-          </div>
-        </div>
-      ))}
 
-      <div className="flex items-center">
-        <h2 className="text-3xl font-bold mb-2"> To cook later </h2>
-        <span></span>
-      </div>
+                  <div className="flex flex-col items-center justify-center gap_akm pad_akm border rounded_akm shadow_akm">
+                    <p>
+                      <strong>Box</strong>
+                    </p>
+                    <p className="text-5xl">{mealDetails.total_mealbox}</p>
+                  </div>
+
+                  {/* <p>
+                    <strong>Menu ID:</strong> {mealDetails.menu_id}
+                  </p> */}
+                </div>
+                <div className="space-y-2">
+                  {mealDetails.food_items.map((item) => (
+                    <div
+                      key={item.mrd_food_id}
+                      className="flex items-center space-x-4"
+                    >
+                      <img
+                        src={`http://192.168.0.216/tf-lara/public/assets/images/${item.mrd_food_img}`}
+                        alt={item.mrd_food_name}
+                        className="w-16 h-16 object-cover"
+                      />
+                      <div>
+                        <h4 className="text-md font-medium">
+                          {item.mrd_food_name}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {item.mrd_food_desc}
+                        </p>
+                        {/* <p className="text-sm text-gray-800">
+                          Price: {item.mrd_food_price}
+                        </p> */}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ))}
     </div>
   );
-};
-
-export default OrderList;
+}

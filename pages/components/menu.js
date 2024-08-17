@@ -79,6 +79,44 @@ const MenuComp = () => {
   const [mealboxStatus, setMealboxStatus] = useState(null);
 
   // const [totalPrices, setTotalPrices] = useState({});
+  //AUTO REFRESH ON NEXT
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchData();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  //FETCH MENU
+  const fetchData = async () => {
+    if (!config) return;
+
+    const { apiBaseUrl, imageBaseUrl } = config;
+
+    try {
+      // Fetch menu data
+      const menuRes = await fetch(
+        `${apiBaseUrl}menu?TFLoginToken=${Cookies.get("TFLoginToken")}`
+      );
+      const menuData = await menuRes.json();
+      setMenuData(menuData);
+
+      // Fetch settings data
+      const settingsRes = await fetch(`${apiBaseUrl}setting`);
+      const settingsData = await settingsRes.json();
+      setSettings(settingsData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle error as needed
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [config]);
 
   useEffect(() => {
     // Fetch config.json on component mount
@@ -100,28 +138,6 @@ const MenuComp = () => {
 
   useEffect(() => {
     // Fetch data when Cookies.get("TFLoginToken") changes or config is fetched
-    const fetchData = async () => {
-      if (!config) return;
-
-      const { apiBaseUrl, imageBaseUrl } = config;
-
-      try {
-        // Fetch menu data
-        const menuRes = await fetch(
-          `${apiBaseUrl}menu?TFLoginToken=${Cookies.get("TFLoginToken")}`
-        );
-        const menuData = await menuRes.json();
-        setMenuData(menuData);
-
-        // Fetch settings data
-        const settingsRes = await fetch(`${apiBaseUrl}setting`);
-        const settingsData = await settingsRes.json();
-        setSettings(settingsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Handle error as needed
-      }
-    };
 
     fetchData();
   }, [config, Cookies.get("TFLoginToken")]);

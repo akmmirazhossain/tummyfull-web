@@ -22,9 +22,9 @@ export default function chef() {
   return (
     <>
       <Layout>
-        <div className="text-2xl border-b-2">Chef page</div>
+        <div className="h1_akm ">Chef Panel</div>
         <OrderList />
-        <MealList />
+        {/* <MealList /> */}
       </Layout>
     </>
   );

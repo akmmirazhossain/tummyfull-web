@@ -25,7 +25,7 @@ const MealList = () => {
     <div className="p-4">
       {Object.entries(meals).map(([date, mealDetails]) => (
         <div key={date} className="mb-6">
-          <h2 className="text-xl font-bold mb-2">{date}</h2>
+          <h2 className="text-xl font-bold mb-2 card_akm">{date}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Object.entries(mealDetails).map(([mealType, details]) => (
               <div
