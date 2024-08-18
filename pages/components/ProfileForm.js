@@ -103,8 +103,11 @@ const ProfileForm = () => {
       const result = await response.json();
       if (response.ok) {
         console.log("User data updated successfully:", result);
-        alert("Profile updated successfully!");
-        // Optionally, you can refresh or redirect the user
+        alert(
+          "Profile updated successfully! \nRedirecting you to the menu page to place your order."
+        );
+
+        router.push("/");
       } else {
         console.error("Failed to update user data:", result);
         alert(result.message || "Failed to update profile. Please try again.");
@@ -134,7 +137,7 @@ const ProfileForm = () => {
           value={formData.name}
           onChange={handleChange}
         />
-        <Spacer y={3} />
+        <Spacer y={4} />
         <div className="flex items-center">
           <span>Phone</span>
           <Tooltip color="foreground" content="Phone number verified">
@@ -152,7 +155,7 @@ const ProfileForm = () => {
           onChange={handleChange}
           disabled // Phone field is disabled since it is not being updated
         />
-        <Spacer y={3} />
+        <Spacer y={4} />
         <div>
           <span>Address </span>
           <span className="text-red-500">*</span>
@@ -173,13 +176,10 @@ const ProfileForm = () => {
           expand to all of Dhaka soon and notify you when we reach your area.
           Stay tuned!
         </span>
-        <Spacer y={3} />
+        <Spacer y={4} />
 
-        <Button type="submit">Update</Button>
-
-        <Spacer y={6} />
-        <div className="flex items-center ">
-          <span className="h2_akm pb_akm">Delivery Guidelines</span>
+        <div>
+          <span>Delivery Guidelines </span>
         </div>
         <Textarea
           label=""
@@ -197,7 +197,9 @@ const ProfileForm = () => {
           <div></div>
           <div></div>
         </div>
-        <Button type="submit">Update</Button>
+        <Button type="submit" size="lg">
+          Update
+        </Button>
       </form>
     </>
   );

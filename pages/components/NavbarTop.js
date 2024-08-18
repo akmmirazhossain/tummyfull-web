@@ -9,6 +9,7 @@ import {
   faGear,
   faListCheck,
   faWallet,
+  faEllipsisVertical,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, Spinner } from "@nextui-org/react";
@@ -27,7 +28,8 @@ const NavbarTop = () => {
   const token = Cookies.get("TFLoginToken");
 
   useEffect(() => {
-    if (token && apiConfig) {
+    if (token) {
+      if (!apiConfig) return;
       setIsLoggedIn(true);
       const fetchData = async () => {
         setIsLoading(true);
@@ -86,6 +88,12 @@ const NavbarTop = () => {
       href: "/notification",
       icon: faBell,
       text: "Notifications",
+    },
+
+    {
+      href: "/info",
+      icon: faEllipsisVertical,
+      text: "More",
     },
   ];
 

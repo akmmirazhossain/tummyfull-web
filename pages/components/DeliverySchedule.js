@@ -96,44 +96,48 @@ const Deliveries = () => {
                     {mealType}
                   </div>
 
-                  <div className="grid grid-cols-8">
+                  <div className="grid grid-cols-4 lg:grid-cols-8 ">
                     <div>Give mealbox</div>
                     <div>Address</div>
                     <div>Phone</div>
                     <div>Name</div>
                     <div>Quantity</div>
-                    <div>Price</div>
+                    {/* <div>Price</div> */}
                     <div>Cash to Collect</div>
                     {/* <div>Mealbox collected</div> */}
                     <div>Status</div>
                   </div>
 
                   {meals[mealType].map((item, index) => (
-                    <div key={index} className="grid grid-cols-8">
-                      <div className="border border-gray-200 p-2">
-                        {item.mrd_order_mealbox}
-                      </div>
-                      <div className="border border-gray-200 p-2">
-                        {item.mrd_user_address}
-                      </div>
-                      <div className="border border-gray-200 p-2">
-                        {item.mrd_user_phone}
-                      </div>
-                      <div className="border border-gray-200 p-2">
-                        {item.mrd_user_first_name}
-                      </div>
-                      <div className="border border-gray-200 p-2">
-                        {item.mrd_order_quantity}
-                      </div>
-                      <div className="border border-gray-200 p-2">
-                        {item.mrd_order_total_price}
-                      </div>
+                    <>
+                      <div
+                        key={index}
+                        className="grid grid-cols-4 lg:grid-cols-8 "
+                      >
+                        <div className="border border-gray-200 p-2">
+                          {item.mrd_order_mealbox}
+                        </div>
+                        <div className="border border-gray-200 p-2">
+                          {item.mrd_user_address}
+                        </div>
+                        <div className="border border-gray-200 p-2">
+                          {item.mrd_user_phone}
+                        </div>
+                        <div className="border border-gray-200 p-2">
+                          {item.mrd_user_first_name}
+                        </div>
+                        <div className="border border-gray-200 p-2">
+                          {item.mrd_order_quantity}
+                        </div>
+                        {/* <div className="border border-gray-200 p-2">
+                          {item.mrd_order_total_price}
+                        </div> */}
 
-                      <div className="border border-gray-200 p-2">
-                        {item.mrd_order_cash_to_get}
-                      </div>
+                        <div className="border border-gray-200 p-2">
+                          {item.mrd_order_cash_to_get}
+                        </div>
 
-                      {/* <div className="border border-gray-200 flex items-center justify-center">
+                        {/* <div className="border border-gray-200 flex items-center justify-center">
                         <Checkbox
                           onChange={() => mealboxCollected(item.mrd_order_id)}
                           size="lg"
@@ -142,67 +146,70 @@ const Deliveries = () => {
                         </Checkbox>
                       </div> */}
 
-                      <div className="border border-gray-200 flex items-center justify-center">
-                        {/* //MARK: DROPDOWN */}
-                        <Dropdown className="text-black">
-                          <DropdownTrigger>
-                            <Button
-                              variant="bordered"
-                              className="capitalize"
-                              isDisabled={
-                                item.mrd_order_status === "delivered" ||
-                                item.mrd_order_status === "cancelled"
+                        <div className="border border-gray-200 flex items-center justify-center">
+                          {/* //MARK: DROPDOWN */}
+                          <Dropdown className="text-black">
+                            <DropdownTrigger>
+                              <Button
+                                variant="bordered"
+                                className="capitalize"
+                                isDisabled={
+                                  item.mrd_order_status === "delivered" ||
+                                  item.mrd_order_status === "cancelled" ||
+                                  item.mrd_order_status === "unavailable"
+                                }
+                              >
+                                {selectedKey === null
+                                  ? item.mrd_order_status
+                                  : orderId === item.mrd_order_id
+                                  ? selectedKey
+                                  : item.mrd_order_status}
+                              </Button>
+                            </DropdownTrigger>
+                            {console.log("selectedKey:", selectedKey)}
+                            <DropdownMenu
+                              aria-label="Single selection example"
+                              variant="flat"
+                              disallowEmptySelection
+                              selectionMode="single"
+                              onSelectionChange={(selectedKey) =>
+                                deliveryStatusUpdate(
+                                  selectedKey,
+
+                                  item.mrd_order_id,
+                                  item.mrd_user_id,
+                                  mealType,
+                                  item.mrd_menu_id
+                                )
                               }
                             >
-                              {selectedKey === null
-                                ? item.mrd_order_status
-                                : orderId === item.mrd_order_id
-                                ? selectedKey
-                                : item.mrd_order_status}
-                            </Button>
-                          </DropdownTrigger>
-                          {console.log("selectedKey:", selectedKey)}
-                          <DropdownMenu
-                            aria-label="Single selection example"
-                            variant="flat"
-                            disallowEmptySelection
-                            selectionMode="single"
-                            onSelectionChange={(selectedKey) =>
-                              deliveryStatusUpdate(
-                                selectedKey,
-
-                                item.mrd_order_id,
-                                item.mrd_user_id,
-                                mealType,
-                                item.mrd_menu_id
-                              )
-                            }
-                          >
-                            <DropdownItem key="pending" className="p-2">
-                              Pending
-                            </DropdownItem>
-                            <DropdownItem
-                              key="delivered"
-                              className="p-2 text-green-600 font-bold"
-                            >
-                              Delivered
-                            </DropdownItem>
-                            <DropdownItem
+                              <DropdownItem key="pending" className="p-2">
+                                Pending
+                              </DropdownItem>
+                              <DropdownItem
+                                key="delivered"
+                                className="p-2 text-green-600 font-bold"
+                              >
+                                Delivered
+                              </DropdownItem>
+                              {/* <DropdownItem
                               key="delivered_with_due"
                               className="p-2"
                             >
                               Delivered with due
-                            </DropdownItem>
-                            <DropdownItem key="cancelled" className="p-2">
-                              Cancelled
-                            </DropdownItem>
-                            <DropdownItem key="unavailable" className="p-2">
-                              Unavailable
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </Dropdown>
+                            </DropdownItem> */}
+                              <DropdownItem key="cancelled" className="p-2">
+                                Cancelled
+                              </DropdownItem>
+                              <DropdownItem key="unavailable" className="p-2">
+                                Unavailable
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
                       </div>
-                    </div>
+                      <div className=" border-green-600 border-b-2 w-full py_akm"></div>
+                    </>
                   ))}
                 </div>
               )

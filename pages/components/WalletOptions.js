@@ -52,10 +52,10 @@ const CreditDisplay = () => {
           <div>
             ৳<span className="h2_akm">{userCredit}</span>
           </div>
-          <div>
+          {/* <div>
             {" "}
             <Button color="primary">Withdraw</Button>
-          </div>
+          </div> */}
         </div>
       </div>
 
