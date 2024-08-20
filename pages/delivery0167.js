@@ -1,11 +1,13 @@
 // pages/index.js
 import Layout from "./layout/Layout";
-import OrderList from "./components/ChefToCookNow";
-import MealList from "./components/ChefToCookLater";
+import Deliveries from "./components/DeliverySchedule";
+
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
-export default function chef() {
+export default function Menu() {
+  const router = useRouter();
   useEffect(() => {
     checkAndRedirect();
   }, []);
@@ -22,9 +24,7 @@ export default function chef() {
   return (
     <>
       <Layout>
-        <div className="h1_akm ">Chef Panel</div>
-        <OrderList />
-        {/* <MealList /> */}
+        <Deliveries />
       </Layout>
     </>
   );
