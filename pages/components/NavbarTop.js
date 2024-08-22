@@ -158,14 +158,14 @@ const NavbarTop = () => {
                   </Button>
                 </Link>
 
-                <Link
+                {/* <Link
                   onClick={handleLogout}
                   href="/"
                   className="gap-2 flex justify-center items-center"
                 >
                   <FontAwesomeIcon icon={faRightFromBracket} />
                   Logout
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>

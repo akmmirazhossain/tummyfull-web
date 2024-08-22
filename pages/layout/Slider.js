@@ -6,21 +6,21 @@ const items = [
     src: "/images/delivery.png",
     alt: "Free Delivery",
     className: "",
-    link: null, // No link for this item
+    link: "/info#features",
     hiddenOnMd: false,
   },
   {
     src: "/images/calendar.png",
     alt: "Hot Homecooked",
     className: "relative",
-    link: null,
+    link: "/info#features",
     hiddenOnMd: false,
   },
   {
     src: "/images/chef.png",
     alt: "Hot Homecooked",
     className: "relative hidden md:block",
-    link: null,
+    link: "/info#features",
     hiddenOnMd: true,
   },
   {
