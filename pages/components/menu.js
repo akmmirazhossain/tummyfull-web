@@ -80,14 +80,22 @@ const MenuComp = () => {
 
   // const [totalPrices, setTotalPrices] = useState({});
   //AUTO REFRESH ON NEXT
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        fetchData();
-      }
-    };
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      fetchData();
 
+      console.log("MENU REFRESHED");
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener when the component mounts
     document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Cleanup event listener when the component unmounts
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   //FETCH MENU

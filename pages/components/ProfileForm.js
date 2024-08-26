@@ -198,7 +198,7 @@ const ProfileForm = () => {
           <div></div>
         </div>
         <Button type="submit" size="lg">
-          Update
+          Save & Continue to Menu
         </Button>
       </form>
     </>
