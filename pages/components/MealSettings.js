@@ -111,7 +111,7 @@ const MealSettings = () => {
       <div className="card_akm p-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center ">
-            <span className="h2_akm">Activate mealbox</span>
+            <span className="h2_akm">Activate mealbox swap</span>
             <span className="ml-2 text-xl">(৳150)</span>
           </div>
           <div className=" ">
@@ -154,6 +154,12 @@ const MealSettings = () => {
               alt="NextUI Album Cover"
               className="m-5"
             />
+          </div>
+
+          <div>
+            {" "}
+            If activated, each meal you receive will be delivered in a new
+            mealbox, in exchange for the previous one.
           </div>
 
           <div className="p-3">
