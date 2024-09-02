@@ -122,6 +122,7 @@ const LoginForm = () => {
 
   const handleSaveAndContinue = async () => {
     const token = Cookies.get("TFLoginToken");
+    console.log(formData.first_name);
 
     if (!token) {
       console.error("No login token found, redirecting to login");
@@ -133,8 +134,9 @@ const LoginForm = () => {
       const response = await axios.post(
         `${config.apiBaseUrl}user-update`,
         {
-          name: first_name,
-          address: address,
+          name: formData.first_name,
+          address: formData.address,
+          delivery_instruction: "",
         },
         {
           headers: {

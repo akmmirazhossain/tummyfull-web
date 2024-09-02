@@ -103,11 +103,7 @@ const ProfileForm = () => {
       const result = await response.json();
       if (response.ok) {
         console.log("User data updated successfully:", result);
-        alert(
-          "Profile updated successfully! \nRedirecting you to the menu page to place your order."
-        );
-
-        router.push("/");
+        alert("Profile updated successfully!");
       } else {
         console.error("Failed to update user data:", result);
         alert(result.message || "Failed to update profile. Please try again.");
@@ -198,7 +194,7 @@ const ProfileForm = () => {
           <div></div>
         </div>
         <Button type="submit" size="lg">
-          Save & Continue to Menu
+          Save
         </Button>
       </form>
     </>

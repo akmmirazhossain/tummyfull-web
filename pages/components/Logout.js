@@ -10,7 +10,7 @@ const LogoutBlock = () => {
   const router = useRouter();
   const handleLogout = () => {
     Cookies.remove("TFLoginToken"); // Remove the cookie
-    setIsLoggedIn(false); // Update the state
+    // setIsLoggedIn(false); // Update the state
     router.push("/"); // Redirect to the login page or home page
   };
   return (
