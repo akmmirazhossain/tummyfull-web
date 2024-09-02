@@ -101,7 +101,8 @@ const NavbarTop = () => {
     <header className="bg_beige text-black">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-6">
         <div className="flex justify-between items-center py-2  ">
-          <div className="flex justify-start items-center ">
+          {/* Puzzler */}
+          {/* <div className="flex justify-start items-center ">
             <Image
               className="mr-1"
               width={50}
@@ -112,7 +113,7 @@ const NavbarTop = () => {
             <Link color="foreground" href="./">
               <p className=" font-niljannati text-2xl">ডালভাত.com</p>
             </Link>
-          </div>
+          </div> */}
           <nav className="hidden md:flex space-x-6 pr-6">
             {/* Replace with your menu items */}
             {navbarItems.map((item, index) => (

@@ -8,7 +8,8 @@ export default function Menu() {
   return (
     <>
       <Layout>
-        <Slider />
+        {/* Puzzler */}
+        {/* <Slider /> */}
         <MenuComp />
       </Layout>
     </>

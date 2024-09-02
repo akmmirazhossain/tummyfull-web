@@ -69,7 +69,9 @@ body {
   }
 
   .bg_light_orange {
-    background-color: #ffcf9d;
+    /* Puzzler */
+    background-color: blue;
+    /* background-color: #ffcf9d; */
   }
 }
 
