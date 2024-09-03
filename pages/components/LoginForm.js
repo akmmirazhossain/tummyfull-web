@@ -106,6 +106,8 @@ const LoginForm = () => {
         //SHOW THE USER NAME & ADDRESS INPUT FIELDS, IF THE USER IS NEW
         if (newUser) {
           setShowNameAddrInput(true);
+        } else {
+          router.push("/");
         }
 
         // router.push("/settings");
