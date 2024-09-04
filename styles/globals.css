@@ -237,3 +237,30 @@ body {
 .slide-up {
   animation: slideUp 0.2s ease-out;
 }
+
+/* SHAKE NOTIF BELL */
+@keyframes shake_bell {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  40% {
+    transform: rotate(15deg);
+  }
+  60% {
+    transform: rotate(-15deg);
+  }
+  80% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.shake_bell {
+  display: inline-block;
+  animation: shake_bell 0.5s ease-in-out forwards; /* Faster shaking */
+}

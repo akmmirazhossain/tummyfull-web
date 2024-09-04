@@ -22,7 +22,7 @@ const NavbarTop = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [showNotifications, setShowNotifications] = useState(false);
   const router = useRouter();
   const apiConfig = useContext(ApiContext);
   const token = Cookies.get("TFLoginToken");
@@ -61,6 +61,10 @@ const NavbarTop = () => {
     router.push("/"); // Redirect to the login page or home page
   };
 
+  const handleBellClick = () => {
+    setShowNotifications(!showNotifications); // Toggle visibility
+  };
+
   const navbarItems = [
     {
       href: "/",
@@ -84,11 +88,11 @@ const NavbarTop = () => {
     //   icon: faWallet,
     //   text: "Wallet",
     // },
-    {
-      href: "/notification",
-      icon: faBell,
-      text: "Notifications",
-    },
+    // {
+    //   href: "/notification",
+    //   icon: faBell,
+    //   text: "Notifications",
+    // },
 
     {
       href: "/info",
@@ -127,7 +131,27 @@ const NavbarTop = () => {
               </Link>
             ))}
           </nav>
-          <div>
+          <div className="flex">
+            <div
+              id="notif_bell"
+              className="pr_akm pl_akm relative cursor-pointer"
+              onClick={handleBellClick}
+            >
+              <div className="absolute -top-1 right-1 z-10 text-xs text-white bg-red-600 rounded-full h-4 w-4 flex justify-center items-center">
+                3
+              </div>
+              <FontAwesomeIcon className="shake_bell" icon={faBell} />
+              {/* Notification Dropdown */}
+              {showNotifications && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20 p-2">
+                  {/* Replace this with your notification items */}
+                  <div className="text-sm p-2 border-b">Notification 1</div>
+                  <div className="text-sm p-2 border-b">Notification 2</div>
+                  <div className="text-sm p-2">Notification 3</div>
+                </div>
+              )}
+            </div>
+
             {!isLoggedIn && (
               <Link
                 href="/login"
