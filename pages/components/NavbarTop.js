@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import NotificationBell from "./NotificationBell";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUtensils,
@@ -12,26 +13,53 @@ import {
   faEllipsisVertical,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Spinner, Badge } from "@nextui-org/react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { ApiContext } from "../contexts/ApiContext";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
+dayjs.extend(relativeTime);
+dayjs.extend(advancedFormat);
+
+const formatNotificationDate = (date) => {
+  const dayjsDate = dayjs(date);
+  const now = dayjs();
+
+  if (now.diff(dayjsDate, "day") < 2) {
+    // Show "Just now", "Yesterday", etc.
+    return dayjsDate.fromNow();
+  } else {
+    // Show "Monday, 2nd Sep"
+    return dayjsDate.format("ddd, Do MMM");
+  }
+};
 
 const NavbarTop = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notif, setNotif] = useState(null);
+
+  const notificationRef = useRef(null);
+  const [unseenCount, setUnseenCount] = useState(0);
   const router = useRouter();
   const apiConfig = useContext(ApiContext);
   const token = Cookies.get("TFLoginToken");
+
+  const [isShaking, setIsShaking] = useState(false);
 
   useEffect(() => {
     if (token) {
       if (!apiConfig) return;
       setIsLoggedIn(true);
-      const fetchData = async () => {
+
+      //MARK: Fetch User
+      const fetchUser = async () => {
         setIsLoading(true);
         try {
           const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
@@ -49,21 +77,17 @@ const NavbarTop = () => {
           setIsLoading(false);
         }
       };
-      fetchData();
+      fetchUser();
     } else {
       setIsLoading(false);
     }
   }, [token, apiConfig]);
 
-  const handleLogout = () => {
-    Cookies.remove("TFLoginToken"); // Remove the cookie
-    setIsLoggedIn(false); // Update the state
-    router.push("/"); // Redirect to the login page or home page
-  };
-
-  const handleBellClick = () => {
-    setShowNotifications(!showNotifications); // Toggle visibility
-  };
+  // const handleLogout = () => {
+  //   Cookies.remove("TFLoginToken"); // Remove the cookie
+  //   setIsLoggedIn(false); // Update the state
+  //   router.push("/"); // Redirect to the login page or home page
+  // };
 
   const navbarItems = [
     {
@@ -106,7 +130,7 @@ const NavbarTop = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-6">
         <div className="flex justify-between items-center py-2  ">
           {/* Puzzler */}
-          {/* <div className="flex justify-start items-center ">
+          <div className="flex justify-start items-center ">
             <Image
               className="mr-1"
               width={50}
@@ -117,7 +141,7 @@ const NavbarTop = () => {
             <Link color="foreground" href="./">
               <p className=" font-niljannati text-2xl">ডালভাত.com</p>
             </Link>
-          </div> */}
+          </div>
           <nav className="hidden md:flex space-x-6 pr-6">
             {/* Replace with your menu items */}
             {navbarItems.map((item, index) => (
@@ -131,26 +155,9 @@ const NavbarTop = () => {
               </Link>
             ))}
           </nav>
-          <div className="flex">
-            <div
-              id="notif_bell"
-              className="pr_akm pl_akm relative cursor-pointer"
-              onClick={handleBellClick}
-            >
-              <div className="absolute -top-1 right-1 z-10 text-xs text-white bg-red-600 rounded-full h-4 w-4 flex justify-center items-center">
-                3
-              </div>
-              <FontAwesomeIcon className="shake_bell" icon={faBell} />
-              {/* Notification Dropdown */}
-              {showNotifications && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20 p-2">
-                  {/* Replace this with your notification items */}
-                  <div className="text-sm p-2 border-b">Notification 1</div>
-                  <div className="text-sm p-2 border-b">Notification 2</div>
-                  <div className="text-sm p-2">Notification 3</div>
-                </div>
-              )}
-            </div>
+
+          <div className="flex items-center">
+            <NotificationBell />
 
             {!isLoggedIn && (
               <Link

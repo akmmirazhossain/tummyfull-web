@@ -70,8 +70,8 @@ body {
 
   .bg_light_orange {
     /* Puzzler */
-    background-color: blue;
-    /* background-color: #ffcf9d; */
+    /* background-color: blue; */
+    background-color: #ffcf9d;
   }
 }
 
@@ -239,6 +239,7 @@ body {
 }
 
 /* SHAKE NOTIF BELL */
+
 @keyframes shake_bell {
   0% {
     transform: rotate(0deg);
@@ -262,5 +263,5 @@ body {
 
 .shake_bell {
   display: inline-block;
-  animation: shake_bell 0.5s ease-in-out forwards; /* Faster shaking */
+  animation: shake_bell 0.5s ease-in-out forwards;
 }

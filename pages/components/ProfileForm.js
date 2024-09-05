@@ -23,8 +23,7 @@ const ProfileForm = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const token = Cookies.get("TFLoginToken");
-      console.log("fetchUserData -->".token);
-
+      if (!apiConfig) return;
       try {
         const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
           method: "GET",

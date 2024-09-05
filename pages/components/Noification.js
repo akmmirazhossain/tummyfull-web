@@ -3,8 +3,27 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { formatDistanceToNow } from "date-fns";
+// import { formatDistanceToNow } from "date-fns";
 import { Skeleton } from "@nextui-org/react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
+dayjs.extend(relativeTime);
+dayjs.extend(advancedFormat);
+
+const formatNotificationDate = (date) => {
+  const dayjsDate = dayjs(date);
+  const now = dayjs();
+
+  if (now.diff(dayjsDate, "day") < 2) {
+    // Show "Just now", "Yesterday", etc.
+    return dayjsDate.fromNow();
+  } else {
+    // Show "Monday, 2nd Sep"
+    return dayjsDate.format("ddd, Do MMM");
+  }
+};
 
 const Notification = () => {
   const router = useRouter();
@@ -82,10 +101,7 @@ const Notification = () => {
                     `৳ ${notification.mrd_notif_total_price}`}
                 </div>
                 <div className="h4info_akm flex justify-end mb-3">
-                  {formatDistanceToNow(
-                    new Date(notification.mrd_notif_date_added)
-                  )}{" "}
-                  ago
+                  {formatNotificationDate(notification.mrd_notif_date_added)}
                 </div>
               </div>
             ))}

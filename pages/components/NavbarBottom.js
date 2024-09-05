@@ -43,11 +43,11 @@ const NavbarBottom = () => {
       icon: faGear,
       text: "Settings",
     },
-    {
-      href: "/notification",
-      icon: faBell,
-      text: "Notifications",
-    },
+    // {
+    //   href: "/notification",
+    //   icon: faBell,
+    //   text: "Notifications",
+    // },
     {
       href: "/info",
       icon: faEllipsisVertical,

@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
+import { useNotification } from "../contexts/NotificationContext";
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" {...props} />
@@ -78,7 +79,7 @@ const MenuComp = () => {
   const [disabledSwitches, setDisabledSwitches] = useState({});
   const [mealboxStatus, setMealboxStatus] = useState(null);
 
-  // const [totalPrices, setTotalPrices] = useState({});
+  const { shakeBell } = useNotification();
   //AUTO REFRESH ON NEXT
   const handleVisibilityChange = () => {
     if (document.visibilityState === "visible") {
@@ -188,6 +189,7 @@ const MenuComp = () => {
     };
 
     try {
+      shakeBell();
       const response = await fetch(`${config.apiBaseUrl}order-place`, {
         method: "POST",
         headers: {
@@ -219,25 +221,6 @@ const MenuComp = () => {
 
       const mealboxResData = await mealboxRes.json();
       setMealboxStatus(mealboxResData);
-
-      //NOTIF INSERT
-      // const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data),
-      // });
-      // console.log("🚀 ~ handleLunchStatusChange ~ body:", data);
-      // if (!notifRes.ok) {
-      //   throw new Error(
-      //     "🚀 ~ handleLunchStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
-      //   );
-      // }
-
-      // const notifResData = await notifRes.json();
-      // console.log("🚀 ~ handleLunchStatusChange ~ notifResData:", notifResData);
-      // //setMealboxStatus(notifResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
@@ -314,28 +297,6 @@ const MenuComp = () => {
 
       const mealboxResData = await mealboxRes.json();
       setMealboxStatus(mealboxResData);
-
-      //NOTIF INSERT
-      // const notifRes = await fetch(`${config.apiBaseUrl}notif-order-place`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data),
-      // });
-      // console.log("🚀 ~ handleDinnerStatusChange ~ body:", data);
-      // if (!notifRes.ok) {
-      //   throw new Error(
-      //     "🚀 ~ handleDinnerStatusChange ~ notifRes: Failed to send data to Notifi Order Place"
-      //   );
-      // }
-
-      // const notifResData = await notifRes.json();
-      // console.log(
-      //   "🚀 ~ handleDinnerStatusChange ~ notifResData:",
-      //   notifResData
-      // );
-      //setMealboxStatus(notifResData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
@@ -345,91 +306,6 @@ const MenuComp = () => {
       }, 100);
     }
   };
-
-  // const handleDinnerStatusChange = async (day, menuId, date, value, price) => {
-  //   checkAndRedirect(); // Ensure the user is authenticated
-
-  //   //SWITCH STATUS CHANGER
-  //   const updatedMenuData = { ...menuData };
-
-  //   if (updatedMenuData[day].dinner.status === "disabled") {
-  //     updatedMenuData[day].dinner.status = "enabled";
-  //     updatedMenuData[day].dinner.quantity = 1;
-  //     setDinnerOrderAcceptText(false);
-  //   } else {
-  //     updatedMenuData[day].dinner.status = "disabled";
-  //     //updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
-  //     setDinnerOrderAcceptText(true);
-  //   }
-  //   setMenuData(updatedMenuData);
-
-  //   //SWITCH DISABLER
-  //   const switchKey = `${day}-${menuId}`;
-  //   if (disabledSwitches[switchKey]) return;
-  //   // Disable the specific switch
-  //   setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
-
-  //   // API CALLER
-  //   const data = {
-  //     menuId: menuId,
-  //     date: date,
-  //     TFLoginToken: Cookies.get("TFLoginToken"),
-  //     switchValue: value,
-  //     price: price,
-  //     quantity: 1,
-  //   };
-
-  //   console.log("API Data:", data);
-
-  //   try {
-  //     const response = await fetch(`${config.apiBaseUrl}order-place`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to send data to the API");
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log("API Response:", responseData);
-
-  //     //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
-  //     const mealboxData = {
-  //       TFLoginToken: Cookies.get("TFLoginToken"),
-  //     };
-  //     const mealboxRes = await fetch(`${config.apiBaseUrl}mealbox-status`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(mealboxData),
-  //     });
-
-  //     if (!mealboxRes.ok) {
-  //       console.log("🚀 ~ handleLunchStatusChange ~ mealboxRes:", mealboxRes);
-  //       throw new Error("Failed to send data to the second API");
-  //     }
-
-  //     const mealboxResData = await mealboxRes.json();
-  //     console.log(
-  //       "🚀 ~ handleLunchStatusChange ~ mealboxResData:",
-  //       mealboxResData
-  //     );
-
-  //     setMealboxStatus(mealboxResData);
-  //   } catch (error) {
-  //     console.error("Error sending data to the API:", error.message);
-  //   } finally {
-  //     // SWITCH ENABLER
-  //     setTimeout(() => {
-  //       setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
-  //     }, 100);
-  //   }
-  // };
 
   //MARK: Quantity Chng
   const handleQuantityChange = async (day, mealType, change, menuId, date) => {
@@ -706,6 +582,7 @@ const MenuComp = () => {
                               </Link>
                             )
                           )}
+
                           <div className="flex items-center justify-center space-x-2">
                             <Button
                               radius="full"

@@ -1,42 +1,27 @@
-import React from "react";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-} from "@nextui-org/react";
+// TriggerBellShake.js
+import React, { useRef } from "react";
+import NotificationBell from "./components/NotificationBell";
 
-export default function App() {
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["pending"]));
+const TriggerBellShake = () => {
+  const handleButtonClickRef = useRef(null); // Create a ref to pass
 
-  console.log("test.js ->", selectedKeys);
-
-  const selectedValue = React.useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
+  const triggerNotificationShake = () => {
+    if (handleButtonClickRef.current) {
+      handleButtonClickRef.current(); // Call the function when needed
+    }
+  };
 
   return (
-    <Dropdown className="text-black">
-      <DropdownTrigger>
-        <Button variant="bordered" className="capitalize">
-          {selectedValue}
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu
-        aria-label="Single selection example"
-        variant="flat"
-        disallowEmptySelection
-        selectionMode="single"
-        selectedKeys={selectedKeys}
-        onSelectionChange={setSelectedKeys}
-      >
-        <DropdownItem key="pending">pending</DropdownItem>
-        <DropdownItem key="delivered">delivered</DropdownItem>
-        <DropdownItem key="cancelled">cancelled</DropdownItem>
-        <DropdownItem key="unavailable">unavailable</DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
+    <div className="text-black">
+      {/* Render the NotificationBell component with a ref prop */}
+      <NotificationBell onButtonClick={handleButtonClickRef} />
+      {/* A button to trigger the bell shake from this component */}
+      <button onClick={triggerNotificationShake}>
+        Shake Notification Bell
+      </button>
+      awdwad
+    </div>
   );
-}
+};
+
+export default TriggerBellShake;
