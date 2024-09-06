@@ -157,8 +157,6 @@ const NavbarTop = () => {
           </nav>
 
           <div className="flex items-center">
-            <NotificationBell />
-
             {!isLoggedIn && (
               <Link
                 href="/login"
@@ -170,7 +168,8 @@ const NavbarTop = () => {
             )}
 
             {isLoggedIn && (
-              <div className="flex items-center justify-center gap-2 lg:gap-4">
+              <div className="flex items-center justify-center ">
+                <NotificationBell />
                 <Link href="/wallet">
                   <Button
                     variant="light"

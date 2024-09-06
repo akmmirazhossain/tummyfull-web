@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
-// import { formatDistanceToNow } from "date-fns";
+
 import { Skeleton } from "@nextui-org/react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -88,20 +88,33 @@ const Notification = () => {
         {notif && notif.notifications && notif.notifications.length > 0 ? (
           <>
             {notif.notifications.map((notification, index) => (
-              <div className="grid grid-cols-5 " key={index}>
-                <div className="col-span-2 flex items-center mb-3">
+              <div
+                key={index}
+                className="text-sm  border-b last:border-0 p-2 md:p-3"
+              >
+                <p
+                  className={`${
+                    notification.mrd_notif_seen === 0
+                      ? "font-bold"
+                      : "font-normal"
+                  }`}
+                >
                   {notification.mrd_notif_message}
-                </div>
-                <div className="flex items-center mb-3">
-                  {notification.mrd_notif_quantity !== null &&
-                    `Qty: ${notification.mrd_notif_quantity}`}
-                </div>
-                <div className="flex items-center mb-3">
-                  {notification.mrd_notif_total_price !== null &&
-                    `৳ ${notification.mrd_notif_total_price}`}
-                </div>
-                <div className="h4info_akm flex justify-end mb-3">
+                </p>
+                <p className="text-xs text-gray-500 md:text-right">
                   {formatNotificationDate(notification.mrd_notif_date_added)}
+                </p>
+                <div className="flex gap_akm">
+                  {notification.mrd_notif_quantity && (
+                    <p className="text-xs">
+                      Quantity: {notification.mrd_notif_quantity}{" "}
+                    </p>
+                  )}
+                  {notification.mrd_notif_total_price && (
+                    <p className="text-xs">
+                      Total: ৳{notification.mrd_notif_total_price}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}

@@ -263,6 +263,7 @@ const MenuComp = () => {
     };
 
     try {
+      shakeBell();
       const response = await fetch(`${config.apiBaseUrl}order-place`, {
         method: "POST",
         headers: {

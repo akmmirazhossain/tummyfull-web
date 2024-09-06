@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { Badge } from "@nextui-org/react";
+import { Badge, Button } from "@nextui-org/react";
 import Link from "next/link";
 import { useNotification } from "../contexts/NotificationContext";
 import Cookies from "js-cookie";
@@ -24,6 +24,7 @@ const formatNotificationDate = (date) => {
 
 const NotificationBell = () => {
   const { isShaking } = useNotification();
+
   const [showNotifications, setShowNotifications] = useState(false);
   const [notif, setNotif] = useState(null);
   const [unseenCount, setUnseenCount] = useState(0);
@@ -31,29 +32,37 @@ const NotificationBell = () => {
   const apiConfig = useContext(ApiContext);
   const token = Cookies.get("TFLoginToken");
 
+  const fetchNotif = async () => {
+    if (token && apiConfig) {
+      try {
+        const response = await axios.get(`${apiConfig.apiBaseUrl}notif-get`, {
+          headers: { Authorization: token },
+        });
+
+        const notifications = response.data.notifications;
+        const unseen = notifications.filter(
+          (notif) => notif.mrd_notif_seen === 0
+        ).length;
+
+        setNotif(response.data);
+        setUnseenCount(unseen);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     if (token && apiConfig) {
-      //MARK: Fetch Notif
-      const fetchNotif = async () => {
-        try {
-          const response = await axios.get(`${apiConfig.apiBaseUrl}notif-get`, {
-            headers: { Authorization: token },
-          });
-
-          const notifications = response.data.notifications;
-          const unseen = notifications.filter(
-            (notif) => notif.mrd_notif_seen === 0
-          ).length;
-
-          setNotif(response.data);
-          setUnseenCount(unseen);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      fetchNotif();
+      fetchNotif(); // Fetch notifications initially
     }
   }, [token, apiConfig]);
+
+  useEffect(() => {
+    if (isShaking) {
+      fetchNotif(); // Fetch notifications when bell shakes
+    }
+  }, [isShaking]); // Dependency array includes isShaking
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -62,6 +71,7 @@ const NotificationBell = () => {
         !notificationRef.current.contains(event.target)
       ) {
         setShowNotifications(false);
+        fetchNotif();
       }
     };
 
@@ -84,33 +94,44 @@ const NotificationBell = () => {
         console.error("Error updating notifications:", error);
       }
     }
+
+    setUnseenCount(0);
   };
 
   return (
-    <div className="flex items-center">
-      <div
-        id="notif_bell"
-        className="pr_akm pl_akm relative cursor-pointer"
-        onClick={handleBellClick}
-        ref={notificationRef}
-      >
+    <div className="flex items-center justify-center">
+      <div id="notif_bell" className=" relative" ref={notificationRef}>
         <Badge
           color="danger"
           content={unseenCount}
-          size="sm"
+          size="md"
           shape="circle"
           isInvisible={unseenCount === 0}
         >
-          <FontAwesomeIcon
-            className={`font-awesome-icon ${isShaking ? "shake_bell" : ""}`}
-            icon={faBell}
-          />
+          <Button
+            radius="full"
+            isIconOnly
+            variant="light"
+            onClick={handleBellClick}
+            size="sm"
+          >
+            <FontAwesomeIcon
+              className={`font-awesome-icon cursor-pointer  text-lg ${
+                isShaking ? "shake_bell" : ""
+              }`}
+              icon={faBell}
+              size="1.5x"
+            />
+          </Button>
         </Badge>
 
         {showNotifications && notif && notif.notifications.length > 0 && (
-          <div className="absolute right-0 mt-2 w-64 md:w-96 bg-white border border-gray-300 rounded-md shadow-lg z-20 p-2">
+          <div className="absolute right-0 mt-2 w-64 md:w-96 bg-white border border-gray-300 rounded-md shadow-lg z-20 ">
             {notif.notifications.slice(0, 5).map((notification, index) => (
-              <div key={index} className="text-sm p-2 border-b last:border-0">
+              <div
+                key={index}
+                className="text-sm  border-b last:border-0 p-2 md:p-3"
+              >
                 <p
                   className={`${
                     notification.mrd_notif_seen === 0
@@ -123,15 +144,22 @@ const NotificationBell = () => {
                 <p className="text-xs text-gray-500">
                   {formatNotificationDate(notification.mrd_notif_date_added)}
                 </p>
-                {notification.mrd_notif_total_price && (
-                  <p className="text-xs">
-                    Total: ৳{notification.mrd_notif_total_price}
-                  </p>
-                )}
+                <div className="flex gap_akm">
+                  {notification.mrd_notif_quantity && (
+                    <p className="text-xs">
+                      Quantity: {notification.mrd_notif_quantity}{" "}
+                    </p>
+                  )}
+                  {notification.mrd_notif_total_price && (
+                    <p className="text-xs">
+                      Total: ৳{notification.mrd_notif_total_price}
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
             <Link href={"/notification"}>
-              <div className="text-blue-500 text-center mt-2 cursor-pointer">
+              <div className="h4info_akm  text-center pad_akm">
                 Show all notifications
               </div>
             </Link>
