@@ -1,3 +1,5 @@
+//components/NotificationBell.js
+
 import React, { useRef, useEffect, useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -32,13 +34,15 @@ const NotificationBell = () => {
   const apiConfig = useContext(ApiContext);
   const token = Cookies.get("TFLoginToken");
 
+  const [updateNotif, setUpdateNotif] = useState(false);
+
   const fetchNotif = async () => {
     if (token && apiConfig) {
       try {
         const response = await axios.get(`${apiConfig.apiBaseUrl}notif-get`, {
           headers: { Authorization: token },
         });
-
+        // alert("Notif Fetched");
         const notifications = response.data.notifications;
         const unseen = notifications.filter(
           (notif) => notif.mrd_notif_seen === 0
@@ -58,11 +62,16 @@ const NotificationBell = () => {
     }
   }, [token, apiConfig]);
 
+  // if (isShaking) {
+  //   fetchNotif();
+  // }
+
   useEffect(() => {
     if (isShaking) {
-      fetchNotif(); // Fetch notifications when bell shakes
+      // alert("isShaking is true!"); // Show an alert popup box
+      fetchNotif(); // Comment out the function call or remove it
     }
-  }, [isShaking]); // Dependency array includes isShaking
+  }, [isShaking]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -71,7 +80,7 @@ const NotificationBell = () => {
         !notificationRef.current.contains(event.target)
       ) {
         setShowNotifications(false);
-        fetchNotif();
+        // fetchNotif();
       }
     };
 
