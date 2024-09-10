@@ -8,7 +8,6 @@ export default function Menu() {
   return (
     <>
       <Layout>
-        {/* Puzzler */}
         <Slider />
         <MenuComp />
       </Layout>
