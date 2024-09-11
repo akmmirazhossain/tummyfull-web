@@ -24,7 +24,7 @@ const Layout = ({ children, title }) => {
       <header className="fixed w-full z-20">
         <NavbarTop className="" />
       </header>
-      <main className="max-w-5xl mx-auto min-h-screen pt-16 pb-10 px_akm">
+      <main className="max-w-5xl mx-auto min-h-screen pt-16 pb-20 md:pb-10 px_akm">
         {children}
       </main>
       <NavbarBottom />
