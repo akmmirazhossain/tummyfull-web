@@ -25,16 +25,17 @@ const formatNotificationDate = (date) => {
 };
 
 const NotificationBell = () => {
-  const { isShaking } = useNotification();
+  const { isShaking, notifLoad, setNotifLoad } = useNotification();
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [notif, setNotif] = useState(null);
+
   const [unseenCount, setUnseenCount] = useState(0);
   const notificationRef = useRef(null);
   const apiConfig = useContext(ApiContext);
   const token = Cookies.get("TFLoginToken");
 
-  const [updateNotif, setUpdateNotif] = useState(false);
+  // const [updateNotif, setUpdateNotif] = useState(false);
 
   const fetchNotif = async () => {
     if (token && apiConfig) {
@@ -62,17 +63,28 @@ const NotificationBell = () => {
     }
   }, [token, apiConfig]);
 
-  // if (isShaking) {
-  //   fetchNotif();
-  // }
-
   useEffect(() => {
     if (isShaking) {
-      // alert("isShaking is true!"); // Show an alert popup box
-      fetchNotif(); // Comment out the function call or remove it
+      const timer = setTimeout(() => {
+        fetchNotif(); // Fetch notifications when isShaking is true
+      }, 100); // Slight delay to handle state batching issues on iOS
+
+      return () => clearTimeout(timer); // Cleanup timeout on component unmount or dependency change
     }
   }, [isShaking]);
 
+  // components/NotificationBell.js
+
+  useEffect(() => {
+    if (notifLoad) {
+      fetchNotif().then(() => {
+        // Reset notifLoad to false after fetching notifications
+        setNotifLoad(false); // This will ensure it can be triggered again
+      });
+    }
+  }, [notifLoad]);
+
+  //CLOSE POP ON OUTSIDE MOUSE CLICK
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (

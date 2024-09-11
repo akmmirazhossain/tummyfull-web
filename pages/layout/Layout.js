@@ -3,6 +3,7 @@
 import Head from "next/head";
 import NavbarTop from "../components/NavbarTop";
 import NavbarBottom from "../components/NavbarBottom";
+import FooterMain from "./Footer";
 
 const Layout = ({ children, title }) => {
   return (
@@ -26,8 +27,9 @@ const Layout = ({ children, title }) => {
       <main className="max-w-5xl mx-auto min-h-screen pt-16 pb-20 px_akm">
         {children}
       </main>
-      <footer className="fixed w-full z-20  bottom-0 ">
+      <footer className="  ">
         <NavbarBottom />
+        <FooterMain />
       </footer>
     </div>
   );

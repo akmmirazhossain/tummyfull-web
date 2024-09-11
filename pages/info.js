@@ -61,23 +61,23 @@ const Info = () => {
 
             <span className="border-b-2"></span>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 ">
-              <div className="flex justify-center items-center pad_akm">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="flex justify-center items-center pad_akm md:order-1 order-2">
                 <span className="h3_akm">
                   Unlike traditional catering services, you can pre-schedule
                   your meals and turn them on or off as needed.{" "}
                   <Link
                     href="/"
                     target="_blank"
-                    className="text-blue-600 font-bold"
+                    className="text-blue-500 text-base font-bold"
                   >
                     (Check our menu)
                   </Link>
                 </span>
               </div>
-              <div>
+              <div className="md:order-2 order-1">
                 <Image
-                  src={"/images/calendar.png"}
+                  src="/images/calendar.png"
                   height={400}
                   width={800}
                   alt=""
@@ -106,7 +106,7 @@ const Info = () => {
                   <Link
                     href="/wallet"
                     target="_blank"
-                    className="text-blue-600 font-bold"
+                    className="text-blue-500 text-base font-bold"
                   >
                     (Visit wallet)
                   </Link>
@@ -117,7 +117,7 @@ const Info = () => {
             <span className="border-b-2"></span>
 
             <div className="grid grid-cols-1 md:grid-cols-2 ">
-              <div className="flex justify-center items-center pad_akm">
+              <div className="flex justify-center items-center pad_akm md:order-1 order-2">
                 <span className="h3_akm">
                   If you plan to use our service regularly, activate the mealbox
                   swap option to have your meals delivered in food-grade boxes
@@ -125,13 +125,13 @@ const Info = () => {
                   <Link
                     href="/settings#mealbox"
                     target="_blank"
-                    className="text-blue-600 font-bold"
+                    className="text-blue-500 text-base font-bold"
                   >
                     (Activate mealbox swap)
                   </Link>
                 </span>
               </div>
-              <div>
+              <div className="md:order-2 order-1">
                 <Image
                   src={"/images/mealbox_swap.png"}
                   height={400}

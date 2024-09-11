@@ -79,11 +79,12 @@ const MenuComp = () => {
   const [disabledSwitches, setDisabledSwitches] = useState({});
   const [mealboxStatus, setMealboxStatus] = useState(null);
 
-  const { shakeBell } = useNotification();
+  const { shakeBell, notifLoadTrigger } = useNotification();
   //AUTO REFRESH ON NEXT
   const handleVisibilityChange = () => {
     if (document.visibilityState === "visible") {
       fetchData();
+      notifLoadTrigger();
 
       console.log("MENU REFRESHED");
     }

@@ -56,7 +56,7 @@ const NavbarBottom = () => {
   ];
 
   return (
-    <header className="bg_beige text-black md:hidden">
+    <header className="bg_beige text-black md:hidden fixed w-full z-20  bottom-0">
       <div className="max-w-5xl mx-auto  ">
         <div className="flex justify-center items-center  ">
           <nav className="flex items-center justify-center ">
