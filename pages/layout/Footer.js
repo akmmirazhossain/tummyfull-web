@@ -3,6 +3,36 @@ import Image from "next/image";
 import Link from "next/link";
 
 const FooterMain = () => {
+  const navSections = [
+    {
+      title: "APP",
+      links: [
+        { href: "./", label: "Menu" },
+        { href: "/settings", label: "Settings" },
+        { href: "/wallet", label: "Wallet" },
+      ],
+    },
+    {
+      title: "PAGES",
+      links: [
+        { href: "/partner", label: "Be our Partner" },
+        { href: "/info", label: "Contact" },
+        { href: "/info#features", label: "Our Uniqueness" },
+      ],
+    },
+    {
+      title: "LINKS",
+      links: [
+        {
+          href: "https://www.facebook.com/dalbhath",
+          label: "Facebook",
+          target: "_blank",
+        },
+        { href: "/policies#return", label: "Return Policy" },
+        { href: "/policies", label: "Other Policies" },
+      ],
+    },
+  ];
   return (
     <>
       <div className="flex flex-col justify-center items-center">
@@ -26,53 +56,22 @@ const FooterMain = () => {
                 holders, and families seeking convenient daily meal options.
               </p>
             </div>
-            <div className="col-span-1">
-              <h2 class="title-font  tracking-widest  mb-3">APP</h2>
-              <nav class="list-none ">
-                <li className="py-0.5">
-                  <Link href="./">Menu</Link>
-                </li>
-                <li className="py-0.5">
-                  <Link href="/settings">Settings</Link>
-                </li>
-                <li className="py-0.5">
-                  <Link href="/wallet">Wallet</Link>
-                </li>
-              </nav>
-            </div>
-            <div className="col-span-1">
-              <h2 class="title-font  tracking-widest  mb-3">PAGES</h2>
-              <nav class="list-none">
-                <li className="py-0.5">
-                  <Link href="/partner">Be our Partner</Link>
-                </li>
-                <li className="py-0.5">
-                  <Link href="/info">Contact</Link>
-                </li>
-                <li className="py-0.5">
-                  <Link href="/info#features">Our Uniqueness</Link>
-                </li>
-              </nav>
-            </div>
-            <div className="col-span-1">
-              <h2 class="title-font  tracking-widest  mb-3">LINKS</h2>
-              <nav class="list-none ">
-                <li className="py-0.5">
-                  <Link
-                    target="_blank"
-                    href="https://www.facebook.com/dalbhath"
-                  >
-                    Facebook
-                  </Link>
-                </li>
-                <li className="py-0.5">
-                  <Link href="/policies#return">Return Policy</Link>
-                </li>
-                <li className="py-0.5">
-                  <Link href="/policies">Other Policies</Link>
-                </li>
-              </nav>
-            </div>
+            {navSections.map((section, sectionIndex) => (
+              <div key={sectionIndex} className="col-span-1">
+                <h2 className="title-font tracking-widest mb-3">
+                  {section.title}
+                </h2>
+                <nav className="list-none">
+                  {section.links.map((link, linkIndex) => (
+                    <li key={linkIndex} className="py-0.5">
+                      <Link href={link.href} target={link.target || "_self"}>
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </nav>
+              </div>
+            ))}
           </div>
         </div>
       </div>

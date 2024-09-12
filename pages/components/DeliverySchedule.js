@@ -96,16 +96,47 @@ const Deliveries = () => {
                     {mealType}
                   </div>
 
+                  <div className="max-w-md mx-auto overflow-hidden border border-gray-200 rounded-lg shadow-lg">
+                    <div className="flex flex-col">
+                      <div className="flex  border-b border-gray-200">
+                        <div className="w-1/3 p-4 bg-gray-100 font-semibold text-right">
+                          Give mealbox
+                        </div>
+                        <div className="w-2/3 p-4">John Doe</div>
+                      </div>
+                      <div className="flex  border-b border-gray-200">
+                        <div className="w-1/3 p-4 bg-gray-100 font-semibold text-right">
+                          Address
+                        </div>
+                        <div className="w-2/3 p-4">john.doe@example.com</div>
+                      </div>
+                      <div className="flex  border-b border-gray-200">
+                        <div className="w-1/3 p-4 bg-gray-100 font-semibold text-right">
+                          Phone
+                        </div>
+                        <div className="w-2/3 p-4">+1 (555) 123-4567</div>
+                      </div>
+                      <div className="flex ">
+                        <div className="w-1/3 p-4 bg-gray-100 font-semibold text-right">
+                          Name
+                        </div>
+                        <div className="w-2/3 p-4">
+                          123 Main St, Springfield, USA
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-4 lg:grid-cols-8 ">
-                    <div>Give mealbox</div>
+                    {/* <div>Give mealbox</div>
                     <div>Address</div>
                     <div>Phone</div>
                     <div>Name</div>
                     <div>Quantity</div>
-                    {/* <div>Price</div> */}
+                    <div>Price</div>
                     <div>Cash to Collect</div>
-                    {/* <div>Mealbox collected</div> */}
-                    <div>Status</div>
+                    <div>Mealbox collected</div>
+                    <div>Status</div> */}
                   </div>
 
                   {meals[mealType].map((item, index) => (
@@ -136,15 +167,6 @@ const Deliveries = () => {
                         <div className="border border-gray-200 p-2">
                           {item.mrd_order_cash_to_get}
                         </div>
-
-                        {/* <div className="border border-gray-200 flex items-center justify-center">
-                        <Checkbox
-                          onChange={() => mealboxCollected(item.mrd_order_id)}
-                          size="lg"
-                        >
-                          Yes
-                        </Checkbox>
-                      </div> */}
 
                         <div className="border border-gray-200 flex items-center justify-center">
                           {/* //MARK: DROPDOWN */}
