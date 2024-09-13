@@ -1,69 +1,70 @@
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Autoplay } from "swiper/modules";
 
 const items = [
   {
     src: "/images/delivery.png",
     alt: "Free Delivery",
-    className: "",
     link: "/info#features",
-    hiddenOnMd: false,
   },
   {
     src: "/images/calendar.png",
     alt: "Hot Homecooked",
-    className: "relative",
     link: "/info#features",
-    hiddenOnMd: false,
   },
   {
     src: "/images/chef.png",
     alt: "Hot Homecooked",
-    className: "relative hidden md:block",
     link: "/info#features",
-    hiddenOnMd: true,
   },
   {
     src: "/images/wallet.png",
     alt: "Hot Homecooked",
-    className: "hidden md:block",
     link: "/wallet",
-    hiddenOnMd: true,
   },
 ];
 
 export default function Slider() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap_akm pt_akm">
-      {items.map((item, index) =>
-        item.link ? (
-          <Link key={index} href={item.link} className={item.className}>
-            <div className="relative">
+    <div className="pt_akm">
+      <Swiper
+        slidesPerView={2} // Default for small screens (below 640px)
+        spaceBetween={8}
+        slidesPerGroup={2}
+        breakpoints={{
+          768: {
+            slidesPerView: 4,
+            spaceBetween: 16,
+            slidesPerGroup: 2,
+          },
+        }}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: false,
+        }}
+        modules={[Autoplay]}
+      >
+        {items.map((item, index) => (
+          <SwiperSlide key={index}>
+            <Link href={item.link}>
               <div className="bg-gradient-to-r from-rose-100 to-teal-100 rounded_akm shadow_akm h-auto flex items-center justify-center overflow-hidden">
                 <Image
                   src={item.src}
-                  height={400}
-                  width={800}
+                  height={200}
+                  width={400}
                   alt={item.alt}
                   className="object-cover h-full w-full"
                 />
               </div>
-            </div>
-          </Link>
-        ) : (
-          <div key={index} className={item.className}>
-            <div className="bg-gradient-to-r from-rose-100 to-teal-100 rounded_akm shadow_akm h-auto flex items-center justify-center overflow-hidden">
-              <Image
-                src={item.src}
-                height={400}
-                width={800}
-                alt={item.alt}
-                className="object-cover h-full w-full"
-              />
-            </div>
-          </div>
-        )
-      )}
+            </Link>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }
