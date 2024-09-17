@@ -10,8 +10,13 @@ const Info = () => {
       <Layout>
         <section id="features">
           <div className="flex flex-col items-center justify-center gap_akm pad_akm card_akm mt_akm">
-            {" "}
-            <p className="h2_akm">পার্টনার হতে আগ্রহী?</p>
+            <p className="h3_akm">
+              ঘরে বসে শুধু কয়েক ঘন্টা রান্না করে মাসে ১০ হাজারেরও বেশি টাকা আয়
+              করতে চান?
+            </p>
+            <p className="h2_akm">
+              তাহলে এখনই আমাদের রাঁধুনি পার্টনার হয়ে যান!
+            </p>
             <Link
               target="_blank"
               href={
@@ -22,8 +27,6 @@ const Info = () => {
                 Register here
               </Button>
             </Link>
-            <p className="h3_akm"> বিস্তারিত জানার জন্য কল করুন</p>
-            <p className="h3_akm"> +880 1673-692997, +880 1910-355118</p>
           </div>
           <div className="h1_akm">ডালভাত ডট কমে পার্টনার হওয়ার সুবিধা:</div>
           <div className="card_akm pad_akm flex flex-col gap_akm">
@@ -129,6 +132,10 @@ const Info = () => {
                   className="object-cover h-full w-full pad_akm"
                 />
               </div>
+            </div>
+            <div className="flex items-center justify-center flex-col">
+              <p className="">যে কোন প্রশ্নের জন্য কল করুন:</p>
+              <p className="h3_akm"> +880 1673-692997, +880 1910-355118</p>
             </div>
           </div>
         </section>

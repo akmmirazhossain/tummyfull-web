@@ -51,7 +51,7 @@ const FooterMain = () => {
                 <p className=" font-niljannati text-2xl">ডালভাত.com</p>
               </Link>
 
-              <p class="mt-2 text-sm text-gray-500 max-w-80">
+              <p className="mt-2 text-sm text-gray-500 max-w-80">
                 DalBhath is an easy meal management app for students, job
                 holders, and families seeking convenient daily meal options.
               </p>

@@ -74,103 +74,60 @@ body {
     background-color: #ffcf9d;
   }
 }
-
 .h1_akm {
-  @apply text-2xl sm:text-2xl lg:text-3xl;
-  @apply py-4 lg:py-6;
-  @apply font-bold;
+  @apply text-2xl sm:text-2xl lg:text-3xl py-4 lg:py-6 font-bold;
 }
 
 .h2_akm {
-  @apply text-lg font-semibold;
-  @apply sm:text-xl;
-  @apply md:text-2xl;
-  @apply lg:text-2xl;
-  @apply xl:text-2xl;
+  @apply text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-semibold;
 }
 
 .h3_akm {
-  @apply text-lg;
-  @apply sm:text-lg;
-  @apply md:text-lg;
-  @apply lg:text-xl;
-  @apply xl:text-xl;
+  @apply text-lg sm:text-lg md:text-lg lg:text-xl xl:text-xl;
 }
 
 .h4_akm {
-  @apply text-xs;
-  @apply lg:text-sm;
+  @apply text-xs lg:text-sm;
 }
-.h4info_akm {
-  @apply text-xs text-gray-500;
 
-  @apply lg:text-sm;
+.h4info_akm {
+  @apply text-xs text-gray-500 lg:text-sm;
 }
 
 .pad_akm {
-  @apply p-2;
-  @apply sm:p-2;
-  @apply md:p-3;
-  @apply lg:p-4;
-  @apply xl:p-4;
+  @apply p-2 sm:p-2 md:p-3 lg:p-4 xl:p-4;
 }
 
 .py_akm {
-  @apply py-2;
-  @apply sm:py-2;
-  @apply md:py-3;
-  @apply lg:py-4;
+  @apply py-2 sm:py-2 md:py-3 lg:py-4;
 }
 
 .px_akm {
-  @apply px-2;
-  @apply sm:px-2;
-  @apply md:px-3;
-  @apply lg:px-4;
+  @apply px-2 sm:px-2 md:px-3 lg:px-4;
 }
 
 .pl_akm {
-  @apply pl-2;
-  @apply sm:pl-2;
-  @apply md:pl-3;
-  @apply lg:pl-4;
+  @apply pl-2 sm:pl-2 md:pl-3 lg:pl-4;
 }
 
 .pr_akm {
-  @apply pr-2;
-  @apply sm:pr-2;
-  @apply md:pr-3;
-  @apply lg:pr-4;
+  @apply pr-2 sm:pr-2 md:pr-3 lg:pr-4;
 }
 
 .pt_akm {
-  @apply pt-2;
-  @apply sm:pt-2;
-  @apply md:pt-3;
-  @apply lg:pt-4;
+  @apply pt-2 sm:pt-2 md:pt-3 lg:pt-4;
 }
 
 .pb_akm {
-  @apply pb-2;
-  @apply sm:pb-2;
-  @apply md:pb-3;
-  @apply lg:pb-4;
+  @apply pb-2 sm:pb-2 md:pb-3 lg:pb-4;
 }
 
 .mb_akm {
   @apply mb-6;
-  /* @apply sm:text-xl;
-  @apply md:text-xl;
-  @apply lg:text-xl;
-  @apply xl:text-xl; */
 }
 
 .mt_akm {
   @apply mt-2;
-  /* @apply sm:text-xl;
-  @apply md:text-xl;
-  @apply lg:text-xl;
-  @apply xl:text-xl; */
 }
 
 .mx_akm {
@@ -178,7 +135,7 @@ body {
 }
 
 .my_akm {
-  @apply mx-6;
+  @apply my-4 md:my-6;
 }
 
 .my3_akm {
@@ -188,10 +145,6 @@ body {
 .gap_akm {
   @apply gap-2;
   @apply md:gap-4;
-  /* @apply sm:px-2;
-  @apply md:px-3;
-  @apply lg:px-4;
-  @apply xl:px-6; */
 }
 
 .shadow_akm {

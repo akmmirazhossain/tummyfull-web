@@ -1,6 +1,6 @@
 // pages/menu2.js
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
@@ -8,7 +8,6 @@ import { Button, Card, Chip, Skeleton } from "@nextui-org/react";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHourglassEnd,
   faShippingFast,
   faCircleCheck,
   faCircleExclamation,
@@ -16,6 +15,8 @@ import {
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
 import { useNotification } from "../contexts/NotificationContext";
+import axios from "axios";
+import { ApiContext } from "../contexts/ApiContext";
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" {...props} />
@@ -78,6 +79,7 @@ const MenuComp = () => {
   const [dinnerOrderAcceptText, setDinnerOrderAcceptText] = useState(true);
   const [disabledSwitches, setDisabledSwitches] = useState({});
   const [mealboxStatus, setMealboxStatus] = useState(null);
+  const apiConfig = useContext(ApiContext);
 
   const { shakeBell, notifLoadTrigger } = useNotification();
   //AUTO REFRESH ON NEXT
@@ -102,21 +104,21 @@ const MenuComp = () => {
 
   //FETCH MENU
   const fetchData = async () => {
-    if (!config) return;
-
-    const { apiBaseUrl, imageBaseUrl } = config;
+    if (!apiConfig) return;
 
     try {
       // Fetch menu data
-      const menuRes = await fetch(
-        `${apiBaseUrl}menu?TFLoginToken=${Cookies.get("TFLoginToken")}`
+      const { data: menuData } = await axios.get(
+        `${apiConfig.apiBaseUrl}menu?TFLoginToken=${Cookies.get(
+          "TFLoginToken"
+        )}`
       );
-      const menuData = await menuRes.json();
       setMenuData(menuData);
 
       // Fetch settings data
-      const settingsRes = await fetch(`${apiBaseUrl}setting`);
-      const settingsData = await settingsRes.json();
+      const { data: settingsData } = await axios.get(
+        `${apiConfig.apiBaseUrl}setting`
+      );
       setSettings(settingsData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -124,9 +126,9 @@ const MenuComp = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [config]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [config]);
 
   useEffect(() => {
     // Fetch config.json on component mount
@@ -148,9 +150,8 @@ const MenuComp = () => {
 
   useEffect(() => {
     // Fetch data when Cookies.get("TFLoginToken") changes or config is fetched
-
     fetchData();
-  }, [config, Cookies.get("TFLoginToken")]);
+  }, [apiConfig, Cookies.get("TFLoginToken")]);
   // Dependency array ensures useEffect runs when TFLoginToken changes
 
   const checkAndRedirect = () => {
@@ -191,7 +192,7 @@ const MenuComp = () => {
 
     try {
       shakeBell();
-      const response = await fetch(`${config.apiBaseUrl}order-place`, {
+      const response = await fetch(`${apiConfig.apiBaseUrl}order-place`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -208,7 +209,7 @@ const MenuComp = () => {
       const mealboxData = {
         TFLoginToken: Cookies.get("TFLoginToken"),
       };
-      const mealboxRes = await fetch(`${config.apiBaseUrl}mealbox-status`, {
+      const mealboxRes = await fetch(`${apiConfig.apiBaseUrl}mealbox-status`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -265,7 +266,7 @@ const MenuComp = () => {
 
     try {
       shakeBell();
-      const response = await fetch(`${config.apiBaseUrl}order-place`, {
+      const response = await fetch(`${apiConfig.apiBaseUrl}order-place`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -285,7 +286,7 @@ const MenuComp = () => {
       const mealboxData = {
         TFLoginToken: Cookies.get("TFLoginToken"),
       };
-      const mealboxRes = await fetch(`${config.apiBaseUrl}mealbox-status`, {
+      const mealboxRes = await fetch(`${apiConfig.apiBaseUrl}mealbox-status`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -357,7 +358,7 @@ const MenuComp = () => {
     console.log("QuantityChange -> Quantity Data:", data);
 
     try {
-      const response = await fetch(`${config.apiBaseUrl}quantity-changer`, {
+      const response = await fetch(`${apiConfig.apiBaseUrl}quantity-changer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -386,9 +387,9 @@ const MenuComp = () => {
     const totalPrice = price * quantity;
 
     // Apply 10% discount if quantity is more than 1
-    const discountedPrice = quantity > 1 ? totalPrice * 0.9 : totalPrice;
+    //const discountedPrice = quantity > 1 ? totalPrice * 0.9 : totalPrice;
 
-    return Math.floor(discountedPrice); // Round down to nearest integer
+    return Math.floor(totalPrice); // Round down to nearest integer
   };
 
   // const dayMap = {
@@ -445,8 +446,8 @@ const MenuComp = () => {
 
   return (
     <div className="">
-      {days.map((day) => (
-        <>
+      {days.map((day, dayIndex) => (
+        <div key={dayIndex}>
           <div className="flex items-center justify-between ">
             <div className="h1_akm ">{menuData[day].menu_of}</div>
             <Chip
@@ -546,30 +547,13 @@ const MenuComp = () => {
 
                       {menuData[day].lunch.status === "enabled" && (
                         <div className="mt-2 flex flex-col pb_akm">
-                          {menuData[day].lunch.mealbox !== null ? (
-                            <Link href="/settings#mealbox">
-                              <div className="h4info_akm flex items-center justify-center py-1">
-                                {/* {menuData[day].lunch.mealbox} */}
-                                Mealbox
-                                {menuData[day]?.lunch?.mealbox === 1 ? (
-                                  <span className="text-green-600 ml-1">
-                                    <FontAwesomeIcon icon={faCircleCheck} />
-                                  </span>
-                                ) : (
-                                  <span className=" ml-1">
-                                    <FontAwesomeIcon
-                                      icon={faCircleExclamation}
-                                    />
-                                  </span>
-                                )}
-                              </div>
-                            </Link>
-                          ) : (
-                            mealboxStatus !== null && (
-                              <Link href="/settings#mealbox">
+                          <div className="pb-1">
+                            {menuData[day].lunch.mealbox !== null ? (
+                              <Link href="/settings#mealbox" cla>
                                 <div className="h4info_akm flex items-center justify-center py-1">
+                                  {/* {menuData[day].lunch.mealbox} */}
                                   Mealbox
-                                  {mealboxStatus === 1 ? (
+                                  {menuData[day]?.lunch?.mealbox === 1 ? (
                                     <span className="text-green-600 ml-1">
                                       <FontAwesomeIcon icon={faCircleCheck} />
                                     </span>
@@ -582,8 +566,27 @@ const MenuComp = () => {
                                   )}
                                 </div>
                               </Link>
-                            )
-                          )}
+                            ) : (
+                              mealboxStatus !== null && (
+                                <Link href="/settings#mealbox">
+                                  <div className="h4info_akm flex items-center justify-center py-1">
+                                    Mealbox
+                                    {mealboxStatus === 1 ? (
+                                      <span className="text-green-600 ml-1">
+                                        <FontAwesomeIcon icon={faCircleCheck} />
+                                      </span>
+                                    ) : (
+                                      <span className=" ml-1">
+                                        <FontAwesomeIcon
+                                          icon={faCircleExclamation}
+                                        />
+                                      </span>
+                                    )}
+                                  </div>
+                                </Link>
+                              )
+                            )}
+                          </div>
 
                           <div className="flex items-center justify-center space-x-2">
                             <Button
@@ -644,10 +647,13 @@ const MenuComp = () => {
                               BDT
                             </span>
                             {menuData[day].lunch.quantity > 1 && (
-                              <span className="h4info_akm">
-                                {" "}
-                                (10% discounted)
-                              </span>
+                              <>
+                                {/* {" "}
+                                <span className="h4info_akm">
+                                  {" "}
+                                  (10% discounted)
+                                </span> */}
+                              </>
                             )}
                           </div>
                         </div>
@@ -751,30 +757,13 @@ const MenuComp = () => {
 
                       {menuData[day].dinner.status === "enabled" && (
                         <div className="mt-2 flex flex-col pb_akm">
-                          {menuData[day].dinner.mealbox !== null ? (
-                            <Link href="/settings#mealbox">
-                              <div className="h4info_akm flex items-center justify-center py-1">
-                                {/* {menuData[day].dinner.mealbox} */}
-                                Mealbox
-                                {menuData[day]?.dinner?.mealbox === 1 ? (
-                                  <span className="text-green-600 ml-1">
-                                    <FontAwesomeIcon icon={faCircleCheck} />
-                                  </span>
-                                ) : (
-                                  <span className=" ml-1">
-                                    <FontAwesomeIcon
-                                      icon={faCircleExclamation}
-                                    />
-                                  </span>
-                                )}
-                              </div>
-                            </Link>
-                          ) : (
-                            mealboxStatus !== null && (
+                          <div className="pb-1">
+                            {menuData[day].dinner.mealbox !== null ? (
                               <Link href="/settings#mealbox">
                                 <div className="h4info_akm flex items-center justify-center py-1">
+                                  {/* {menuData[day].dinner.mealbox} */}
                                   Mealbox
-                                  {mealboxStatus === 1 ? (
+                                  {menuData[day]?.dinner?.mealbox === 1 ? (
                                     <span className="text-green-600 ml-1">
                                       <FontAwesomeIcon icon={faCircleCheck} />
                                     </span>
@@ -787,8 +776,27 @@ const MenuComp = () => {
                                   )}
                                 </div>
                               </Link>
-                            )
-                          )}
+                            ) : (
+                              mealboxStatus !== null && (
+                                <Link href="/settings#mealbox">
+                                  <div className="h4info_akm flex items-center justify-center py-1">
+                                    Mealbox
+                                    {mealboxStatus === 1 ? (
+                                      <span className="text-green-600 ml-1">
+                                        <FontAwesomeIcon icon={faCircleCheck} />
+                                      </span>
+                                    ) : (
+                                      <span className=" ml-1">
+                                        <FontAwesomeIcon
+                                          icon={faCircleExclamation}
+                                        />
+                                      </span>
+                                    )}
+                                  </div>
+                                </Link>
+                              )
+                            )}
+                          </div>
                           <div className="flex items-center justify-center space-x-2">
                             <Button
                               radius="full"
@@ -848,10 +856,12 @@ const MenuComp = () => {
                               BDT
                             </span>
                             {menuData[day].dinner.quantity > 1 && (
-                              <span className="h4info_akm">
-                                {" "}
-                                (10% discounted)
-                              </span>
+                              <>
+                                {/* <span className="h4info_akm">
+                                  {" "}
+                                  (10% discounted)
+                                </span> */}
+                              </>
                             )}
                           </div>
                         </div>
@@ -870,7 +880,7 @@ const MenuComp = () => {
               }
             </div>
           </div>
-        </>
+        </div>
       ))}
       <div className="pad_akm text-center h4info_akm">
         Menu rotates daily for the upcoming 7 days

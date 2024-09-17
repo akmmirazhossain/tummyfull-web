@@ -141,7 +141,7 @@ const NotificationBell = () => {
                 isShaking ? "shake_bell" : ""
               }`}
               icon={faBell}
-              size="1.5x"
+              size="2x"
             />
           </Button>
         </Badge>
