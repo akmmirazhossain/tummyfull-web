@@ -1,31 +1,86 @@
 // pages/index.js
+import { useContext, useEffect, useState } from "react";
+import { ApiContext } from "./contexts/ApiContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+
 import Layout from "./layout/Layout";
 import Deliveries from "./components/DeliverySchedule";
 
-import { useEffect } from "react";
+import { Button } from "@nextui-org/react";
+
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
+import axios from "axios";
 
-export default function Menu() {
-  const router = useRouter();
+const DelivPanel = () => {
+  const { isAuthenticated } = useAuth();
+  const apiConfig = useContext(ApiContext);
+  const [loading, setLoading] = useState(true);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [showComponent, setShowComponent] = useState("orderList");
+
   useEffect(() => {
-    checkAndRedirect();
-  }, []);
-
-  const checkAndRedirect = () => {
-    const token = Cookies.get("TFLoginToken");
-    if (!token) {
-      router.push("/login"); // Redirect to login page if the cookie is not available
-    } else {
-      //return cookies.TFLoginToken;
-      console.log("MealSettings: checkAndRedirect -> Token found");
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
     }
-  };
+
+    const fetchUserData = async () => {
+      const token = Cookies.get("TFLoginToken");
+      if (!apiConfig) return;
+      try {
+        const response = await axios.get(`${apiConfig.apiBaseUrl}user-fetch`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = response.data;
+        console.log("🚀 ~ fetchUserData ~ data:", data);
+
+        if (data.data.user_type !== "delivery") {
+          setHasAccess(false);
+        } else {
+          setHasAccess(true); // Clear the message if user type is valid
+        }
+
+        setLoading(false);
+        return data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+        return null;
+      }
+    };
+
+    fetchUserData();
+  }, [apiConfig, isAuthenticated]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <>
       <Layout>
-        <Deliveries />
+        {hasAccess ? (
+          <>
+            <Deliveries />
+          </>
+        ) : (
+          !loading && ( // Ensure the message is only shown after loading completes
+            <div className="card_akm pad_akm">
+              This section is accessible only to delivery person.
+            </div>
+          )
+        )}
       </Layout>
     </>
   );
-}
+};
+
+const ProtectedPageWithAuth = () => (
+  <AuthProvider>
+    <DelivPanel />
+  </AuthProvider>
+);
+
+export default ProtectedPageWithAuth;

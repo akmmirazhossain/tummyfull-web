@@ -1,6 +1,6 @@
 // ./components/LoginForm.js
 import React, { useState, useEffect, useMemo } from "react";
-import { Input, Spacer, Button } from "@nextui-org/react";
+import { Input, Spacer, Button, Textarea } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Head from "next/head";
@@ -68,7 +68,8 @@ const LoginForm = () => {
 
         // Check if new_user is "no"
         if (data.new_user === "yes") {
-          setNewUser(true); // Set showNameAddrInput to true
+          setNewUser(true);
+          console.log("🚀 ~ handleSendOTP ~ data.new_user:", data.new_user);
         }
       } else {
         console.log("OTP not sent, setting error");
@@ -109,7 +110,7 @@ const LoginForm = () => {
         } else {
           router.push("/");
         }
-
+        console.log("🚀 ~ handleVerifyOTP ~", newUser);
         // router.push("/settings");
       } else {
         setError(data.message || "Failed to verify OTP. Please try again.");
@@ -149,9 +150,7 @@ const LoginForm = () => {
       );
 
       console.log("User data updated successfully:", response.data);
-      alert(
-        "Profile updated successfully! Redirecting to the menu page to place your order."
-      );
+
       router.push("/");
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -173,87 +172,109 @@ const LoginForm = () => {
       <Head>
         <meta name="viewport" content="width=device-width, user-scalable=no" />
       </Head>
-      <div className="h1_akm ">Login</div>
 
       {!showNameAddrInput && (
-        <div className="card_akm p-8">
-          <div>Please log in and provide your address to continue.</div>
-          <Spacer y={3} />
-          <Input
-            value={value}
-            id="phone"
-            type="text"
-            label="Phone"
-            variant="bordered"
-            isInvalid={isInvalid}
-            color={isInvalid ? "danger" : "success"}
-            errorMessage="Please enter a valid 11 digit phone number"
-            onValueChange={setValue}
-          />
-          {isOtpSent && (
-            <>
-              <p className="text-xs">
-                Enter the 4 digit OTP sent on your phone
-              </p>
-              <Input
-                value={otp}
-                id="otp"
-                type="text"
-                label="OTP"
-                variant="bordered"
-                color="success"
-                onValueChange={setOtp}
-              />
-            </>
-          )}
+        <>
+          {" "}
+          <div className="h1_akm ">Login</div>
+          <div className="card_akm p-8">
+            <div>Please log in and provide your address to continue.</div>
+            <Spacer y={3} />
+            <Input
+              value={value}
+              id="phone"
+              type="text"
+              label="Phone"
+              variant="bordered"
+              isInvalid={isInvalid}
+              color={isInvalid ? "danger" : "success"}
+              errorMessage="Please enter a valid 11 digit phone number"
+              onValueChange={setValue}
+            />
+            {isOtpSent && (
+              <>
+                <p className="text-xs">
+                  Enter the 4 digit OTP sent on your phone
+                </p>
+                <Input
+                  value={otp}
+                  id="otp"
+                  type="text"
+                  label="OTP"
+                  variant="bordered"
+                  color="success"
+                  onValueChange={setOtp}
+                />
+              </>
+            )}
 
-          {error && <p className="text-xs text-red-500">{error}</p>}
-          <div className="flex justify-end items-center mt-4">
-            <>
-              {!isOtpSent ? (
-                <Button onPress={handleSendOTP} disabled={isInvalid}>
-                  Send OTP
-                </Button>
-              ) : (
-                <Button onPress={handleVerifyOTP} disabled={!otp}>
-                  Verify OTP
-                </Button>
-              )}
-            </>
+            {error && <p className="text-xs text-red-500">{error}</p>}
+            <div className="flex justify-end items-center mt-4">
+              <>
+                {!isOtpSent ? (
+                  <Button onPress={handleSendOTP} disabled={isInvalid}>
+                    Send OTP
+                  </Button>
+                ) : (
+                  <Button onPress={handleVerifyOTP} disabled={!otp}>
+                    Verify OTP
+                  </Button>
+                )}
+              </>
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* SHOW THE USER / ADDRESS INPUTS IF THE USER IS NEW */}
 
       {showNameAddrInput && (
-        <div className="flex flex-col gap_akm card_akm p-8">
-          <p className="h3_akm">Welcome to DalBhath.com!</p>
-          <p className="h4_akm">
-            Please enter your name and address to continue.
-          </p>
-          <Input
-            name="first_name"
-            type="text"
-            label="User Name"
-            variant="bordered"
-            value={formData.first_name}
-            onChange={handleChange}
-          />
-          <Input
-            name="address"
-            type="text"
-            label="Address"
-            variant="bordered"
-            value={formData.address}
-            onChange={handleChange}
-          />
-          <div className="flex justify-end items-center">
-            <Button color="success" onClick={handleSaveAndContinue}>
-              Save & Continue to Menu
-            </Button>
+        <>
+          <div className="h1_akm ">Welcome!</div>
+          <div className="flex flex-col gap_akm card_akm p-8">
+            <p>Please enter your name and address to continue.</p>
+            <Input
+              name="first_name"
+              type="text"
+              label="User Name"
+              variant="bordered"
+              value={formData.first_name}
+              onChange={handleChange}
+              isRequired
+            />
+
+            <div>
+              {" "}
+              <Textarea
+                name="address"
+                type="text"
+                label="Full Address"
+                variant="bordered"
+                placeholder="Flat no, House no, Road no, Block, Area"
+                className=" md:col-span-2"
+                value={formData.address}
+                onChange={handleChange}
+                isRequired
+              />
+              <p className="h4info_akm mt_akm">
+                Our service is currently available only in{" "}
+                <span className="font-bold">Bashundhara R/A. </span>
+                We will expand to all of Dhaka soon and notify you when we reach
+                your area. Stay tuned!{" "}
+              </p>
+            </div>
+
+            <div className="flex justify-end items-center">
+              <Button
+                color="success"
+                className=""
+                onClick={handleSaveAndContinue}
+              >
+                Save & Continue to Menu
+              </Button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

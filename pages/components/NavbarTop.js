@@ -16,7 +16,7 @@ import {
 import { Button, Spinner, Badge } from "@nextui-org/react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import axios from "axios";
+
 import { ApiContext } from "../contexts/ApiContext";
 // import dayjs from "dayjs";
 // import relativeTime from "dayjs/plugin/relativeTime";

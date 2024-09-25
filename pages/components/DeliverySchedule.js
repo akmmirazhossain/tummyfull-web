@@ -73,7 +73,8 @@ const Deliveries = () => {
         console.error(error);
       }
     );
-    setDelivFetchRefresh((prev) => prev + 1);
+    //setDelivFetchRefresh((prev) => prev + 1);
+    setDelivFetchRefresh();
     setSelectedKey(selectedKey);
     setOrderId(orderId);
     // router.reload();
@@ -105,7 +106,7 @@ const Deliveries = () => {
                       >
                         <div className="flex items-center justify-center  border-b border-gray-200 pad_akm">
                           <div className="flex items-center justify-center w-10 h-10 bg-slate-800 rounded-full h2_akm text-white">
-                            {index + 1}
+                            {item.mrd_order_id}
                           </div>
                         </div>
                         <div className="flex  border-b border-gray-200">

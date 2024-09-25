@@ -12,6 +12,15 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   createServer(async (req, res) => {
     try {
+      // Redirect to HTTPS if the protocol is HTTP
+      if (!dev && req.headers["x-forwarded-proto"] !== "https") {
+        res.writeHead(301, {
+          Location: `https://${req.headers.host}${req.url}`,
+        });
+        res.end();
+        return;
+      }
+
       const parsedUrl = parse(req.url, true);
       const { pathname, query } = parsedUrl;
 

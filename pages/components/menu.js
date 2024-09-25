@@ -358,6 +358,7 @@ const MenuComp = () => {
     console.log("QuantityChange -> Quantity Data:", data);
 
     try {
+      notifLoadTrigger();
       const response = await fetch(`${apiConfig.apiBaseUrl}quantity-changer`, {
         method: "POST",
         headers: {
@@ -845,7 +846,7 @@ const MenuComp = () => {
                           </div>
                           <div className="mt_akm flex flex-col items-center justify-center">
                             <span className="font-semibold">
-                              Total:{" "}
+                              Total: ৳
                               {
                                 //MARK: Total Price
                                 calculateTotalPrice(
@@ -853,7 +854,6 @@ const MenuComp = () => {
                                   menuData[day].dinner.quantity
                                 )
                               }{" "}
-                              BDT
                             </span>
                             {menuData[day].dinner.quantity > 1 && (
                               <>
