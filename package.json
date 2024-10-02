@@ -33,6 +33,7 @@
     "@eslint/js": "^9.11.1",
     "@types/node": "20.14.2",
     "@types/react": "18.3.5",
+    "daisyui": "^4.12.10",
     "eslint": "^9.11.1",
     "eslint-plugin-react": "^7.36.1",
     "globals": "^15.9.0",

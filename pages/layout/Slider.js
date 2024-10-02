@@ -32,7 +32,7 @@ export default function Slider() {
   return (
     <div className="pt_akm">
       <Swiper
-        slidesPerView={2} // Default for small screens (below 640px)
+        slidesPerView={2}
         spaceBetween={8}
         slidesPerGroup={2}
         breakpoints={{
@@ -60,7 +60,6 @@ export default function Slider() {
                   alt={item.alt}
                   quality={75}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  layout="responsive"
                 />
               </div>
             </Link>

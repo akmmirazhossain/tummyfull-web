@@ -136,8 +136,7 @@ const MealSettings = () => {
                 <div className="px-1 py-2">
                   <div className="text-small font-bold">Mealbox activated!</div>
                   <div className="text-tiny">
-                    Starting tomorrow, your meals will be delivered in a
-                    mealbox.
+                    Your upcoming meals will be delivered in a mealbox.
                   </div>
                 </div>
               </PopoverContent>
