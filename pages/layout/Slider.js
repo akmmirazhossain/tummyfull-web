@@ -59,7 +59,8 @@ export default function Slider() {
                   width={400}
                   alt={item.alt}
                   quality={75}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  // layout="responsive"
                 />
               </div>
             </Link>
