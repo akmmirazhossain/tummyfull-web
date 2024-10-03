@@ -509,9 +509,15 @@ const MenuComp = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex justify-center h3_akm py_akm">
-                      <span className="">৳ {menuData[day].lunch.price}</span>
+                    <div className="flex items-center justify-center py_akm gap_akm">
+                      <span className=" h2_akm text_green">
+                        ৳ {menuData[day].lunch.price}
+                      </span>
+                      <span className="h4_akm line-through text-gray-500 ">
+                        ৳ 180
+                      </span>
                     </div>
+
                     <div className="flex items-center flex-col justify-center -m-2 pb_akm">
                       {/* //MARK: Lunch Sw  */}
                       <IOSSwitch
@@ -719,8 +725,14 @@ const MenuComp = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex justify-center h3_akm py_akm">
-                      <span className="">৳ {menuData[day].dinner.price}</span>
+
+                    <div className="flex items-center justify-center py_akm gap_akm">
+                      <span className=" h2_akm text_green">
+                        ৳ {menuData[day].dinner.price}
+                      </span>
+                      <span className="h4_akm line-through text-gray-500 ">
+                        ৳ 180
+                      </span>
                     </div>
                     <div className="flex items-center flex-col justify-center -m-2 pb_akm">
                       {/* //MARK: Dinner Sw  */}

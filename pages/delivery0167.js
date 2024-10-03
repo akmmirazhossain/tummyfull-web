@@ -63,6 +63,7 @@ const DelivPanel = () => {
       <Layout>
         {hasAccess ? (
           <>
+            <div className="h1_akm">Delivery Panel</div>
             <Deliveries />
           </>
         ) : (

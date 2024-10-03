@@ -7,6 +7,11 @@ import { Autoplay } from "swiper/modules";
 
 const items = [
   {
+    src: "/images/chef.png",
+    alt: "Hot Homecooked",
+    link: "/info#features",
+  },
+  {
     src: "/images/delivery.png",
     alt: "Free Delivery",
     link: "/info#features",
@@ -16,11 +21,7 @@ const items = [
     alt: "Hot Homecooked",
     link: "/info#features",
   },
-  {
-    src: "/images/chef.png",
-    alt: "Hot Homecooked",
-    link: "/info#features",
-  },
+
   {
     src: "/images/wallet.png",
     alt: "Hot Homecooked",
@@ -32,14 +33,14 @@ export default function Slider() {
   return (
     <div className="pt_akm">
       <Swiper
-        slidesPerView={2}
+        slidesPerView={2} // Default for small screens (below 640px)
         spaceBetween={8}
         slidesPerGroup={2}
         breakpoints={{
           768: {
             slidesPerView: 4,
             spaceBetween: 16,
-            slidesPerGroup: 2,
+            // slidesPerGroup: 2,
           },
         }}
         autoplay={{
@@ -52,7 +53,7 @@ export default function Slider() {
         {items.map((item, index) => (
           <SwiperSlide key={index}>
             <Link href={item.link}>
-              <div className="bg-gradient-to-r from-rose-100 to-teal-100 rounded_akm shadow_akm h-auto flex items-center justify-center overflow-hidden">
+              <div className="bg-gradient-to-r from-rose-100 to-teal-100 rounded_akm shadow_akm h-auto flex items-center justify-center overflow-hidden ">
                 <Image
                   src={item.src}
                   height={200}
