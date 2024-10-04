@@ -1,4 +1,5 @@
 // pages/wallet.js
+import React from "react";
 import Layout from "./layout/Layout";
 import Image from "next/image";
 import Link from "next/link";
@@ -93,7 +94,7 @@ const Info = () => {
                 <span className="px_akm">
                   {" "}
                   প্রতিদিন কয়টা লাঞ্চ এবং ডিনার রান্না করতে হবে এটি আমাদের
-                  পোর্টালে দেখতে পারবেন, যার ফলে আপনাকে অতিরিক্ত কিংবা আগ্রিম
+                  পোর্টালে দেখতে পারবেন, যার ফলে আপনার অতিরিক্ত কিংবা আগ্রিম
                   রান্না করার প্রয়োজন হবে না।
                 </span>
               </div>

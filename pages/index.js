@@ -1,5 +1,5 @@
 // pages/index.js
-import { useEffect } from "react"; // Import useEffect from React
+import React from "react";
 import Layout from "./layout/Layout";
 import Slider from "./layout/Slider";
 import MenuComp from "./components/menu";

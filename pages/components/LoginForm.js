@@ -82,7 +82,7 @@ const LoginForm = () => {
   };
 
   //MARK: VerifyOTP
-  const handleVerifyOTP = async (setModalContent) => {
+  const handleVerifyOTP = async () => {
     try {
       const response = await fetch(`${config.apiBaseUrl}verify-otp`, {
         method: "POST",

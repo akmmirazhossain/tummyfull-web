@@ -1,4 +1,5 @@
 // pages/wallet.js
+import React from "react";
 import Layout from "./layout/Layout";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,5 +1,5 @@
 // components/OrderList.js
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
@@ -54,41 +54,49 @@ const ChefOrderHistory = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => {
-            const formattedDate = dayjs(order.mrd_order_date).format(
-              "D, MMM, YYYY"
-            );
-            return (
-              <tr key={order.mrd_order_id}>
-                <td className="py-2 px-4 border-b text-center">
-                  {formattedDate}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {order.mrd_order_quantity} x{" "}
-                  {order.mrd_setting_commission_chef}
-                </td>
-                {/* <td className="py-2 px-4 border-b text-center">
+          {orders.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="py-2 px-4 border-b text-center">
+                No orders
+              </td>
+            </tr>
+          ) : (
+            orders.map((order) => {
+              const formattedDate = dayjs(order.mrd_order_date).format(
+                "D, MMM, YYYY"
+              );
+              return (
+                <tr key={order.mrd_order_id}>
+                  <td className="py-2 px-4 border-b text-center">
+                    {formattedDate}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {order.mrd_order_quantity} x{" "}
+                    {order.mrd_setting_commission_chef}
+                  </td>
+                  {/* <td className="py-2 px-4 border-b text-center">
                   {order.mrd_order_status}
                 </td> */}
 
-                <td className="py-2 px-4 border-b text-center">
-                  <span className="text-xs">৳</span>
-                  {order.total_commission}
-                </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    <span className="text-xs">৳</span>
+                    {order.total_commission}
+                  </td>
 
-                <td className="py-2 px-4 border-b text-center">
-                  {order.mrd_order_id}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {order.mrd_order_chef_pay_status === "unpaid" ? (
-                    <Chip color="warning">unpaid</Chip>
-                  ) : (
-                    <Chip color="success">paid</Chip>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
+                  <td className="py-2 px-4 border-b text-center">
+                    {order.mrd_order_id}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {order.mrd_order_chef_pay_status === "unpaid" ? (
+                      <Chip color="warning">unpaid</Chip>
+                    ) : (
+                      <Chip color="success">paid</Chip>
+                    )}
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </div>

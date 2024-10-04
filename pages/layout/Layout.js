@@ -1,5 +1,5 @@
 // ./layout/Layout.js
-
+import React from "react";
 import Head from "next/head";
 import NavbarTop from "../components/NavbarTop";
 import NavbarBottom from "../components/NavbarBottom";
@@ -10,16 +10,22 @@ const Layout = ({ children, title }) => {
     <div className="bg_light_orange text_black">
       <Head>
         <title>{title ? title : "ডালভাত"}</title>
-        <meta name="description" content="Your page description goes here." />
+        <meta
+          name="description"
+          content="DalBhath is an easy meal management app for students, job holders, and families seeking convenient daily meal options."
+        />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.dalbhath.com/" />
         <meta property="og:title" content="ডালভাত.com" />
         <meta
           property="og:description"
-          content="DalBhath is a meal management app that helps college students living in shared apartments easily plan and manage their daily lunch and dinner, ensuring they always have a meal without the hassle of cooking or organizing."
+          content="DalBhath is an easy meal management app for students, job holders, and families seeking convenient daily meal options."
         />
-        <meta property="og:image" content="https://dalbhath.com/logo.png" />
+        <meta
+          property="og:image"
+          content="https://dalbhath.com/images/og-main.webp"
+        />
       </Head>
       <header className="fixed w-full z-20">
         <NavbarTop className="" />

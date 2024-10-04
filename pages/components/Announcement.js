@@ -1,6 +1,6 @@
 // components/Announcement.js
 import React, { useState, useEffect } from "react";
-import { Card, Text } from "@nextui-org/react";
+import { Card } from "@nextui-org/react";
 
 const Announcement = () => {
   const [announcement, setAnnouncement] = useState("");

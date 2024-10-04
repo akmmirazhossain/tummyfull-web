@@ -70,7 +70,6 @@ const IOSSwitch = styled((props) => (
 }));
 
 const MenuComp = () => {
-  const [config, setConfig] = useState(null);
   const [menuData, setMenuData] = useState(null);
   // const [cookies] = useCookies(["TFLoginToken"]);
   const router = useRouter();
@@ -87,8 +86,6 @@ const MenuComp = () => {
     if (document.visibilityState === "visible") {
       fetchData();
       notifLoadTrigger();
-
-      console.log("MENU REFRESHED");
     }
   };
 
@@ -104,6 +101,7 @@ const MenuComp = () => {
 
   //FETCH MENU
   const fetchData = async () => {
+    console.log("MENU REFRESHED");
     if (!apiConfig) return;
 
     try {
@@ -125,28 +123,6 @@ const MenuComp = () => {
       // Handle error as needed
     }
   };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [config]);
-
-  useEffect(() => {
-    // Fetch config.json on component mount
-    const fetchConfig = async () => {
-      try {
-        const response = await fetch("../../config.json"); // Adjust URL as needed
-        if (!response.ok) {
-          throw new Error("Failed to fetch config");
-        }
-        const data = await response.json();
-        setConfig(data);
-      } catch (error) {
-        console.error("Error fetching config:", error);
-      }
-    };
-
-    fetchConfig();
-  }, []);
 
   useEffect(() => {
     // Fetch data when Cookies.get("TFLoginToken") changes or config is fetched
@@ -483,7 +459,7 @@ const MenuComp = () => {
                           className=" flex flex-col justify-center items-center "
                         >
                           <img
-                            src={`${config.imageBaseUrl}${food.food_image}`}
+                            src={`${apiConfig.imageBaseUrl}${food.food_image}`}
                             alt={food.name}
                             className="w-28 lg:w-40  rounded-full "
                           />
@@ -699,7 +675,7 @@ const MenuComp = () => {
                           className=" flex flex-col justify-center items-center "
                         >
                           <img
-                            src={`${config.imageBaseUrl}${food.food_image}`}
+                            src={`${apiConfig.imageBaseUrl}${food.food_image}`}
                             alt={food.name}
                             className="w-28 lg:w-40  rounded-full "
                           />

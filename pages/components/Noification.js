@@ -1,6 +1,5 @@
 import { ApiContext } from "../contexts/ApiContext";
 import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from "next/router";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -26,7 +25,6 @@ const formatNotificationDate = (date) => {
 };
 
 const Notification = () => {
-  const router = useRouter();
   const apiConfig = useContext(ApiContext);
   const [notif, setNotif] = useState(null);
   const [loading, setLoading] = useState(true);

@@ -1,4 +1,5 @@
 // pages/_app.js
+import React from "react";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ApiProvider } from "./contexts/ApiContext";
 import { NotificationProvider } from "./contexts/NotificationContext";

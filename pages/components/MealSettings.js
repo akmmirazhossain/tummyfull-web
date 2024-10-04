@@ -9,12 +9,9 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  Button,
-  Textarea,
 } from "@nextui-org/react";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBox, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { useNotification } from "../contexts/NotificationContext";
 
 const MealSettings = () => {
   const [isOn, setIsOn] = useState(false);
@@ -22,6 +19,7 @@ const MealSettings = () => {
   const router = useRouter();
 
   const [config, setConfig] = useState(null);
+  const { shakeBell, notifLoadTrigger } = useNotification();
 
   useEffect(() => {
     checkAndRedirect();
@@ -82,6 +80,8 @@ const MealSettings = () => {
 
   //MARK: mealboxSw
   const mealboxSwitchChange = async (value) => {
+    shakeBell();
+    notifLoadTrigger();
     checkAndRedirect();
     setIsOn(value);
     if (value == true) {

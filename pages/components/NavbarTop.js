@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import NotificationBell from "./NotificationBell";
@@ -6,43 +6,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUtensils,
   faRightToBracket,
-  faRightFromBracket,
   faGear,
-  faListCheck,
-  faWallet,
   faEllipsisVertical,
-  faBell,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Spinner, Badge } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 
 import { ApiContext } from "../contexts/ApiContext";
-// import dayjs from "dayjs";
-// import relativeTime from "dayjs/plugin/relativeTime";
-// import advancedFormat from "dayjs/plugin/advancedFormat";
-
-// dayjs.extend(relativeTime);
-// dayjs.extend(advancedFormat);
-
-// const formatNotificationDate = (date) => {
-//   const dayjsDate = dayjs(date);
-//   const now = dayjs();
-
-//   if (now.diff(dayjsDate, "day") < 2) {
-//     // Show "Just now", "Yesterday", etc.
-//     return dayjsDate.fromNow();
-//   } else {
-//     // Show "Monday, 2nd Sep"
-//     return dayjsDate.format("ddd, Do MMM");
-//   }
-// };
 
 const NavbarTop = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+
   const apiConfig = useContext(ApiContext);
   const token = Cookies.get("TFLoginToken");
 
@@ -137,7 +113,7 @@ const NavbarTop = () => {
           </div>
           <nav className="hidden md:flex space-x-6 pr-6">
             {/* Replace with your menu items */}
-            {navbarItems.map((item, index) => (
+            {navbarItems.map((item) => (
               <Link
                 key={item.text}
                 href={item.href}

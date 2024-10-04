@@ -1,5 +1,5 @@
 // components/ProfileForm.js
-import { Button, Input, Spacer, Tooltip, Textarea } from "@nextui-org/react";
+import { Button, Input, Spacer, Textarea } from "@nextui-org/react";
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router"; // Import useRouter
 import React from "react";
@@ -57,15 +57,6 @@ const ProfileForm = () => {
 
     fetchUserData();
   }, [apiConfig]);
-
-  const checkAndRedirect = () => {
-    const token = Cookies.get("TFLoginToken");
-    if (!token) {
-      router.push("/login"); // Redirect to login page if the cookie is not available
-    } else {
-      console.log("MealSettings: checkAndRedirect -> Token found");
-    }
-  };
 
   // Function to fetch user data using the token
 
@@ -186,12 +177,13 @@ const ProfileForm = () => {
         <Spacer y={4} />
         <div className="flex items-center">
           <span>Phone</span>
-          <Tooltip color="foreground" content="Phone number verified">
+
+          <div className="lg:tooltip" data-tip="Phone number verified">
             <FontAwesomeIcon
               icon={faCircleCheck}
-              className="text-md text-green-600 ml-1"
+              className=" text-green-600 ml-1"
             />
-          </Tooltip>
+          </div>
         </div>
         <Input
           labelPlaceholder="Phone"

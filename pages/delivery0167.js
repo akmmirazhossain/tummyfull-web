@@ -1,12 +1,11 @@
 // pages/index.js
+import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "./contexts/ApiContext";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 import Layout from "./layout/Layout";
 import Deliveries from "./components/DeliverySchedule";
-
-import { Button } from "@nextui-org/react";
 
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -16,7 +15,6 @@ const DelivPanel = () => {
   const apiConfig = useContext(ApiContext);
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
-  const [showComponent, setShowComponent] = useState("orderList");
 
   useEffect(() => {
     if (!isAuthenticated) {

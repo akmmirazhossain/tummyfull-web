@@ -1,5 +1,5 @@
 // components/OrderList.js
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
@@ -54,39 +54,47 @@ const ChefPaymentHistory = () => {
           </tr>
         </thead>
         <tbody>
-          {payments.map((payment) => {
-            const formattedDate = dayjs(payment.mrd_payment_date_paid).format(
-              "D, MMM, YYYY"
-            );
-            return (
-              <tr key={payment.mrd_payment_id}>
-                <td className="py-2 px-4 border-b text-center">
-                  {formattedDate}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {payment.mrd_payment_order_quantity}
-                </td>
+          {payments.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="py-2 px-4 border-b text-center">
+                No payments
+              </td>
+            </tr>
+          ) : (
+            payments.map((payment) => {
+              const formattedDate = dayjs(payment.mrd_payment_date_paid).format(
+                "D, MMM, YYYY"
+              );
+              return (
+                <tr key={payment.mrd_payment_id}>
+                  <td className="py-2 px-4 border-b text-center">
+                    {formattedDate}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {payment.mrd_payment_order_quantity}
+                  </td>
 
-                {/* <td className="py-2 px-4 border-b text-center">
+                  {/* <td className="py-2 px-4 border-b text-center">
                   {order.mrd_order_status}
                 </td> */}
-                <td className="py-2 px-4 border-b text-center">
-                  <span className="text-xs">৳</span>
-                  {payment.mrd_payment_amount}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {payment.mrd_payment_order_id}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {payment.mrd_payment_status === "unpaid" ? (
-                    <Chip color="warning">unpaid</Chip>
-                  ) : (
-                    <Chip color="success">paid</Chip>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
+                  <td className="py-2 px-4 border-b text-center">
+                    <span className="text-xs">৳</span>
+                    {payment.mrd_payment_amount}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {payment.mrd_payment_order_id}
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                    {payment.mrd_payment_status === "unpaid" ? (
+                      <Chip color="warning">unpaid</Chip>
+                    ) : (
+                      <Chip color="success">paid</Chip>
+                    )}
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </div>

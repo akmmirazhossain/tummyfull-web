@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
@@ -71,7 +71,7 @@ const DeliveryList = () => {
           },
         }
       )
-      .then((response) => {
+      .then(() => {
         alert("Delivery updated successfully");
         fetchDeliveryList();
       })
@@ -133,7 +133,7 @@ const DeliveryList = () => {
                 </h3>
                 <div className="grid grid-cols-2">
                   {deliveries[date][mealType].map((delivery) => (
-                    <>
+                    <div key={date}>
                       <table
                         key={delivery.mrd_order_id}
                         className="table card_akm py_akm"
@@ -153,7 +153,12 @@ const DeliveryList = () => {
 
                           <tr>
                             <th>নাম:</th>
-                            <td>{delivery.mrd_user_first_name}</td>
+                            <td>
+                              {delivery.mrd_user_first_name} &bull;{" "}
+                              <span className="text-xs">
+                                (Current Credit: {delivery.mrd_user_credit})
+                              </span>
+                            </td>
                           </tr>
                           <tr>
                             <th>ফোন:</th>
@@ -202,7 +207,7 @@ const DeliveryList = () => {
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-2 badge badge-ghost badge-lg badge-outline ">
                                   <input
-                                    class="radio radio-error radio-sm"
+                                    className="radio radio-error radio-sm"
                                     type="radio"
                                     name={`mealboxPicked-${delivery.mrd_order_id}`}
                                     value={0}
@@ -221,7 +226,7 @@ const DeliveryList = () => {
                                 {delivery.mrd_user_has_mealbox == "1" && (
                                   <div className="flex items-center gap-2 badge badge-ghost badge-lg badge-outline ">
                                     <input
-                                      class="radio radio-error radio-sm"
+                                      className="radio radio-error radio-sm"
                                       type="radio"
                                       name={`mealboxPicked-${delivery.mrd_order_id}`}
                                       value={1}
@@ -242,7 +247,7 @@ const DeliveryList = () => {
                                 {delivery.mrd_user_has_mealbox == "2" && (
                                   <div className="flex items-center gap-2 badge badge-ghost badge-lg badge-outline ">
                                     <input
-                                      class="radio radio-error radio-sm"
+                                      className="radio radio-error radio-sm"
                                       type="radio"
                                       name={`mealboxPicked-${delivery.mrd_order_id}`}
                                       value={2}
@@ -283,11 +288,13 @@ const DeliveryList = () => {
                                   </div>
                                 ) : delivery.mrd_user_has_mealbox == "1" ? (
                                   <div className="text-xs">
-                                    (ইউজারের কাছে আমাদের ১ টা মিলবক্স আছে)
+                                    (ইউজারের কাছে আমাদের ১ টা মিলবক্স আছে, ফেরত
+                                    আনুন)
                                   </div>
                                 ) : delivery.mrd_user_has_mealbox == "2" ? (
                                   <div className="text-xs">
-                                    (ইউজারের কাছে আমাদের ২ টা মিলবক্স আছে)
+                                    (ইউজারের কাছে আমাদের ২ টা মিলবক্স আছে, ফেরত
+                                    আনুন)
                                   </div>
                                 ) : null}
                               </div>
@@ -441,7 +448,7 @@ const DeliveryList = () => {
                           </tr>
                         </tbody>
                       </table>
-                    </>
+                    </div>
                   ))}
                 </div>
               </div>

@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
-import { Skeleton, Button } from "@nextui-org/react";
+import { Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUtensils,
   faGear,
-  faBell,
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
-import Cookies from "js-cookie";
+
 import { useRouter } from "next/router";
 import { Button, ButtonGroup } from "@nextui-org/react";
 

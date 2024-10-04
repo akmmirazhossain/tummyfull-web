@@ -1,5 +1,5 @@
 // pages/index.js
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Layout from "./layout/Layout";
 import OrderList from "./components/ChefToCookNow";
 import ChefOrderHistory from "./components/ChefOrderHistory";
