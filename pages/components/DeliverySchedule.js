@@ -131,7 +131,7 @@ const DeliveryList = () => {
 
                   {mealType}
                 </h3>
-                <div className="grid grid-cols-2">
+                <div className="grid grid-cols-1 md:grid-cols-2">
                   {deliveries[date][mealType].map((delivery) => (
                     <div key={date}>
                       <table
@@ -147,7 +147,7 @@ const DeliveryList = () => {
                           {delivery.mrd_user_delivery_instruction && (
                             <tr>
                               <th>ডেলিভারি নির্দেশনা:</th>
-                              <td></td>
+                              <td>{delivery.mrd_user_delivery_instruction}</td>
                             </tr>
                           )}
 
