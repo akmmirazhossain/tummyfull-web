@@ -26,7 +26,7 @@ const ChefOrderHistory = () => {
           }
         );
         setOrders(response.data); // Set the fetched data to the state
-      } catch (error) {
+      } catch {
         setError("Failed to fetch orders.");
       } finally {
         setLoading(false);

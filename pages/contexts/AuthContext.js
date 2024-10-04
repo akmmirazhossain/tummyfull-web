@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import PropTypes from "prop-types";
 
 const AuthContext = createContext();
 
@@ -23,6 +24,11 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+// Add PropTypes validation for children
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => useContext(AuthContext);

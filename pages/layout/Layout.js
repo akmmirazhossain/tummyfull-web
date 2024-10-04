@@ -1,5 +1,6 @@
 // ./layout/Layout.js
 import React from "react";
+import PropTypes from "prop-types";
 import Head from "next/head";
 import NavbarTop from "../components/NavbarTop";
 import NavbarBottom from "../components/NavbarBottom";
@@ -39,6 +40,11 @@ const Layout = ({ children, title }) => {
       </footer>
     </div>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired, // Validate children
+  title: PropTypes.string, // Validate title
 };
 
 export default Layout;

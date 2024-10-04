@@ -6,6 +6,7 @@ import { NotificationProvider } from "./contexts/NotificationContext";
 
 import "../styles/globals.css";
 
+// eslint-disable-next-line react/prop-types
 export default function App({ Component, pageProps }) {
   return (
     <AppRouterCacheProvider>

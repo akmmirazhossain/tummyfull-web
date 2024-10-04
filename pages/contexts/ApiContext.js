@@ -1,6 +1,6 @@
 // ApiContext.js
 import React, { createContext, useEffect, useState } from "react";
-
+import PropTypes from "prop-types";
 const ApiContext = createContext();
 
 const ApiProvider = ({ children }) => {
@@ -9,7 +9,7 @@ const ApiProvider = ({ children }) => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const response = await fetch("../../config.json"); // Adjust path as needed
+        const response = await fetch("../../config.json");
         const data = await response.json();
         setApiConfig(data);
       } catch (error) {
@@ -23,6 +23,11 @@ const ApiProvider = ({ children }) => {
   return (
     <ApiContext.Provider value={apiConfig}>{children}</ApiContext.Provider>
   );
+};
+
+// Add PropTypes validation for children
+ApiProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export { ApiContext, ApiProvider };
