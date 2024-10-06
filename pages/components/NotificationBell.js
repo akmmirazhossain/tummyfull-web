@@ -128,13 +128,15 @@ const NotificationBell = () => {
           size="md"
           shape="circle"
           isInvisible={unseenCount === 0}
+          className="absolute top-3 right-3"
         >
           <Button
             radius="full"
             isIconOnly
             variant="light"
             onClick={handleBellClick}
-            size="sm"
+            size="lg"
+            className="relative"
           >
             <FontAwesomeIcon
               className={`font-awesome-icon cursor-pointer  text-lg ${

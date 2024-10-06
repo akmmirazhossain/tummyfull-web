@@ -145,6 +145,7 @@ const NavbarTop = () => {
                     isIconOnly
                     size="lg"
                     className="text-green-600"
+                    radius="full"
                   >
                     <div>
                       {isLoading ? (
