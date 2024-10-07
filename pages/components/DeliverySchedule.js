@@ -9,6 +9,12 @@ import {
   faLocationDot,
   faStickyNote,
   faReceipt,
+  faUser,
+  faMobileScreenButton,
+  faBoxOpen,
+  faBowlFood,
+  faCoins,
+  faMoneyBill,
 } from "@fortawesome/free-solid-svg-icons";
 
 const DeliveryList = () => {
@@ -168,20 +174,20 @@ const DeliveryList = () => {
 
                       <div className="flex items-center">
                         <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                          <FontAwesomeIcon icon={faReceipt} />
+                          <FontAwesomeIcon icon={faUser} />
                           <span>নাম:</span>
                         </div>
                         <div className=" w-3/4 py-1">
                           {delivery.mrd_user_first_name}{" "}
                           <span className="text-xs">
-                            (ওয়ালেট বালাঞ্চে: ৳{delivery.mrd_user_credit})
+                            (ওয়ালেট ব্যালেন্স: ৳{delivery.mrd_user_credit})
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center ">
                         <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                          <FontAwesomeIcon icon={faReceipt} />
+                          <FontAwesomeIcon icon={faMobileScreenButton} />
                           <span>ফোন:</span>
                         </div>
                         <div className=" w-3/4 py-1">
@@ -191,7 +197,7 @@ const DeliveryList = () => {
 
                       <div className="flex items-center ">
                         <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                          <FontAwesomeIcon icon={faReceipt} />
+                          <FontAwesomeIcon icon={faBoxOpen} />
                           <span>মিলবক্স ফেরত:</span>
                         </div>
                         <div className=" w-3/4 py-1">
@@ -290,34 +296,9 @@ const DeliveryList = () => {
                         </div>
                       </div>
 
-                      {/* <div className="flex items-center ">
-                        <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                          <FontAwesomeIcon icon={faReceipt} />
-                          <span>মোট মিলের সংখ্যা:</span>
-                        </div>
-                        <div className=" w-3/4 py-1 flex items-center gap_akm">
-                          {delivery.mrd_order_quantity}
-
-                          <div
-                            className="tooltip"
-                            data-tip="মিলবক্স সহ/ছাড়া মোট মিলের সংখ্যা"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="24px"
-                              viewBox="0 -960 960 960"
-                              width="24px"
-                              fill="#4287f5"
-                            >
-                              <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div> */}
-
                       <div className="flex items-center ">
                         <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                          <FontAwesomeIcon icon={faReceipt} />
+                          <FontAwesomeIcon icon={faBowlFood} />
                           <span>মিল দিন:</span>
                         </div>
                         <div className=" w-3/4 py-1 flex items-center gap_akm">
@@ -584,7 +565,7 @@ const DeliveryList = () => {
                         delivery.mrd_order_mealbox == "1" && (
                           <div className="flex items-center ">
                             <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                              <FontAwesomeIcon icon={faReceipt} />
+                              <FontAwesomeIcon icon={faCoins} />
                               <span>নতুন মিলবক্সের দাম:</span>
                             </div>
                             <div className=" w-3/4 py-1 flex items-center gap_akm">
@@ -609,7 +590,7 @@ const DeliveryList = () => {
 
                       <div className="flex items-center ">
                         <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                          <FontAwesomeIcon icon={faReceipt} />
+                          <FontAwesomeIcon icon={faMoneyBill} />
                           <span>মোট মিলের দাম:</span>
                         </div>
                         <div className=" w-3/4 py-1">
@@ -650,7 +631,7 @@ const DeliveryList = () => {
                           {delivery.mrd_order_mealbox == "1" && (
                             <div>
                               {delivery.mrd_user_mealbox_paid == "1" && (
-                                <div>(1){delivery.mrd_order_cash_to_get}</div>
+                                <div>{delivery.mrd_order_cash_to_get}</div>
                               )}
                             </div>
                           )}
@@ -658,7 +639,6 @@ const DeliveryList = () => {
                             <div>
                               {delivery.mrd_user_mealbox_paid == "0" && (
                                 <div>
-                                  (2)
                                   {delivery.mrd_order_cash_to_get +
                                     delivery.mrd_setting_mealbox_price}
                                 </div>
@@ -667,7 +647,7 @@ const DeliveryList = () => {
                           )}
 
                           {delivery.mrd_order_mealbox == "0" && (
-                            <div>(3){delivery.mrd_order_cash_to_get}</div>
+                            <div>{delivery.mrd_order_cash_to_get}</div>
                           )}
 
                           <div className=" w-3/4 py-1 text-xs font-normal">

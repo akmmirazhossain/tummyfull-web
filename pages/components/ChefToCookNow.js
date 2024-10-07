@@ -59,20 +59,31 @@ export default function Meals() {
                 )
                 .map(([mealType, mealDetails]) => (
                   <div key={mealType} className="mb-4 card_akm pad_akm">
-                    <h3 className="h1_akm capitalize">{mealType}</h3>
+                    <h3 className="h1_akm capitalize">
+                      {mealType}{" "}
+                      <span className="h3_akm font-normal">
+                        &bull; মোট মিল সংখ্যা:{" "}
+                        <span className="h2_akm">
+                          {mealDetails.total_quantity}
+                        </span>
+                      </span>
+                    </h3>
                     <div className=" grid grid-cols-2 mb-4 gap_akm">
                       <div className="flex flex-col items-center justify-center gap_akm pad_akm border rounded_akm shadow_akm">
                         <p>
-                          <strong>Quantity</strong>
+                          <strong>মিলবক্স সহ:</strong>
                         </p>
-                        <p className="text-5xl">{mealDetails.total_quantity}</p>
+                        <p className="text-5xl">{mealDetails.total_mealbox}</p>
                       </div>
 
                       <div className="flex flex-col items-center justify-center gap_akm pad_akm border rounded_akm shadow_akm">
                         <p>
-                          <strong>Box</strong>
+                          <strong>ওয়ান টাইম বক্স:</strong>
                         </p>
-                        <p className="text-5xl">{mealDetails.total_mealbox}</p>
+                        <p className="text-5xl">
+                          {mealDetails.total_quantity -
+                            mealDetails.total_mealbox}
+                        </p>
                       </div>
 
                       {/* <p>
