@@ -16,8 +16,22 @@ const Info = () => {
               1673-692997, +880 1910-355118
             </div>
             <div>
-              <span className="text_green font-bold">WhatsApp:</span> +880
-              1673-692997, +880 1910-355118
+              <span className="text_green font-bold">WhatsApp: </span>
+              <a
+                href="https://wa.me/8801673692997?text=Hello%20I%20want%20to%20inquire%20about%20meals"
+                target="_blank"
+                className="underline"
+              >
+                01673-692997
+              </a>
+              ,{" "}
+              <a
+                href="https://wa.me/8801910355118?text=Hello%20I%20want%20to%20inquire%20about%20meals"
+                target="_blank"
+                className="underline"
+              >
+                01910-355118
+              </a>
             </div>
           </div>
         </section>

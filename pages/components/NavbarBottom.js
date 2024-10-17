@@ -7,6 +7,8 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+
 import { useRouter } from "next/router";
 import { Button, ButtonGroup } from "@nextui-org/react";
 
@@ -51,6 +53,12 @@ const NavbarBottom = () => {
       icon: faEllipsisVertical,
       text: "More",
     },
+
+    // {
+    //   href: "https://wa.me/8801673692997?text=Hello%20I%20want%20to%20inquire%20about%20meals",
+    //   icon: faWhatsapp,
+    //   text: "Chat",
+    // },
   ];
 
   return (
@@ -65,7 +73,9 @@ const NavbarBottom = () => {
                   key={index}
                   variant="light"
                   radius="none"
-                  startContent={<FontAwesomeIcon icon={item.icon} />}
+                  startContent={
+                    <FontAwesomeIcon className="w-5 h-5" icon={item.icon} />
+                  }
                   onClick={(event) => handleNavigation(item.href, event)} // Navigate to the corresponding route
                 >
                   {item.text}
