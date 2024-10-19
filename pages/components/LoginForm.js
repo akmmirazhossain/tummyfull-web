@@ -1,6 +1,7 @@
 // ./components/LoginForm.js
 import React, { useState, useEffect, useMemo } from "react";
 import { Input, Spacer, Button, Textarea } from "@nextui-org/react";
+import MealSettings from "./MealSettings";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Head from "next/head";
@@ -274,6 +275,7 @@ const LoginForm = () => {
               </Button>
             </div>
           </div>
+          <MealSettings />
         </>
       )}
     </div>
