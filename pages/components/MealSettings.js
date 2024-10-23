@@ -20,8 +20,9 @@ import { ApiContext } from "../contexts/ApiContext";
 const MealSettings = () => {
   const [isOn, setIsOn] = useState(false);
   const [popOverOpen, setPopOverOpen] = useState(false);
-  const router = useRouter();
+
   const [userData, setUserData] = useState(null);
+  const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const apiConfig = useContext(ApiContext);
 
@@ -51,7 +52,22 @@ const MealSettings = () => {
     }
   };
 
+  //MARK: FETCH SETTINGS
+  const fetchSettings = async () => {
+    if (!apiConfig) return;
+
+    try {
+      const resSettings = await axios.get(`${apiConfig.apiBaseUrl}setting`);
+
+      setSettings(resSettings.data);
+    } catch (error) {
+      console.error("fetchSettings -> API Error:", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    fetchSettings();
     fetchUserData();
   }, [apiConfig]);
 
@@ -105,7 +121,9 @@ const MealSettings = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center ">
             <span className="h2_akm">Activate mealbox swap</span>
-            <span className="ml-2 text-xl">(৳150)</span>
+            <span className="ml-2 text-xl">
+              (৳{settings && <>{settings.mealbox_price}</>})
+            </span>
           </div>
           <div className=" ">
             <Popover
@@ -177,7 +195,7 @@ const MealSettings = () => {
             <Image
               isBlurred
               width={240}
-              src="/images/mealbox.png"
+              src="/images/meal-box.webp"
               alt="NextUI Album Cover"
               className="m-5"
             />

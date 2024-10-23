@@ -5,7 +5,6 @@ import Head from "next/head";
 import NavbarTop from "../components/NavbarTop";
 import NavbarBottom from "../components/NavbarBottom";
 import FooterMain from "./Footer";
-import Script from "next/script";
 
 const Layout = ({ children, title }) => {
   return (
@@ -28,20 +27,6 @@ const Layout = ({ children, title }) => {
           property="og:image"
           content="https://dalbhath.com/images/og-main.webp"
         />
-
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-NBS25Q8PM5"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'G-NBS25Q8PM5');
-        `}
-        </Script>
       </Head>
       <header className="fixed w-full z-20">
         <NavbarTop className="" />

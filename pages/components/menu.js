@@ -369,15 +369,15 @@ const MenuComp = () => {
     return Math.floor(totalPrice); // Round down to nearest integer
   };
 
-  // const dayMap = {
-  //   fri: "Friday",
-  //   sat: "Saturday",
-  //   sun: "Sunday",
-  //   mon: "Monday",
-  //   tue: "Tuesday",
-  //   wed: "Wednesday",
-  //   thu: "Thursday",
-  // };
+  const dayMap = {
+    sat: "Saturday",
+    sun: "Sunday",
+    mon: "Monday",
+    tue: "Tuesday",
+    wed: "Wednesday",
+    thu: "Thursday",
+    fri: "Friday",
+  };
 
   if (!menuData || !settings) {
     return (
@@ -426,13 +426,16 @@ const MenuComp = () => {
       {days.map((day, dayIndex) => (
         <div key={dayIndex}>
           <div className="flex items-center justify-between ">
-            <div className="h1_akm ">{menuData[day].menu_of}</div>
+            <div className="h1_akm ">
+              {" "}
+              {dayMap[day.toLowerCase()] || day}'s Menu
+            </div>
+            {/* <div className="h1_akm ">{menuData[day].menu_of}</div> */}
             <Chip
               radius="full"
               variant="shadow"
-              className="ml-2 px-2 py-4 text-md bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
+              className="ml-2 px-2 py-4 text-md bg-gradient-to-tr from-[#004225] to-[#008b4f] text-white shadow-lg"
             >
-              {day.charAt(0).toUpperCase() + day.slice(1)},{" "}
               {formatDate(menuData[day].date)}
             </Chip>
           </div>
