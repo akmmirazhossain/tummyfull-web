@@ -5,12 +5,30 @@ import ProfileForm from "./components/ProfileForm";
 import MealSettings from "./components/MealSettings";
 import LogoutBlock from "./components/Logout";
 
-export default function Settings() {
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+
+const ProtectedPage = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Layout>Loading...</Layout>;
+  }
+
   return (
-    <Layout>
-      <ProfileForm />
-      <MealSettings />
-      <LogoutBlock />
-    </Layout>
+    <>
+      <Layout>
+        <ProfileForm />
+        <MealSettings />
+        <LogoutBlock />
+      </Layout>
+    </>
   );
-}
+};
+
+const ProtectedPageWithAuth = () => (
+  <AuthProvider>
+    <ProtectedPage />
+  </AuthProvider>
+);
+
+export default ProtectedPageWithAuth;

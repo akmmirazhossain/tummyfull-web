@@ -37,6 +37,16 @@ export default function Document() {
             `,
           }}
         />
+
+        {/* <script src="//code.jivosite.com/widget/WR2lNdFd2W" async></script> */}
+
+        {/* <div
+          dangerouslySetInnerHTML={{
+            __html: `
+          <script src="//code.tidio.co/mxaxfltlusk8s5ggyzrdde9vsgam0rao.js" async></script>
+        `,
+          }}
+        /> */}
       </Head>
       <body>
         <Main />
