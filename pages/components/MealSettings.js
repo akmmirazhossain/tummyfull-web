@@ -207,8 +207,8 @@ const MealSettings = () => {
               <li>A healthier alternative to single-use plastic containers.</li>
 
               <li>
-                A refund of ৳150 is available if you deactivate the mealbox at
-                any time.
+                A refund of ৳{settings && <>{settings.mealbox_price}</>} is
+                available if you deactivate the mealbox at any time.
               </li>
             </ul>
           </div>
