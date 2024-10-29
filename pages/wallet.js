@@ -8,7 +8,11 @@ const ProtectedPage = () => {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return <p>Loading...</p>;
+    return (
+      <Layout>
+        <span className="loading loading-ring loading-md"></span>
+      </Layout>
+    );
   }
 
   return (

@@ -462,7 +462,7 @@ const MenuComp = () => {
                           className=" flex flex-col justify-center items-center "
                         >
                           <img
-                            src={`${apiConfig.imageBaseUrl}${food.food_image}`}
+                            src={`/images/food/${food.food_image}`}
                             alt={food.name}
                             className="w-28 lg:w-40  rounded-full "
                           />
@@ -678,7 +678,7 @@ const MenuComp = () => {
                           className=" flex flex-col justify-center items-center "
                         >
                           <img
-                            src={`${apiConfig.imageBaseUrl}${food.food_image}`}
+                            src={`/images/food/${food.food_image}`}
                             alt={food.name}
                             className="w-28 lg:w-40  rounded-full "
                           />
