@@ -54,7 +54,7 @@ const DelivPanel = () => {
   }, [apiConfig, isAuthenticated]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Layout>Loading...</Layout>;
   }
   return (
     <>

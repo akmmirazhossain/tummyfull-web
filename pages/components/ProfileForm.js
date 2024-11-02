@@ -138,11 +138,10 @@ const ProfileForm = () => {
             </div>
           )}
           {formData.user_type === "delivery" && (
-            <div className=" flex flex-col gap_akm">
+            <div className=" flex flex-col gap_akm ">
               <div> আপনি ডেলিভারি পার্সন হিসেবে লগ ইন করেছেন।</div>
-              <div>
-                {" "}
-                <Link href="/delivery0167">
+              <div className="flex gap_akm flex-col md:flex-row">
+                <Link href="/delivery0167" target="_blank">
                   <Button size="lg" color="secondary">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -154,6 +153,19 @@ const ProfileForm = () => {
                       <path d="M240-160q-50 0-85-35t-35-85H40v-440q0-33 23.5-56.5T120-800h560v160h120l120 160v200h-80q0 50-35 85t-85 35q-50 0-85-35t-35-85H360q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T280-280q0-17-11.5-28.5T240-320q-17 0-28.5 11.5T200-280q0 17 11.5 28.5T240-240ZM120-360h32q17-18 39-29t49-11q27 0 49 11t39 29h272v-360H120v360Zm600 120q17 0 28.5-11.5T760-280q0-17-11.5-28.5T720-320q-17 0-28.5 11.5T680-280q0 17 11.5 28.5T720-240Zm-40-200h170l-90-120h-80v120ZM360-540Z" />
                     </svg>
                     ডেলিভারি প্যানেলে ভিজিট করুন
+                  </Button>
+                </Link>
+                <Link href="/delivery0167" target="_blank">
+                  <Button size="lg" color="success">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                    >
+                      <path d="m590-488 160-92-160-92-160 92 160 92Zm0 122 110-64v-84l-110 64-110-64v84l110 64ZM480-480Zm320 320H600q0-20-1.5-40t-4.5-40h206v-480H160v46q-20-3-40-4.5T80-680v-40q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160Zm-720 0v-120q50 0 85 35t35 85H80Zm200 0q0-83-58.5-141.5T80-360v-80q117 0 198.5 81.5T360-160h-80Zm160 0q0-75-28.5-140.5t-77-114q-48.5-48.5-114-77T80-520v-80q91 0 171 34.5T391-471q60 60 94.5 140T520-160h-80Z" />
+                    </svg>
+                    টিউটোরিয়াল দেখুন
                   </Button>
                 </Link>
               </div>

@@ -488,16 +488,21 @@ const MenuComp = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center justify-center py_akm gap_akm">
-                      <span className=" h2_akm text_green">
-                        ৳ {menuData[day].lunch.price}
-                      </span>
-                      <span className="h4_akm line-through text-gray-500 ">
-                        ৳ 150
-                      </span>
+                    <div className="flex items-center justify-center flex-col py_akm md:gap-0.5">
+                      <div className="flex items-center justify-center ">
+                        <span className="h3_akm text_green ">৳ </span>
+                        <span className=" h2_akm text_green">
+                          {menuData[day].lunch.price}
+                        </span>
+                      </div>
+                      <div className=" flex items-center justify-center ">
+                        <div className=" -skew-x-12 px-1 rounded-md bg-[#004225] text-white text-[0.6rem] md:text-[0.7rem] ">
+                          Free delivery!
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex items-center flex-col justify-center -m-2 pb_akm">
+                    <div className="flex items-center flex-col justify-center -m-2 ">
                       {/* //MARK: Lunch Sw  */}
                       <IOSSwitch
                         sx={{ m: 1 }}
@@ -583,7 +588,7 @@ const MenuComp = () => {
                                   `${day}-${menuData[day].lunch.id}-decrement`
                                 ]
                               }
-                              className="bg-blue-500 text-white"
+                              className="bg-[#004225]  text-white text-xl"
                               onClick={() =>
                                 handleQuantityChange(
                                   day,
@@ -606,7 +611,7 @@ const MenuComp = () => {
                                   `${day}-${menuData[day].lunch.id}-increment`
                                 ]
                               }
-                              className="bg-blue-500 text-white"
+                              className="bg-[#004225]  text-white text-xl"
                               onClick={() =>
                                 handleQuantityChange(
                                   day,
@@ -622,7 +627,7 @@ const MenuComp = () => {
                           </div>
                           <div className="mt_akm flex flex-col items-center justify-center">
                             <span className="font-semibold">
-                              Total:{" "}
+                              Total: ৳
                               {
                                 //MARK: Total Price
                                 calculateTotalPrice(
@@ -705,15 +710,20 @@ const MenuComp = () => {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-center py_akm gap_akm">
-                      <span className=" h2_akm text_green">
-                        ৳ {menuData[day].dinner.price}
-                      </span>
-                      <span className="h4_akm line-through text-gray-500 ">
-                        ৳ 150
-                      </span>
+                    <div className="flex items-center justify-center flex-col py_akm md:gap-0.5">
+                      <div className="flex items-center justify-center ">
+                        <span className="h3_akm text_green ">৳ </span>
+                        <span className=" h2_akm text_green">
+                          {menuData[day].dinner.price}
+                        </span>
+                      </div>
+                      <div className=" flex items-center justify-center ">
+                        <div className=" -skew-x-12 px-1 rounded-md bg_green text-[0.6rem] md:text-[0.7rem] text-white">
+                          Free delivery!
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center flex-col justify-center -m-2 pb_akm">
+                    <div className="flex items-center flex-col justify-center -m-2 ">
                       {/* //MARK: Dinner Sw  */}
                       <IOSSwitch
                         sx={{ m: 1 }}
@@ -798,7 +808,7 @@ const MenuComp = () => {
                                   `${day}-${menuData[day].dinner.id}-decrement`
                                 ]
                               }
-                              className="bg-blue-500 text-white"
+                              className="bg-[#004225] text-white text-xl"
                               onClick={() =>
                                 handleQuantityChange(
                                   day,
@@ -821,7 +831,7 @@ const MenuComp = () => {
                                   `${day}-${menuData[day].dinner.id}-increment`
                                 ]
                               }
-                              className="bg-blue-500 text-white"
+                              className="bg-[#004225] text-white text-xl"
                               onClick={() =>
                                 handleQuantityChange(
                                   day,

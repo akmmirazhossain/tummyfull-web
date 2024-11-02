@@ -10,7 +10,7 @@ const ProtectedPage = () => {
   if (!isAuthenticated) {
     return (
       <Layout>
-        <span className="loading loading-ring loading-md"></span>
+        {/* <span className="loading loading-ring loading-md"></span> */}
       </Layout>
     );
   }
