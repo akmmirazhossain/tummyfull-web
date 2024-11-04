@@ -155,7 +155,7 @@ const ProfileForm = () => {
                     ডেলিভারি প্যানেলে ভিজিট করুন
                   </Button>
                 </Link>
-                <Link href="/delivery0167" target="_blank">
+                <Link href="https://youtu.be/IrbJKfHFEns" target="_blank">
                   <Button size="lg" color="success">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

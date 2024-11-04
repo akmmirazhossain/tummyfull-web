@@ -489,20 +489,24 @@ const MenuComp = () => {
                       )}
                     </div>
                     <div className="flex items-center justify-center flex-col py_akm md:gap-0.5">
-                      <div className="flex items-center justify-center ">
-                        <span className="h3_akm text_green ">৳ </span>
-                        <span className=" h2_akm text_green">
-                          {menuData[day].lunch.price}
-                        </span>
+                      <div className="flex items-center justify-center gap-2">
+                        <div>
+                          {" "}
+                          <span className="h3_akm text_green ">৳ </span>
+                          <span className=" h2_akm text_green">
+                            {menuData[day].lunch.price}
+                          </span>
+                        </div>
+                        <div className="h4info_akm line-through">৳180</div>
                       </div>
                       <div className=" flex items-center justify-center ">
-                        <div className=" -skew-x-12 px-1 rounded-md bg-[#004225] text-white text-[0.6rem] md:text-[0.7rem] ">
+                        <div className=" -skew-x-12 px-1 rounded-md bg_green text-[0.6rem] md:text-[0.7rem] text-white">
                           Free delivery!
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center flex-col justify-center -m-2 ">
+                    <div className="flex items-center flex-col justify-center ">
                       {/* //MARK: Lunch Sw  */}
                       <IOSSwitch
                         sx={{ m: 1 }}
@@ -711,11 +715,15 @@ const MenuComp = () => {
                     </div>
 
                     <div className="flex items-center justify-center flex-col py_akm md:gap-0.5">
-                      <div className="flex items-center justify-center ">
-                        <span className="h3_akm text_green ">৳ </span>
-                        <span className=" h2_akm text_green">
-                          {menuData[day].dinner.price}
-                        </span>
+                      <div className="flex items-center justify-center gap-2">
+                        <div>
+                          {" "}
+                          <span className="h3_akm text_green ">৳ </span>
+                          <span className=" h2_akm text_green">
+                            {menuData[day].dinner.price}
+                          </span>
+                        </div>
+                        <div className="h4info_akm line-through">৳180</div>
                       </div>
                       <div className=" flex items-center justify-center ">
                         <div className=" -skew-x-12 px-1 rounded-md bg_green text-[0.6rem] md:text-[0.7rem] text-white">
@@ -723,7 +731,7 @@ const MenuComp = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center flex-col justify-center -m-2 ">
+                    <div className="flex items-center flex-col justify-center ">
                       {/* //MARK: Dinner Sw  */}
                       <IOSSwitch
                         sx={{ m: 1 }}
