@@ -16,6 +16,7 @@ import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
 import { useNotification } from "../contexts/NotificationContext";
 import axios from "axios";
+import dayjs from "dayjs";
 import { ApiContext } from "../contexts/ApiContext";
 
 const IOSSwitch = styled((props) => (
@@ -79,6 +80,8 @@ const MenuComp = () => {
   const [disabledSwitches, setDisabledSwitches] = useState({});
   const [mealboxStatus, setMealboxStatus] = useState(null);
   const apiConfig = useContext(ApiContext);
+  const formatToDayMonth = (dateString) =>
+    dayjs(dateString).format("D[th] MMM");
 
   const { shakeBell, notifLoadTrigger } = useNotification();
   //AUTO REFRESH ON NEXT
@@ -132,13 +135,14 @@ const MenuComp = () => {
 
   const checkAndRedirect = () => {
     if (!Cookies.get("TFLoginToken")) {
-      router.push("/login"); // Redirect to login page if the cookie is not available
+      router.push("/login");
     }
   };
 
   //MARK: Lunch Status
   const handleLunchStatusChange = async (day, menuId, date, value, price) => {
     checkAndRedirect(); // Ensure the user is authenticated
+
     //SWITCH STATUS CHANGER
     const updatedMenuData = { ...menuData };
     if (updatedMenuData[day].lunch.status === "disabled") {
@@ -206,6 +210,14 @@ const MenuComp = () => {
       setTimeout(() => {
         setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
       }, 100);
+    }
+    if (value === true && Cookies.get("TFLoginToken") !== undefined) {
+      alert(
+        "Order placed! Lunch delivery time: " +
+          formatToDayMonth(date) +
+          ", " +
+          settings.delivery_time_lunch
+      );
     }
   };
 
@@ -283,6 +295,15 @@ const MenuComp = () => {
       setTimeout(() => {
         setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
       }, 100);
+    }
+
+    if (value == true && Cookies.get("TFLoginToken") !== undefined) {
+      alert(
+        "Order placed! Dinner delivery time: " +
+          formatToDayMonth(date) +
+          ", " +
+          settings.delivery_time_dinner
+      );
     }
   };
 
@@ -455,20 +476,30 @@ const MenuComp = () => {
                         {settings?.delivery_time_lunch || "N/A"}
                       </div>
                     </div>
-                    <div className="relative grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1 ">
+                    <div className="relative grid grid-cols-2  p-2 lg:p-12 h-auto border-y-1 ">
                       {menuData[day].lunch.foods.map((food, index) => (
                         <div
                           key={index}
-                          className=" flex flex-col justify-center items-center "
+                          className={`flex items-center ${
+                            index === 0
+                              ? "justify-end mr-1 lg:mr-2"
+                              : index === 1
+                              ? "justify-start ml-1 lg:ml-2"
+                              : "justify-center col-span-2"
+                          } `}
                         >
-                          <img
-                            src={`/images/food/${food.food_image}`}
-                            alt={food.name}
-                            className="w-28 lg:w-40  rounded-full "
-                          />
-                          <span className="h4_akm text-center">
-                            {food.food_name}
-                          </span>
+                          <div className="h4_akm text-center">
+                            <img
+                              src={`/images/food/${food.food_image}`}
+                              alt={food.food_name}
+                              className={`${
+                                index === menuData[day].lunch.foods.length - 1
+                                  ? "w-28 lg:w-44"
+                                  : "w-20 lg:w-32"
+                              } rounded-full`}
+                            />
+                            <span>{food.food_name}</span>
+                          </div>
                         </div>
                       ))}
 
@@ -680,20 +711,30 @@ const MenuComp = () => {
                         {settings?.delivery_time_dinner || "N/A"}
                       </div>
                     </div>
-                    <div className="relative grid grid-cols-2 gap-2 p-2 lg:p-12 h-auto border-y-1">
+                    <div className="relative grid grid-cols-2  p-2 lg:p-12 h-auto border-y-1">
                       {menuData[day].dinner.foods.map((food, index) => (
                         <div
                           key={index}
-                          className=" flex flex-col justify-center items-center "
+                          className={`flex items-center ${
+                            index === 0
+                              ? "justify-end mr-1 lg:mr-2"
+                              : index === 1
+                              ? "justify-start ml-1 lg:ml-2"
+                              : "justify-center col-span-2"
+                          } `}
                         >
-                          <img
-                            src={`/images/food/${food.food_image}`}
-                            alt={food.name}
-                            className="w-28 lg:w-40  rounded-full "
-                          />
-                          <span className="h4_akm text-center">
-                            {food.food_name}
-                          </span>
+                          <div className="h4_akm text-center">
+                            <img
+                              src={`/images/food/${food.food_image}`}
+                              alt={food.food_name}
+                              className={`${
+                                index === menuData[day].dinner.foods.length - 1
+                                  ? "w-28 lg:w-44"
+                                  : "w-20 lg:w-32"
+                              } rounded-full`}
+                            />
+                            <span>{food.food_name}</span>
+                          </div>
                         </div>
                       ))}
 
