@@ -14,8 +14,8 @@ const items = [
     link: "/info#features",
   },
   {
-    src: "/images/delivery.png",
-    alt: "Free Delivery",
+    src: "/images/premium_quality.png",
+    alt: "Cooked with Preium Ingredients",
     link: "/info#features",
   },
   {

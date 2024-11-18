@@ -25,7 +25,7 @@ const Layout = ({ children, title }) => {
         />
         <meta
           property="og:image"
-          content="https://dalbhath.com/images/og-main.webp"
+          content="https://dalbhath.com/images/og-main95tk.webp"
         />
       </Head>
       <header className="fixed w-full z-20">

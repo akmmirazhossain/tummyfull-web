@@ -97,7 +97,7 @@ export default function Meals() {
                           className="flex items-center space-x-4"
                         >
                           <img
-                            src={`${apiConfig.imageBaseUrl}${item.mrd_food_img}`}
+                            src={`/images/food/${item.mrd_food_img}`}
                             alt={item.mrd_food_name}
                             className="w-16 h-16 object-cover"
                           />

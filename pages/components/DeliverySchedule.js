@@ -30,6 +30,12 @@ const DeliveryList = () => {
   const fetchDeliveryList = async () => {
     if (!apiConfig) return;
     try {
+      // Fetch settings data
+      const { data: settingsData } = await axios.get(
+        `${apiConfig.apiBaseUrl}setting`
+      );
+      setSettings(settingsData);
+
       const response = await axios.get(`${apiConfig.apiBaseUrl}delivery-list`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -38,12 +44,6 @@ const DeliveryList = () => {
 
       const data = response.data;
       setDeliveries(data);
-
-      // Fetch settings data
-      const { data: settingsData } = await axios.get(
-        `${apiConfig.apiBaseUrl}setting`
-      );
-      setSettings(settingsData);
 
       // Set default order status and mealbox picked states
       const status = {};
@@ -168,8 +168,30 @@ const DeliveryList = () => {
                     deliveries[date][mealType].map((delivery) => (
                       <div
                         key={delivery.mrd_order_id}
-                        className=" card_akm pad_akm text-sm"
+                        className={`card_akm pad_akm text-sm `}
                       >
+                        {["cancelled", "delivered", "unavailable"].includes(
+                          delivery.mrd_order_status
+                        ) ? (
+                          <div role="alert" className="alert alert-success">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6 shrink-0 stroke-current"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                            <span>Submission successful.</span>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                         <div className="flex items-center ">
                           <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
                             <FontAwesomeIcon icon={faLocationDot} />
@@ -613,8 +635,12 @@ const DeliveryList = () => {
                             <FontAwesomeIcon icon={faMoneyBill} />
                             <span>মোট মিলের দাম:</span>
                           </div>
-                          <div className=" w-3/4 py-1">
-                            ৳{delivery.mrd_order_total_price}{" "}
+                          <div className=" w-3/4 py-1 flex gap-2">
+                            ৳{delivery.mrd_order_total_price}
+                            <div className="text-xs font-normal">
+                              (ডেলিভারি চার্জ:
+                              {delivery.mrd_order_deliv_commission})
+                            </div>
                             {/* {delivery.mrd_order_cash_to_get == "0" ? (
                             <div className="text-xs font-normal">
                               (মিলের টাকা ওয়ালেট থেকে পরিশোধ করা হয়েছে)
@@ -648,6 +674,12 @@ const DeliveryList = () => {
                             <span> টাকা নিন:</span>
                           </div>
                           <div className=" w-3/4 py-1 h2_akm flex items-center flex-row gap_akm">
+                            {/* if mealbox give = yes
+                            if mealbox paid = yes
+                            Then only show "cash to get" (not the mealbox price)
+                            
+                            TK 95 + 25 (deliv charge)
+                            */}
                             {delivery.mrd_order_mealbox == "1" && (
                               <div>
                                 {delivery.mrd_user_mealbox_paid == "1" && (
@@ -655,6 +687,12 @@ const DeliveryList = () => {
                                 )}
                               </div>
                             )}
+                            {/* if mealbox give = yes
+                            if mealbox paid = no
+                            Then show cash to get + mealbox_price 
+                            
+                            TK 95 + 90 + 25 (deliv charge)
+                            */}
                             {delivery.mrd_order_mealbox == "1" && (
                               <div>
                                 {delivery.mrd_user_mealbox_paid == "0" && (
@@ -666,26 +704,62 @@ const DeliveryList = () => {
                               </div>
                             )}
 
+                            {/* if no meal box, then only show cash to get */}
                             {delivery.mrd_order_mealbox == "0" && (
                               <div>{delivery.mrd_order_cash_to_get}</div>
                             )}
 
                             <div className=" w-3/4 py-1 text-xs font-normal">
+                              {/* if cash to get = 0 */}
                               {delivery.mrd_order_cash_to_get == "0" ? (
                                 <div className="text-xs font-normal">
                                   (মিলের ৳{delivery.mrd_order_total_price} টাকা
+                                  + ডেলিভারি চার্জ ৳
+                                  {delivery.mrd_order_deliv_commission} টাকা
                                   ওয়ালেট থেকে পরিশোধ করা হয়েছে)
                                 </div>
                               ) : (
                                 <>
-                                  {delivery.mrd_user_credit != "0" &&
-                                    delivery.mrd_user_credit <
-                                      delivery.mrd_order_cash_to_get && (
-                                      <div>
-                                        (মিলের ৳{delivery.mrd_user_credit} টাকা
-                                        ওয়ালেট থেকে পরিশোধ করা হয়েছে)
-                                      </div>
-                                    )}
+                                  {/* 
+                                  if cash to get > 0
+                                  Here we are adding credit + deliv comm, and if their sum is less than cash to get, then show message.
+
+                                  meal: 95 + deliv: 25 = 120 tk                      
+                                  credit: 50 tk
+
+                                  if (120 > 50)
+                                  */}
+                                  {delivery.mrd_user_credit +
+                                    delivery.mrd_order_deliv_commission >
+                                    delivery.mrd_order_cash_to_get && (
+                                    <div>
+                                      (৳{delivery.mrd_user_credit} টাকা ওয়ালেট
+                                      থেকে পরিশোধ করা হয়েছে)
+                                    </div>
+                                  )}
+                                  {/* If cash to get = deliv comm/deliv charge 
+                                  
+                                  CTG = 95
+                                  Credit = 95
+                                  if (95 == 95)
+                                  
+                                  */}
+
+                                  {delivery.mrd_order_cash_to_get ==
+                                    delivery.mrd_user_credit && (
+                                    <div>
+                                      (মিলের ৳{delivery.mrd_user_credit}
+                                      টাকা ওয়ালেট থেকে পরিশোধ করা হয়েছে)
+                                    </div>
+                                  )}
+
+                                  {/* {delivery.mrd_order_total_price ==
+                                    delivery.mrd_user_credit && (
+                                    <div>
+                                      (মিলের ৳{delivery.mrd_user_credit}
+                                      টাকা ওয়ালেট থেকে পরিশোধ করা হয়েছে)
+                                    </div>
+                                  )} */}
                                 </>
                               )}
                             </div>

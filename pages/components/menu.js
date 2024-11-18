@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
-import Cookies from "js-cookie";
+
 import { useRouter } from "next/router";
 import { Button, Card, Chip, Skeleton } from "@nextui-org/react";
 import Switch from "@mui/material/Switch";
@@ -11,10 +11,17 @@ import {
   faShippingFast,
   faCircleCheck,
   faCircleExclamation,
+  faCalendarDays,
+  faClock,
+  faLayerGroup,
+  faTruckFast,
+  faCoins,
+  faCreditCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
 import { useNotification } from "../contexts/NotificationContext";
+import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -82,6 +89,9 @@ const MenuComp = () => {
   const [disabledSwitches, setDisabledSwitches] = useState({});
   const [mealboxStatus, setMealboxStatus] = useState(null);
   const apiConfig = useContext(ApiContext);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
   const formatToDayMonth = (dateString) =>
     dayjs(dateString).format("D[th] MMM");
 
@@ -213,13 +223,13 @@ const MenuComp = () => {
         setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
       }, 100);
     }
-    if (value === true && Cookies.get("TFLoginToken") !== undefined) {
-      alert(
-        "Order placed! Lunch delivery time: " +
-          formatToDayMonth(date) +
-          ", " +
-          settings.delivery_time_lunch
-      );
+    if (
+      value === true &&
+      Cookies.get("TFLoginToken") !== undefined &&
+      menuId === menuData[day].lunch.id
+    ) {
+      setModalData(data);
+      setShowModal(true);
     }
   };
 
@@ -299,13 +309,13 @@ const MenuComp = () => {
       }, 100);
     }
 
-    if (value == true && Cookies.get("TFLoginToken") !== undefined) {
-      alert(
-        "Order placed! Dinner delivery time: " +
-          formatToDayMonth(date) +
-          ", " +
-          settings.delivery_time_dinner
-      );
+    if (
+      value === true &&
+      Cookies.get("TFLoginToken") !== undefined &&
+      menuId === menuData[day].dinner.id
+    ) {
+      setModalData(data);
+      setShowModal(true);
     }
   };
 
@@ -473,25 +483,6 @@ const MenuComp = () => {
                       <div className="h2_akm pl_akm">
                         <span>Lunch</span>
                       </div>
-
-                      {firstDay === day &&
-                        lunchOrderAcceptText &&
-                        menuData[day].lunch.status !== "enabled" && (
-                          <div className="h4_akm md:pr-4 flex items-center gap-0.5">
-                            <svg
-                              className="w-4"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 -960 960 960"
-                              fill="currentColor"
-                            >
-                              <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z" />
-                            </svg>
-                            Until{" "}
-                            {dayjs(settings.time_limit_lunch, "hh:mm a").format(
-                              "h a"
-                            )}
-                          </div>
-                        )}
                     </div>
                     <div className="relative grid grid-cols-2  p-2 lg:p-12 h-auto border-y-1 ">
                       {menuData[day].lunch.foods.map((food, index) => (
@@ -532,6 +523,17 @@ const MenuComp = () => {
                               {day.charAt(0).toUpperCase() + day.slice(1)},{" "}
                               {formatDate(menuData[day].date)})
                             </span>
+                            <span>
+                              {" "}
+                              Cash on delivery ৳
+                              {
+                                //MARK: Total Price
+                                calculateTotalPrice(
+                                  menuData[day].lunch.price,
+                                  menuData[day].lunch.quantity
+                                ) + settings.mrd_setting_commission_delivery
+                              }
+                            </span>
                           </div>
                         </div>
                       )}
@@ -545,11 +547,20 @@ const MenuComp = () => {
                             {menuData[day].lunch.price}
                           </span>
                         </div>
-                        <div className="h4info_akm line-through">৳180</div>
+                        <div className="h4info_akm line-through">৳125</div>
                       </div>
                       <div className=" flex items-center justify-center ">
-                        <div className=" -skew-x-12 px-1 rounded-md bg_green text-[0.6rem] md:text-[0.7rem] text-white">
-                          Free delivery!
+                        <div className=" h4_akm flex flex-col items-center">
+                          <span>
+                            Delivery charge: ৳
+                            {settings.mrd_setting_commission_delivery}
+                          </span>{" "}
+                          <span>
+                            {" "}
+                            Delivery time:{" "}
+                            {settings?.delivery_time_lunch || "N/A"},
+                          </span>
+                          <span>{formatDate(menuData[day].date)}</span>
                         </div>
                       </div>
                     </div>
@@ -685,7 +696,7 @@ const MenuComp = () => {
                                 calculateTotalPrice(
                                   menuData[day].lunch.price,
                                   menuData[day].lunch.quantity
-                                )
+                                ) + settings.mrd_setting_commission_delivery
                               }{" "}
                               BDT
                             </span>
@@ -702,6 +713,104 @@ const MenuComp = () => {
                         </div>
                       )}
                     </div>
+
+                    {/* //MARK: Modal Lunch  */}
+
+                    {showModal &&
+                      modalData?.menuId === menuData[day].lunch.id && (
+                        <div
+                          className="modal modal-open "
+                          onClick={() => setShowModal(false)}
+                        >
+                          <div
+                            className="modal-box bg_beige "
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <h3 className="font-bold text-lg pb_akm">
+                              Your lunch order has been placed.
+                            </h3>
+
+                            <ul className="list-none space-y-1">
+                              <li className="flex items-center ">
+                                <span className="w-6 mr-1 flex items-center justify-start">
+                                  <FontAwesomeIcon icon={faCalendarDays} />
+                                </span>
+                                <span className="w-36">Date: </span>
+                                <span>{formatDate(modalData?.date)}</span>
+                              </li>
+
+                              <li className="flex items-center ">
+                                <span className="w-6 mr-1  flex items-center justify-start">
+                                  <FontAwesomeIcon icon={faClock} />
+                                </span>
+                                <span className="w-36">Delivery Time: </span>
+                                <span>{settings?.delivery_time_lunch}</span>
+                              </li>
+
+                              <li className="flex items-center ">
+                                <span className="w-6 mr-1  flex items-center justify-start">
+                                  <FontAwesomeIcon icon={faLayerGroup} />
+                                </span>
+                                <span className="w-36">Quantity: </span>
+                                <span>{modalData?.quantity}</span>
+                              </li>
+
+                              <li className="flex items-center ">
+                                <span className="w-6 mr-1  flex items-center justify-start">
+                                  <FontAwesomeIcon icon={faTruckFast} />
+                                </span>
+                                <span className="w-36">Delivery Charge: </span>
+                                <span>
+                                  ৳{settings.mrd_setting_commission_delivery}
+                                </span>
+                              </li>
+
+                              <li className="flex items-center ">
+                                <span className="w-6 mr-1  flex items-center justify-start">
+                                  <FontAwesomeIcon icon={faCoins} />
+                                </span>
+                                <span className="w-36">Total Price: </span>
+                                <span>
+                                  {modalData?.price} +{" "}
+                                  {settings.mrd_setting_commission_delivery} ={" "}
+                                  <span className="font-bold">
+                                    {modalData?.price +
+                                      settings.mrd_setting_commission_delivery}
+                                  </span>
+                                </span>
+                              </li>
+
+                              <li className="flex items-center ">
+                                <span className="w-6 mr-1  flex items-center justify-start">
+                                  <FontAwesomeIcon icon={faCreditCard} />
+                                </span>
+                                <span className="w-36">Pay. Method: </span>
+                                <span className="flex gap-1">
+                                  Cash on delivery or
+                                  <Link
+                                    href={"/wallet"}
+                                    target="_blank"
+                                    className="btn btn-xs rounded_akm bg_green text-white font-normal"
+                                  >
+                                    Recharge wallet
+                                  </Link>
+                                </span>
+                              </li>
+                            </ul>
+
+                            <div className="modal-action flex justify-center">
+                              <button
+                                className="btn bg_green text-white font-normal rounded_akm hover:bg_orange hover:text-inherit"
+                                onClick={() => {
+                                  setShowModal(false);
+                                }}
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                   </div>
                 )
                 // : (
@@ -767,6 +876,18 @@ const MenuComp = () => {
                               {day.charAt(0).toUpperCase() + day.slice(1)},{" "}
                               {formatDate(menuData[day].date)})
                             </span>
+
+                            <span>
+                              {" "}
+                              Cash on delivery ৳
+                              {
+                                //MARK: Total Price
+                                calculateTotalPrice(
+                                  menuData[day].dinner.price,
+                                  menuData[day].dinner.quantity
+                                ) + settings.mrd_setting_commission_delivery
+                              }
+                            </span>
                           </div>
                         </div>
                       )}
@@ -781,11 +902,20 @@ const MenuComp = () => {
                             {menuData[day].dinner.price}
                           </span>
                         </div>
-                        <div className="h4info_akm line-through">৳180</div>
+                        <div className="h4info_akm line-through">৳125</div>
                       </div>
                       <div className=" flex items-center justify-center ">
-                        <div className=" -skew-x-12 px-1 rounded-md bg_green text-[0.6rem] md:text-[0.7rem] text-white">
-                          Free delivery!
+                        <div className=" h4_akm flex flex-col items-center">
+                          <span>
+                            Delivery charge: ৳
+                            {settings.mrd_setting_commission_delivery}
+                          </span>{" "}
+                          <span>
+                            {" "}
+                            Delivery time:{" "}
+                            {settings?.delivery_time_dinner || "N/A"},
+                          </span>
+                          <span>{formatDate(menuData[day].date)}</span>
                         </div>
                       </div>
                     </div>
@@ -919,7 +1049,7 @@ const MenuComp = () => {
                                 calculateTotalPrice(
                                   menuData[day].dinner.price,
                                   menuData[day].dinner.quantity
-                                )
+                                ) + settings.mrd_setting_commission_delivery
                               }{" "}
                             </span>
                             {menuData[day].dinner.quantity > 1 && (
@@ -931,6 +1061,122 @@ const MenuComp = () => {
                               </>
                             )}
                           </div>
+
+                          {/* //MARK: Modal Dinner  */}
+
+                          {showModal &&
+                            modalData?.menuId === menuData[day].dinner.id && (
+                              <div
+                                className="modal modal-open "
+                                onClick={() => setShowModal(false)}
+                              >
+                                <div
+                                  className="modal-box bg_beige "
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <h3 className="font-bold text-lg pb_akm">
+                                    Your dinner order has been placed.
+                                  </h3>
+
+                                  <ul className="list-none space-y-1">
+                                    <li className="flex items-center ">
+                                      <span className="w-6 mr-1 flex items-center justify-start">
+                                        <FontAwesomeIcon
+                                          icon={faCalendarDays}
+                                        />
+                                      </span>
+                                      <span className="w-36">Date: </span>
+                                      <span>{formatDate(modalData?.date)}</span>
+                                    </li>
+
+                                    <li className="flex items-center ">
+                                      <span className="w-6 mr-1  flex items-center justify-start">
+                                        <FontAwesomeIcon icon={faClock} />
+                                      </span>
+                                      <span className="w-36">
+                                        Delivery Time:{" "}
+                                      </span>
+                                      <span>
+                                        {settings?.delivery_time_dinner}
+                                      </span>
+                                    </li>
+
+                                    <li className="flex items-center ">
+                                      <span className="w-6 mr-1  flex items-center justify-start">
+                                        <FontAwesomeIcon icon={faLayerGroup} />
+                                      </span>
+                                      <span className="w-36">Quantity: </span>
+                                      <span>{modalData?.quantity}</span>
+                                    </li>
+
+                                    <li className="flex items-center ">
+                                      <span className="w-6 mr-1  flex items-center justify-start">
+                                        <FontAwesomeIcon icon={faTruckFast} />
+                                      </span>
+                                      <span className="w-36">
+                                        Delivery Charge:{" "}
+                                      </span>
+                                      <span>
+                                        ৳
+                                        {
+                                          settings.mrd_setting_commission_delivery
+                                        }
+                                      </span>
+                                    </li>
+
+                                    <li className="flex items-center ">
+                                      <span className="w-6 mr-1  flex items-center justify-start">
+                                        <FontAwesomeIcon icon={faCoins} />
+                                      </span>
+                                      <span className="w-36">
+                                        Total Price:{" "}
+                                      </span>
+                                      <span>
+                                        {modalData?.price} +{" "}
+                                        {
+                                          settings.mrd_setting_commission_delivery
+                                        }{" "}
+                                        ={" "}
+                                        <span className="font-bold">
+                                          {modalData?.price +
+                                            settings.mrd_setting_commission_delivery}
+                                        </span>
+                                      </span>
+                                    </li>
+
+                                    <li className="flex items-center ">
+                                      <span className="w-6 mr-1  flex items-center justify-start">
+                                        <FontAwesomeIcon icon={faCreditCard} />
+                                      </span>
+                                      <span className="w-36">
+                                        Pay. Method:{" "}
+                                      </span>
+                                      <span className="flex gap-1">
+                                        Cash on delivery or
+                                        <Link
+                                          href={"/wallet"}
+                                          target="_blank"
+                                          className="btn btn-xs rounded_akm bg_green text-white font-normal"
+                                        >
+                                          Recharge wallet
+                                        </Link>
+                                      </span>
+                                    </li>
+                                  </ul>
+
+                                  <div className="modal-action flex justify-center">
+                                    <button
+                                      className="btn bg_green text-white font-normal rounded_akm hover:bg_orange hover:text-inherit"
+                                      onClick={() => {
+                                        setShowModal(false);
+                                      }}
+                                    >
+                                      Close
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                         </div>
                       )}
                     </div>
