@@ -512,27 +512,21 @@ const MenuComp = () => {
                       ))}
 
                       {menuData[day].lunch.status === "enabled" && (
-                        <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm h4_akm slide-up">
+                        <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm text-base slide-up">
                           <div className=" text-center">
-                            You have pre-ordered this Lunch
+                            You have pre-ordered this lunch.
                           </div>
                           <div className=" text-center flex flex-col">
-                            <span> Delivery time:</span>
                             <span>
-                              {settings?.delivery_time_lunch || "N/A"} (
-                              {day.charAt(0).toUpperCase() + day.slice(1)},{" "}
-                              {formatDate(menuData[day].date)})
-                            </span>
-                            <span>
-                              {" "}
-                              Cash on delivery ৳
+                              Total: ৳
                               {
                                 //MARK: Total Price
                                 calculateTotalPrice(
                                   menuData[day].lunch.price,
                                   menuData[day].lunch.quantity
                                 ) + settings.mrd_setting_commission_delivery
-                              }
+                              }{" "}
+                              (Cash on delivery)
                             </span>
                           </div>
                         </div>
@@ -785,7 +779,7 @@ const MenuComp = () => {
                                   <FontAwesomeIcon icon={faCreditCard} />
                                 </span>
                                 <span className="w-36">Pay. Method: </span>
-                                <span className="flex gap-1">
+                                <span className="flex flex-col md:flex-row gap-1">
                                   Cash on delivery or
                                   <Link
                                     href={"/wallet"}
@@ -832,10 +826,6 @@ const MenuComp = () => {
                       <div className="h2_akm pl_akm">
                         <span>Dinner</span>
                       </div>
-                      <div className="h4_akm pr_akm">
-                        <FontAwesomeIcon icon={faShippingFast} />{" "}
-                        {settings?.delivery_time_dinner || "N/A"}
-                      </div>
                     </div>
                     <div className="relative grid grid-cols-2  p-2 lg:p-12 h-auto border-y-1">
                       {menuData[day].dinner.foods.map((food, index) => (
@@ -865,28 +855,21 @@ const MenuComp = () => {
                       ))}
 
                       {menuData[day].dinner.status === "enabled" && (
-                        <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm h4_akm slide-up">
+                        <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm text-base slide-up">
                           <div className=" text-center">
                             You have pre-ordered this Dinner
                           </div>
                           <div className=" text-center flex flex-col">
-                            <span> Delivery time:</span>
                             <span>
-                              {settings?.delivery_time_dinner || "N/A"} (
-                              {day.charAt(0).toUpperCase() + day.slice(1)},{" "}
-                              {formatDate(menuData[day].date)})
-                            </span>
-
-                            <span>
-                              {" "}
-                              Cash on delivery ৳
+                              Total: ৳
                               {
                                 //MARK: Total Price
                                 calculateTotalPrice(
                                   menuData[day].dinner.price,
                                   menuData[day].dinner.quantity
                                 ) + settings.mrd_setting_commission_delivery
-                              }
+                              }{" "}
+                              (Cash on delivery)
                             </span>
                           </div>
                         </div>
@@ -1151,7 +1134,7 @@ const MenuComp = () => {
                                       <span className="w-36">
                                         Pay. Method:{" "}
                                       </span>
-                                      <span className="flex gap-1">
+                                      <span className="flex flex-col md:flex-row gap-1">
                                         Cash on delivery or
                                         <Link
                                           href={"/wallet"}

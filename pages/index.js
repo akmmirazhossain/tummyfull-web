@@ -18,18 +18,24 @@ export default function Menu() {
     <>
       <Layout>
         {showModal && (
-          <div className="modal modal-open ">
-            <div className="modal-box bg_beige">
+          <div
+            className="modal modal-open "
+            onClick={() => setShowModal(false)}
+          >
+            <div
+              className="modal-box bg_beige"
+              onClick={(e) => e.stopPropagation()}
+            >
               <h3 className="font-bold text-lg">
                 {" "}
                 ডালভাত ডটকমে আপনাকে স্বাগতম!
               </h3>
               <p className="py-4">
-                আমরা একটি ওয়েব অ্যাপ ভিত্তিক ক্যাটারিং সার্ভিস যা বসুন্ধরা
-                এলাকার স্টুডেন্ট/ব্যাচেলরদের স্বল্প মূল্যে স্বাস্থ্যকর ও
+                আমরা একটি ওয়েব অ্যাপ ভিত্তিক ক্যাটারিং সার্ভিস, আমরা বসুন্ধরা
+                আবাসিক এলাকায় স্টুডেন্ট/ব্যাচেলরদের স্বল্প মূল্যে স্বাস্থ্যকর ও
                 সুস্বাদু খাবার সরবরাহ করি।
               </p>
-              কেন আমাদের সার্ভিস ব্যবহার করবেন?
+              {/* কেন আমাদের সার্ভিস ব্যবহার করবেন?
               <ul className="list-disc pl_akm">
                 <li>বাজার করা লাগছে না</li>
                 <li>রান্নার জন্য আলাদা কাউকে লাগছে না</li>
@@ -37,7 +43,7 @@ export default function Menu() {
                 <li>রান্নায় গ্যাস বা বিদ্যুৎ খরচ হচ্ছে না</li>
                 <li>ব্যয়বহুল কিচেন সেটআপের প্রয়োজন নেই</li>
                 <li>স্বাস্থ্যসম্মত খাবার সুলভ মূল্যে পাচ্ছেন</li>
-              </ul>
+              </ul> */}
               <p className="mt_akm">
                 {" "}
                 আমরা আপনাকে প্রতিদিন লাঞ্চ/ডিনার দিতে প্রস্তুত।
