@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "./layout/Layout";
 import Slider from "./layout/Slider";
 import MenuComp from "./components/menu";
+import Link from "next/link";
 import Cookies from "js-cookie";
 
 export default function Menu() {
@@ -30,24 +31,42 @@ export default function Menu() {
                 {" "}
                 ডালভাত ডটকমে আপনাকে স্বাগতম!
               </h3>
-              <p className="py-4">
+              <div className="py-4">
                 আমরা একটি ওয়েব অ্যাপ ভিত্তিক ক্যাটারিং সার্ভিস, আমরা বসুন্ধরা
-                আবাসিক এলাকায় স্টুডেন্ট/ব্যাচেলরদের স্বল্প মূল্যে স্বাস্থ্যকর ও
-                সুস্বাদু খাবার সরবরাহ করি।
-              </p>
-              {/* কেন আমাদের সার্ভিস ব্যবহার করবেন?
-              <ul className="list-disc pl_akm">
-                <li>বাজার করা লাগছে না</li>
-                <li>রান্নার জন্য আলাদা কাউকে লাগছে না</li>
+                আবাসিক এলাকায় লাঞ্চ/ডিনার ডেলিভারি করি।
+              </div>
+              <div>যেভাবে অর্ডার করবেন:</div>
+              <div>
+                <ul className="steps steps-vertical ">
+                  <li className="step step-primary ">
+                    <div className="text-left">
+                      লগইন করে ডেলিভারির ঠিকানা দিন
+                    </div>
 
-                <li>রান্নায় গ্যাস বা বিদ্যুৎ খরচ হচ্ছে না</li>
-                <li>ব্যয়বহুল কিচেন সেটআপের প্রয়োজন নেই</li>
-                <li>স্বাস্থ্যসম্মত খাবার সুলভ মূল্যে পাচ্ছেন</li>
-              </ul> */}
-              <p className="mt_akm">
+                    {/* <div className="flex items-center gap_akm">
+                      {" "}
+                      লগইন করুন
+                      <button className="btn btn-xs bg_green text-white font-normal rounded_akm hover:bg_orange hover:text-inherit">
+                        Login
+                      </button>
+                    </div> */}
+                  </li>
+                  <li className="step step-primary ">
+                    <div className="text-left">
+                      সাপ্তাহের প্রতিদিনই আমাদের মেনু রয়েছে, অর্ডার করুন
+                    </div>
+                  </li>
+                  <li className="step step-primary ">
+                    <div className="text-left">
+                      অর্ডারের দিন সময় অনুযায়ী আপনার খাবার পৌঁছে দেওয়া হবে
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              {/* <p className="mt_akm">
                 {" "}
                 আমরা আপনাকে প্রতিদিন লাঞ্চ/ডিনার দিতে প্রস্তুত।
-              </p>
+              </p> */}
               <div className="modal-action flex justify-center">
                 <button
                   className="btn bg_green text-white font-normal rounded_akm hover:bg_orange hover:text-inherit"

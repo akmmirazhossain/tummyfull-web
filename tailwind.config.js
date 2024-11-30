@@ -23,5 +23,19 @@ module.exports = {
     },
   },
   darkMode: "class",
+  daisyui: {
+    themes: [
+      {
+        mycustomtheme: {
+          primary: "#004225", // Your custom primary color
+          secondary: "#f5f5dc", // Your custom secondary color
+          accent: "#ffb000", // Accent color
+          neutral: "#ffcf9d", // Neutral color
+          "base-100": "#FFFFFF", // Background color
+        },
+      },
+    ],
+  },
+
   plugins: [nextui(), require("daisyui")],
 };
