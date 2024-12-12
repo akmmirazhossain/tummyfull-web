@@ -60,6 +60,10 @@ body {
     color: #004225;
   }
 
+  .text_white {
+    color: #f4f4f4;
+  }
+
   .bg_beige {
     background-color: #f5f5dc;
   }

@@ -87,30 +87,10 @@ export default function HeroSection() {
         </div>
       </section>
 
-      <section className="bg_green text-white py_akm    ">
-        <div className="max-w-7xl mx-auto px_akm my_akm">
-          <div className="text-center lg:text-left">
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              🎉 Get Your First Meal Free!
-            </h2>
-            <p className="mt-2 text-lg">
-              Register today and enjoy a delicious meal on us. It's our way of
-              welcoming you to the family!
-            </p>
-          </div>
-
-          <div className="mt-4 lg:mt-0">
-            <button className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-100">
-              Register Now
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
+      <section className="bg_green py_akm ">
+        <div className="container max-w-7xl mx-auto my_akm">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold text-gray-800">
+            <h2 className="text_white text-3xl font-extrabold ">
               How We Simplify Your Life?
             </h2>
             <p className="text-gray-600 mt-2">
@@ -248,6 +228,27 @@ export default function HeroSection() {
           </div>
         </div>
       </section>
+
+      <section className="bg_green text-white py_akm    ">
+        <div className="max-w-7xl mx-auto px_akm my_akm">
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl lg:text-4xl font-bold">
+              🎉 Get Your First Meal Free!
+            </h2>
+            <p className="mt-2 text-lg">
+              Register today and enjoy a delicious meal on us. It's our way of
+              welcoming you to the family!
+            </p>
+          </div>
+
+          <div className="mt-4 lg:mt-0">
+            <button className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-100">
+              Register Now
+            </button>
+          </div>
+        </div>
+      </section>
+
       <footer className=" bg_beige hidden md:block">
         <FooterMain />
       </footer>
