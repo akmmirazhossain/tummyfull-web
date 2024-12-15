@@ -301,7 +301,7 @@ export default function Credits() {
               </Link>
             </p>
 
-            <div className=" mt_akm">Find me in: </div>
+            <div className=" mt_akm font-bold pt_akm">Find me in: </div>
             <div className="grid grid-cols-3 gap_akm">
               {/* LinkedIn */}
               <div className="flex items-center space-x-2 btn">
@@ -361,7 +361,7 @@ export default function Credits() {
               </div>
             </div>
 
-            <div className=" mt_akm">Contact: </div>
+            <div className=" mt_akm font-bold pt_akm">Contact: </div>
             <div>Email: akmmirazhossain@gmail.com</div>
             <div>Phone: +8801673692997</div>
           </section>
