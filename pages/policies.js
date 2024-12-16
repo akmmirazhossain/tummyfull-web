@@ -5,7 +5,7 @@ import React from "react";
 const Policies = () => {
   return (
     <>
-      <Layout>
+      <Layout title="Policies - ডালভাত">
         <section>
           <div className="h1_akm">Our Policies</div>
           <div className="card_akm pad_akm flex flex-col gap_akm" id="return">

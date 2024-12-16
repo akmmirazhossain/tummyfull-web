@@ -5,7 +5,7 @@ import Layout from "./layout/Layout";
 
 export default function Credits() {
   return (
-    <Layout>
+    <Layout title="Credits - ডালভাত">
       <div className="min-h-screen flex flex-col items-center py-10 px-5 text-base-content">
         <div className="bg-base-100 shadow-xl rounded-lg p-8 w-full max-w-3xl">
           {/* Profile Section */}
@@ -42,10 +42,12 @@ export default function Credits() {
               meals. We're here to take care of all those so that you can focus
               on your work and enjoy delicious food effortlessly. <br /> */}
               <br />
+              Here is why we are different from food delivery serives like
+              Foodpanda, Pathao Foods or other catering services: <br />
               Each day, we offer a fixed menu for lunch and dinner, and after
-              receiving group orders for the same meal, our chefs cook in bulk.
-              This approach not only ensures fresh and delicious meals but also
-              significantly reduces costs, making quality food affordable.
+              receiving group orders for that same menu, our chefs cook in bulk.
+              This approach not only ensures fresh meals but also significantly
+              reduces costs, making quality food affordable.
             </p>
           </section>
 

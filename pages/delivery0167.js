@@ -58,7 +58,7 @@ const DelivPanel = () => {
   }
   return (
     <>
-      <Layout>
+      <Layout title="Delivery Panel - ডালভাত">
         {hasAccess ? (
           <>
             <div className="h1_akm">Delivery Panel</div>

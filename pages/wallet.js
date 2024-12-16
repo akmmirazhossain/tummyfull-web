@@ -17,7 +17,7 @@ const ProtectedPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout title="Wallet - ডালভাত">
         <WalletOptions />
       </Layout>
     </>

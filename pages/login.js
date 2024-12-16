@@ -6,7 +6,7 @@ import LoginForm from "./components/LoginForm";
 export default function Menu() {
   return (
     <>
-      <Layout>
+      <Layout title="Login - ডালভাত">
         <LoginForm />
       </Layout>
     </>

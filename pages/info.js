@@ -7,7 +7,7 @@ import Link from "next/link";
 const Info = () => {
   return (
     <>
-      <Layout>
+      <Layout title="Contact Info - ডালভাত">
         <section>
           <div className="h1_akm">Contact</div>
           <div className="card_akm pad_akm flex flex-col gap_akm">

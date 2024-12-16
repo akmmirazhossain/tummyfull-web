@@ -13,7 +13,7 @@ const NotifPage = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="All Notifications - ডালভাত">
       <Notification />
     </Layout>
   );

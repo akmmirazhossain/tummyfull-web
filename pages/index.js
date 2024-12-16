@@ -17,7 +17,7 @@ export default function Menu() {
 
   return (
     <>
-      <Layout>
+      <Layout title="Menu - ডালভাত">
         {showModal && (
           <div
             className="modal modal-open "

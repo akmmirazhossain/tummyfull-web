@@ -43,7 +43,7 @@ const ProtectedPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout title="Settings - ডালভাত">
         <ProfileForm />
         <MealSettings />
         <LogoutBlock />

@@ -10,7 +10,7 @@ const Layout = ({ children, title }) => {
   return (
     <div className="bg_light_orange text_black">
       <Head>
-        <title>{title ? title : "ডালভাত"}</title>
+        <title>{title ? title : "ডালভাত.com"}</title>
         <meta
           name="description"
           content="DalBhath is an easy meal management app for students, job holders, and families seeking convenient daily meal options."
