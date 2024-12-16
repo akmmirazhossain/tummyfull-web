@@ -36,11 +36,11 @@ export default function Credits() {
               Dalbhath.com is a meal management platform designed to solve the
               meal challenges faced by students & bachelors living far away from
               their families. <br />
-              <br />
+              {/* <br />
               Think about the hassle of managing groceries, hiring a maid,
               setting up a kitchen, or refilling gas cylinders just to prepare
-              meals. We're here to take care of all that so our you can focus on
-              your work and enjoy delicious food effortlessly. <br />
+              meals. We're here to take care of all those so that you can focus
+              on your work and enjoy delicious food effortlessly. <br /> */}
               <br />
               Each day, we offer a fixed menu for lunch and dinner, and after
               receiving group orders for the same meal, our chefs cook in bulk.
@@ -52,7 +52,7 @@ export default function Credits() {
           {/* Roles Section */}
           <section className="mb-6">
             <h2 className="text-xl font-semibold mb-2 border-b-2 border-primary pb-2">
-              Roles and Contributions
+              My Roles and Contributions
             </h2>
             <ul className="list-disc list-inside space-y-3">
               <li>
