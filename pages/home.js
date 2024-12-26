@@ -2,6 +2,10 @@ import React from "react";
 import Layout from "./layout/Layout";
 import NavbarTop from "./components/NavbarTop";
 import FooterMain from "./layout/Footer";
+import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBowlRice } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 export default function HeroSection() {
   const testimonials = [
@@ -62,17 +66,23 @@ export default function HeroSection() {
       <section className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between py-12 ">
         {/* Left: Text Content */}
         <div className="flex flex-col items-start lg:w-1/2">
-          <h1 className="text-xl lg:text-5xl font-bold text_green leading-snug">
-            Healthy, affordable meals
-            <br /> delivered to your doorstep!
+          <h1 className="text-xl lg:text-5xl font-bold text_green tracking-wide">
+            Home-Cooked Meals,
+            <br /> at an Unbeatable Price!
           </h1>
-          <p className="mt-4 text-lg text-gray-700">
-            DalBhath is an easy meal management web app for students, job
-            holders, and families seeking convenient daily meal options.
+          <p className="mt-4 text-lg text-gray-700 ">
+            Designed for busy students, job holders, and families. <br /> No
+            cooking, no hassle—just delicious meals everyday!
           </p>
           <div className="mt-6 flex space-x-4">
-            <button className="btn btn-lg rounded_akm bg_green text-white">
-              Visit App
+            <button className="btn  text-xl btn-lg rounded_akm bg_green font-medium text-white hover:bg-orange-500">
+              <FontAwesomeIcon icon={faBowlRice} /> Get a free meal!{" "}
+              <motion.div
+                animate={{ x: [0, 10, 0] }} // Moves left to right
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                →
+              </motion.div>
             </button>
           </div>
         </div>
@@ -89,21 +99,26 @@ export default function HeroSection() {
 
       <section className="bg_green py_akm ">
         <div className="container max-w-7xl mx-auto my_akm">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 pt_akm">
             <h2 className="text_white text-3xl font-extrabold ">
               How We Simplify Your Life?
             </h2>
-            <p className="text-gray-600 mt-2">
-              Experience the convenience and flexibility of our meal management
-              system, tailored to your lifestyle.
+            <p className="text_white mt-2">
+              While you work or study, we are here to take care of your meals.
+              Here are a few reasons how we make your life easier.
             </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+          <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-3 pb_akm">
             {/* Feature 1 */}
             <div className="bg-white shadow-md rounded-lg p-6">
               <h3 className="text-xl font-semibold text-blue-700 mb-4">
-                Schedule and Control Your Meals
+                Pre-schedule Your Meals
               </h3>
+              <Image
+                src={"/images/meal_scheduler_image.svg"}
+                width={800}
+                height={800}
+              />
               <p className="text-gray-600">
                 Unlike traditional catering services, you can pre-schedule your
                 meals and turn them on or off as needed.{" "}
@@ -121,17 +136,15 @@ export default function HeroSection() {
               <h3 className="text-xl font-semibold text-green-700 mb-4">
                 Auto-Pay with Built-in Wallet
               </h3>
+              <Image
+                src={"/images/wallet_pay_home.svg"}
+                width={800}
+                height={800}
+              />
               <p className="text-gray-600">
-                Top up your built-in wallet to enable auto-pay. If sufficient
-                credit is available, the meal charge will be deducted from it,
-                eliminating cash on delivery.{" "}
-                <a
-                  href="/wallet"
-                  className="text-green-500 font-medium hover:underline"
-                >
-                  Visit wallet
-                </a>
-                .
+                Recharge your Dalbhath wallet periodically to automate payments
+                for each meal delivery, eliminating the need for cash on
+                delivery.
               </p>
             </div>
             {/* Feature 3 */}
