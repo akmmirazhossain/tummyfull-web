@@ -19,6 +19,8 @@ module.exports = {
     },
     fontFamily: {
       budge: ["Budge"],
+      bebas: ["bebas"],
+      poppins: ["poppins"],
       niljannati: ["nil-jannati"],
     },
   },

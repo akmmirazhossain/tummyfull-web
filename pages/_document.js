@@ -22,7 +22,47 @@ export default function Document() {
         />
 
         {/* Tawk.to */}
+
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              function loadTawkTo() {
+                var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+                s1.async=true;
+                s1.src='https://embed.tawk.to/671937064304e3196ad6be94/1iat7tt48';
+                s1.charset='UTF-8';
+                s1.setAttribute('crossorigin','*');
+                s0.parentNode.insertBefore(s1,s0);
+              }
+
+              function initTawkTo() {
+                // Check if we're on the home page
+                if (window.location.pathname === '/home') {
+                  // For home page, load after scroll
+                  window.addEventListener('scroll', function() {
+                    if (window.scrollY > 500) {
+                      loadTawkTo();
+                      window.removeEventListener('scroll', arguments.callee);
+                    }
+                  });
+                } else {
+                  // For other pages, load immediately
+                  loadTawkTo();
+                }
+              }
+
+              // Initialize once DOM is ready
+              if (document.readyState === 'complete') {
+                initTawkTo();
+              } else {
+                window.addEventListener('load', initTawkTo);
+              }
+            `,
+          }}
+        />
+
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -35,16 +75,6 @@ export default function Document() {
                 s0.parentNode.insertBefore(s1,s0);
               })();
             `,
-          }}
-        />
-
-        {/* <script src="//code.jivosite.com/widget/WR2lNdFd2W" async></script> */}
-
-        {/* <div
-          dangerouslySetInnerHTML={{
-            __html: `
-          <script src="//code.tidio.co/mxaxfltlusk8s5ggyzrdde9vsgam0rao.js" async></script>
-        `,
           }}
         /> */}
       </Head>

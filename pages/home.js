@@ -1,11 +1,13 @@
 import React from "react";
-import Layout from "./layout/Layout";
-import NavbarTop from "./components/NavbarTop";
-import FooterMain from "./layout/Footer";
+import { useEffect, useState } from "react";
+
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBowlRice } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
+
+import NavbarTop from "./components/NavbarTop";
+import FooterMain from "./layout/Footer";
 
 export default function HeroSection() {
   const testimonials = [
@@ -60,40 +62,111 @@ export default function HeroSection() {
     },
   ];
 
+  const [showNavbar, setShowNavbar] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setShowNavbar(true);
+      } else {
+        setShowNavbar(false);
+      }
+    };
+
+    // Add the scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="">
-      <NavbarTop />
-      <section className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between py-12 ">
-        {/* Left: Text Content */}
-        <div className="flex flex-col items-start lg:w-1/2">
-          <h1 className="text-xl lg:text-5xl font-bold text_green tracking-wide">
-            Home-Cooked Meals,
-            <br /> at an Unbeatable Price!
-          </h1>
-          <p className="mt-4 text-lg text-gray-700 ">
-            Designed for busy students, job holders, and families. <br /> No
-            cooking, no hassle—just delicious meals everyday!
-          </p>
-          <div className="mt-6 flex space-x-4">
-            <button className="btn  text-xl btn-lg rounded_akm bg_green font-medium text-white hover:bg-orange-500">
-              <FontAwesomeIcon icon={faBowlRice} /> Get a free meal!{" "}
-              <motion.div
-                animate={{ x: [0, 10, 0] }} // Moves left to right
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                →
-              </motion.div>
-            </button>
+      <motion.div
+        className="fixed w-full"
+        initial={{ y: -50, opacity: 0 }}
+        animate={showNavbar ? { y: 0, opacity: 1 } : { y: -50, opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
+        <NavbarTop />
+      </motion.div>
+
+      {/* HERO SECTION */}
+      <section className=" h-screen   bg_light_orange">
+        <div className="max-w-5xl h-screen   mx-auto flex flex-col lg:flex-row items-center justify-between ">
+          {/* Left: Text Content */}
+          <div className="flex flex-col items-start lg:w-1/2 pl_akm ml_akm">
+            <h1 className="text-xl lg:text-8xl font-bold font-bebas text_green tracking-wide">
+              Meal Service
+              <br />
+              For Students
+            </h1>
+            <p className="mt-4 text-2xl text-gray-700 font-poppins">
+              Study Hard, Eat Well <br />
+              We’ve Got Your Meals Covered.
+            </p>
+            <div className="mt-6 flex space-x-4 ">
+              <button className="btn  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500">
+                <FontAwesomeIcon icon={faBowlRice} /> Start with a free meal!{" "}
+                <motion.div
+                  animate={{ x: [0, 10, 0] }} // Moves left to right
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  →
+                </motion.div>
+              </button>
+            </div>
+
+            {/* <div className="h4info_akm mt-1 pl-1">
+              (No delivery charge, it's completely free!)
+            </div> */}
+          </div>
+
+          {/* Right: Image */}
+          <div className="mt-10 lg:mt-0 lg:w-1/2 flex justify-center">
+            <Image
+              src={"/images/meal_scheduler_image.svg"}
+              width={800}
+              height={800}
+            />
           </div>
         </div>
+      </section>
 
-        {/* Right: Image */}
-        <div className="mt-10 lg:mt-0 lg:w-1/2 flex justify-center">
-          <img
-            src="https://www.tailwind-kit.com/images/object/10.png"
-            alt="Delicious meal"
-            className="w-full max-w-lg "
-          />
+      {/* HOW IT WORKS SECTION */}
+
+      <section className=" py_akm  bg-[url('/images/bra.jpg')] bg-cover bg-center">
+        <div className="container max-w-5xl mx-auto my_akm">
+          <div className="text-center mb-8 pt_akm">
+            <h2 className=" text-3xl font-poppins font-bold ">How it works?</h2>
+            {/* <p className=" mt-2">
+              While you work or study, we are here to take care of your meals.
+              Here are a few reasons how we make your life easier.
+            </p> */}
+          </div>
+          <div className="grid  md:grid-cols-4 lg:grid-cols-4 pb_akm">
+            <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+              <div className="h3_akm font-bold font-poppins">Step 1</div>
+              <div>Place your Pre-order</div>
+            </div>
+
+            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+              <div className="h3_akm font-bold font-poppins">Step 2</div>
+              <div>Meals Are Cooked</div>
+            </div>
+
+            <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+              <div className="h3_akm font-bold font-poppins">Step 3</div>
+              <div>Home Delivery </div>
+            </div>
+
+            <div className="shadow_akm bg_green text_white rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+              <div className="h3_akm font-bold font-poppins">Step 4</div>
+              <div>Enjoy & Repeat</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -150,29 +223,18 @@ export default function HeroSection() {
             {/* Feature 3 */}
             <div className="bg-white shadow-md rounded-lg p-6">
               <h3 className="text-xl font-semibold text-indigo-700 mb-4">
-                Environment-Friendly Mealbox Swap
+                Mealbox Swap
               </h3>
+
+              <Image
+                src={"/images/mealbox_exchage.webp"}
+                width={800}
+                height={800}
+              />
               <p className="text-gray-600">
-                Use our service regularly and activate the mealbox swap option
-                to have your meals delivered in food-grade boxes instead of
-                polybags.{" "}
-                <a
-                  href="/mealbox-swap"
-                  className="text-indigo-500 font-medium hover:underline"
-                >
-                  Activate mealbox swap
-                </a>
-                .
-              </p>
-            </div>
-            {/* Feature 4 */}
-            <div className="bg-white shadow-md rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-red-700 mb-4">
-                One-Touch Order Cancellation
-              </h3>
-              <p className="text-gray-600">
-                Easily cancel your orders with a single touch if your plans
-                change. Designed for your convenience.
+                Unlike other catering services, Dalbhath ensures your food is
+                delivered in a food-grade mealbox from day one, even for a
+                single order.
               </p>
             </div>
           </div>

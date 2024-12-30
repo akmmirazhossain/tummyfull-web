@@ -24,11 +24,25 @@
 }
 
 @font-face {
+  font-family: "bebas";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/bebas_neue/BebasNeue-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "poppins";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/poppins/Poppins-Regular.ttf") format("truetype");
+}
+
+/* @font-face {
   font-family: "budge";
   font-style: normal;
   font-weight: 400;
   src: url("/fonts/Budge-Regular.otf") format("opentype");
-}
+} */
 
 @font-face {
   font-family: "nil-jannati";
@@ -124,6 +138,10 @@ body {
 
 .pb_akm {
   @apply pb-2 sm:pb-2 md:pb-3 lg:pb-4;
+}
+
+.ml_akm {
+  @apply ml-4 md:ml-6;
 }
 
 .mb_akm {

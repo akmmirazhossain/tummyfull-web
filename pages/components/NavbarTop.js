@@ -9,7 +9,7 @@ import {
   faGear,
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import Cookies from "js-cookie";
 
 import { ApiContext } from "../contexts/ApiContext";
@@ -95,7 +95,7 @@ const NavbarTop = () => {
   ];
 
   return (
-    <header className="bg_beige text-black">
+    <header className="bg_beige text-black shadow_akm">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-6">
         <div className="flex justify-between items-center py-2  ">
           {/* Puzzler */}
@@ -149,7 +149,9 @@ const NavbarTop = () => {
                   >
                     <div>
                       {isLoading ? (
-                        <Spinner size="sm" />
+                        <>
+                          {/* <span className="loading loading-dots loading-xs"></span> */}
+                        </>
                       ) : userData !== null ? (
                         `৳${userData}`
                       ) : (

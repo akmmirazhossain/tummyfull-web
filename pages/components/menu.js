@@ -27,6 +27,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { ApiContext } from "../contexts/ApiContext";
+import LoginForm from "./LoginForm";
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" {...props} />
@@ -92,6 +93,8 @@ const MenuComp = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
 
+  const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+
   const formatToDayMonth = (dateString) =>
     dayjs(dateString).format("D[th] MMM");
 
@@ -147,13 +150,24 @@ const MenuComp = () => {
 
   const checkAndRedirect = () => {
     if (!Cookies.get("TFLoginToken")) {
-      router.push("/login");
+      setLoginModalVisible(true); // Open the modal
     }
+
+    // if (!Cookies.get("TFLoginToken")) {
+    //   router.push("/login");
+    // }
+  };
+
+  //CLOSE LOGIN MODAL
+
+  const closeLoginModal = () => {
+    setLoginModalVisible(false); // Close modal
+    router.push("/login"); // Redirect to login after modal closes
   };
 
   //MARK: Lunch Status
   const handleLunchStatusChange = async (day, menuId, date, value, price) => {
-    checkAndRedirect(); // Ensure the user is authenticated
+    checkAndRedirect();
 
     //SWITCH STATUS CHANGER
     const updatedMenuData = { ...menuData };
@@ -1180,6 +1194,23 @@ const MenuComp = () => {
       ))}
       <div className="pad_akm text-center h4info_akm">
         Menu rotates daily for the upcoming 7 days
+      </div>
+
+      <div className={`modal ${isLoginModalVisible ? "modal-open" : ""}`}>
+        <div className="modal-box">
+          {/* Modal header */}
+          <div className="flex justify-end items-center">
+            <button
+              className="btn btn-sm btn-circle btn-ghost"
+              onClick={() => setLoginModalVisible(false)}
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Embedded LoginForm */}
+          <LoginForm />
+        </div>
       </div>
     </div>
   );
