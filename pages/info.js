@@ -56,7 +56,7 @@ const Info = () => {
           <div className="h1_akm">What makes us unique:</div>
           <div className="card_akm pad_akm flex flex-col gap_akm">
             {/* Daily meal catering facility is easier like never before, our service is carefully constructed which will let you */}
-            <div className="grid grid-cols-1 md:grid-cols-2 ">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 ">
               <div>
                 <Image
                   src={"/images/delivery.png"}
@@ -74,7 +74,7 @@ const Info = () => {
               </div>
             </div>
 
-            <span className="border-b-2"></span>
+            <span className="border-b-2"></span> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="flex justify-center items-center pad_akm md:order-1 order-2">

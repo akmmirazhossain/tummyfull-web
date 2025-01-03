@@ -8,7 +8,6 @@ import { Button, Card, Chip, Skeleton } from "@nextui-org/react";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faShippingFast,
   faCircleCheck,
   faCircleExclamation,
   faCalendarDays,
@@ -94,6 +93,7 @@ const MenuComp = () => {
   const [modalData, setModalData] = useState(null);
 
   const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+  const [pendingOrder, setPendingOrder] = useState(null);
 
   const formatToDayMonth = (dateString) =>
     dayjs(dateString).format("D[th] MMM");
@@ -101,7 +101,9 @@ const MenuComp = () => {
   const { shakeBell, notifLoadTrigger } = useNotification();
   //AUTO REFRESH ON NEXT
   const handleVisibilityChange = () => {
-    if (document.visibilityState === "visible") {
+    console.log("handleVisibilityChange");
+    if (document.visibilityState === "visible" && apiConfig) {
+      // Add apiConfig check
       fetchData();
       notifLoadTrigger();
     }
@@ -115,11 +117,11 @@ const MenuComp = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [apiConfig]);
 
   //FETCH MENU
   const fetchData = async () => {
-    console.log("MENU REFRESHED");
+    console.log("FETCH DATA");
     if (!apiConfig) return;
 
     try {
@@ -129,6 +131,7 @@ const MenuComp = () => {
           "TFLoginToken"
         )}`
       );
+      console.log("FETCH DATA -> TRY:", menuData);
       setMenuData(menuData);
 
       // Fetch settings data
@@ -143,20 +146,8 @@ const MenuComp = () => {
   };
 
   useEffect(() => {
-    // Fetch data when Cookies.get("TFLoginToken") changes or config is fetched
     fetchData();
   }, [apiConfig, Cookies.get("TFLoginToken")]);
-  // Dependency array ensures useEffect runs when TFLoginToken changes
-
-  const checkAndRedirect = () => {
-    if (!Cookies.get("TFLoginToken")) {
-      setLoginModalVisible(true); // Open the modal
-    }
-
-    // if (!Cookies.get("TFLoginToken")) {
-    //   router.push("/login");
-    // }
-  };
 
   //CLOSE LOGIN MODAL
 
@@ -165,20 +156,49 @@ const MenuComp = () => {
     router.push("/login"); // Redirect to login after modal closes
   };
 
-  //MARK: Lunch Status
-  const handleLunchStatusChange = async (day, menuId, date, value, price) => {
-    checkAndRedirect();
+  const checkLogin = () => {
+    // if (!Cookies.get("TFLoginToken")) {
+    //   setLoginModalVisible(true); // Open the modal
+    //   return false; // Indicate no cookie exists
+    // }
+    // return true;
+
+    if (!Cookies.get("TFLoginToken")) {
+      router.push("/login?fromHomePage=true");
+    }
+  };
+
+  //MARK: Order Meal
+  const orderMeal = async (day, menuId, date, value, price, mealPeriod) => {
+    console.log("orderMeal");
+    // if (!checkLogin()) {
+    //   // Store order details
+    //   setPendingOrder({ day, menuId, date, value, price, mealPeriod });
+    //   return;
+    // }
+    //if (!checkLogin()) return;
+    checkLogin();
 
     //SWITCH STATUS CHANGER
     const updatedMenuData = { ...menuData };
-    if (updatedMenuData[day].lunch.status === "disabled") {
-      updatedMenuData[day].lunch.status = "enabled";
-      updatedMenuData[day].lunch.quantity = 1; // Set quantity to 1 when enabling
-      setLunchOrderAcceptText(false);
+    if (updatedMenuData[day][mealPeriod].status === "disabled") {
+      updatedMenuData[day][mealPeriod].status = "enabled";
+      updatedMenuData[day][mealPeriod].quantity = 1;
+
+      if (mealPeriod === "lunch") {
+        setLunchOrderAcceptText(false);
+      } else if (mealPeriod === "dinner") {
+        setDinnerOrderAcceptText(false); // Example for handling dinner
+      }
     } else {
-      updatedMenuData[day].lunch.status = "disabled";
+      updatedMenuData[day][mealPeriod].status = "disabled";
       //updatedMenuData[day].lunch.quantity = 0; // Reset quantity to 0 when disabling
-      setLunchOrderAcceptText(true);
+
+      if (mealPeriod === "lunch") {
+        setLunchOrderAcceptText(true);
+      } else if (mealPeriod === "dinner") {
+        setDinnerOrderAcceptText(true); // Example for handling dinner
+      }
     }
     setMenuData(updatedMenuData);
     //SWITCH DISABLER
@@ -209,7 +229,7 @@ const MenuComp = () => {
         throw new Error("Failed to send data to the API");
       }
       const responseData = await response.json();
-      console.log("🚀 ~ handleLunchStatusChange ~ responseData:", responseData);
+      console.log("🚀 ~ orderMeal ~ responseData:", responseData);
 
       //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
       const mealboxData = {
@@ -240,98 +260,107 @@ const MenuComp = () => {
     if (
       value === true &&
       Cookies.get("TFLoginToken") !== undefined &&
-      menuId === menuData[day].lunch.id
+      menuId === menuData[day][mealPeriod].id
     ) {
       setModalData(data);
       setShowModal(true);
+    }
+  };
+
+  //MARK: Pending Order
+  const orderMealPending = () => {
+    if (pendingOrder) {
+      const { day, menuId, date, value, price, mealPeriod } = pendingOrder;
+      orderMeal(day, menuId, date, value, price, mealPeriod);
+      setPendingOrder(null); // Clear pending order after processing
     }
   };
 
   //MARK: Dinner Status
 
-  const handleDinnerStatusChange = async (day, menuId, date, value, price) => {
-    checkAndRedirect(); // Ensure the user is authenticated
-    //SWITCH STATUS CHANGER
-    const updatedMenuData = { ...menuData };
-    if (updatedMenuData[day].dinner.status === "disabled") {
-      updatedMenuData[day].dinner.status = "enabled";
-      updatedMenuData[day].dinner.quantity = 1; // Set quantity to 1 when enabling
-      setLunchOrderAcceptText(false);
-    } else {
-      updatedMenuData[day].dinner.status = "disabled";
-      //updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
-      setDinnerOrderAcceptText(true);
-    }
-    setMenuData(updatedMenuData);
-    //SWITCH DISABLER
-    const switchKey = `${day}-${menuId}`;
-    if (disabledSwitches[switchKey]) return;
-    // Disable the specific switch
-    setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
-    // API CALLER
-    const data = {
-      menuId: menuId,
-      date: date,
-      TFLoginToken: Cookies.get("TFLoginToken"),
-      switchValue: value,
-      price: price,
-      quantity: 1,
-    };
+  // const handleDinnerStatusChange = async (day, menuId, date, value, price) => {
+  //   checkAndRedirect(); // Ensure the user is authenticated
+  //   //SWITCH STATUS CHANGER
+  //   const updatedMenuData = { ...menuData };
+  //   if (updatedMenuData[day].dinner.status === "disabled") {
+  //     updatedMenuData[day].dinner.status = "enabled";
+  //     updatedMenuData[day].dinner.quantity = 1; // Set quantity to 1 when enabling
+  //     setLunchOrderAcceptText(false);
+  //   } else {
+  //     updatedMenuData[day].dinner.status = "disabled";
+  //     //updatedMenuData[day].dinner.quantity = 0; // Reset quantity to 0 when disabling
+  //     setDinnerOrderAcceptText(true);
+  //   }
+  //   setMenuData(updatedMenuData);
+  //   //SWITCH DISABLER
+  //   const switchKey = `${day}-${menuId}`;
+  //   if (disabledSwitches[switchKey]) return;
+  //   // Disable the specific switch
+  //   setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
+  //   // API CALLER
+  //   const data = {
+  //     menuId: menuId,
+  //     date: date,
+  //     TFLoginToken: Cookies.get("TFLoginToken"),
+  //     switchValue: value,
+  //     price: price,
+  //     quantity: 1,
+  //   };
 
-    try {
-      shakeBell();
-      const response = await fetch(`${apiConfig.apiBaseUrl}order-place`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to send data to the API");
-      }
-      const responseData = await response.json();
-      console.log(
-        "🚀 ~ handleDinnerStatusChange ~ responseData:",
-        responseData
-      );
+  //   try {
+  //     shakeBell();
+  //     const response = await fetch(`${apiConfig.apiBaseUrl}order-place`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to send data to the API");
+  //     }
+  //     const responseData = await response.json();
+  //     console.log(
+  //       "🚀 ~ handleDinnerStatusChange ~ responseData:",
+  //       responseData
+  //     );
 
-      //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
-      const mealboxData = {
-        TFLoginToken: Cookies.get("TFLoginToken"),
-      };
-      const mealboxRes = await fetch(`${apiConfig.apiBaseUrl}mealbox-status`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mealboxData),
-      });
+  //     //CHECK IF MEALBOX STATUS IS 1/0 IN THE USER TABLE
+  //     const mealboxData = {
+  //       TFLoginToken: Cookies.get("TFLoginToken"),
+  //     };
+  //     const mealboxRes = await fetch(`${apiConfig.apiBaseUrl}mealbox-status`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(mealboxData),
+  //     });
 
-      if (!mealboxRes.ok) {
-        throw new Error("Failed to send data to the second API");
-      }
+  //     if (!mealboxRes.ok) {
+  //       throw new Error("Failed to send data to the second API");
+  //     }
 
-      const mealboxResData = await mealboxRes.json();
-      setMealboxStatus(mealboxResData);
-    } catch (error) {
-      console.error("Error sending data to the API:", error.message);
-    } finally {
-      // SWITCH ENABLER
-      setTimeout(() => {
-        setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
-      }, 100);
-    }
+  //     const mealboxResData = await mealboxRes.json();
+  //     setMealboxStatus(mealboxResData);
+  //   } catch (error) {
+  //     console.error("Error sending data to the API:", error.message);
+  //   } finally {
+  //     // SWITCH ENABLER
+  //     setTimeout(() => {
+  //       setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
+  //     }, 100);
+  //   }
 
-    if (
-      value === true &&
-      Cookies.get("TFLoginToken") !== undefined &&
-      menuId === menuData[day].dinner.id
-    ) {
-      setModalData(data);
-      setShowModal(true);
-    }
-  };
+  //   if (
+  //     value === true &&
+  //     Cookies.get("TFLoginToken") !== undefined &&
+  //     menuId === menuData[day].dinner.id
+  //   ) {
+  //     setModalData(data);
+  //     setShowModal(true);
+  //   }
+  // };
 
   //MARK: Quantity Chng
   const handleQuantityChange = async (day, mealType, change, menuId, date) => {
@@ -584,12 +613,13 @@ const MenuComp = () => {
                         onChange={(event) => {
                           const { checked } = event.target;
                           console.log("Lunch Switch triggered for day:", day);
-                          handleLunchStatusChange(
+                          orderMeal(
                             day,
                             menuData[day].lunch.id,
                             menuData[day].date,
                             checked, // Pass 'checked' instead of 'value'
-                            menuData[day].lunch.price
+                            menuData[day].lunch.price,
+                            "lunch"
                           );
                         }}
                       />
@@ -613,7 +643,6 @@ const MenuComp = () => {
                             {menuData[day].lunch.mealbox !== null ? (
                               <Link href="/settings#mealbox" cla>
                                 <div className="h4info_akm flex items-center justify-center py-1">
-                                  {/* {menuData[day].lunch.mealbox} */}
                                   Mealbox
                                   {menuData[day]?.lunch?.mealbox === 1 ? (
                                     <span className="text-green-600 ml-1">
@@ -927,12 +956,13 @@ const MenuComp = () => {
                         onChange={(event) => {
                           const { checked } = event.target;
                           console.log("Dinner Switch triggered for day:", day);
-                          handleDinnerStatusChange(
+                          orderMeal(
                             day,
                             menuData[day].dinner.id,
                             menuData[day].date,
                             checked, // Pass 'checked' instead of 'value'
-                            menuData[day].dinner.price
+                            menuData[day].dinner.price,
+                            "dinner"
                           );
                         }}
                       />
@@ -1196,10 +1226,17 @@ const MenuComp = () => {
         Menu rotates daily for the upcoming 7 days
       </div>
 
-      <div className={`modal ${isLoginModalVisible ? "modal-open" : ""}`}>
-        <div className="modal-box">
+      {/* MARK: Login Modal */}
+      <div
+        className={`modal ${isLoginModalVisible ? "modal-open" : ""}`}
+        onClick={() => setLoginModalVisible(false)}
+      >
+        <div
+          className="modal-box bg-transparent shadow-none relative"
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Modal header */}
-          <div className="flex justify-end items-center">
+          <div className="flex justify-end items-center absolute right-7 top-7">
             <button
               className="btn btn-sm btn-circle btn-ghost"
               onClick={() => setLoginModalVisible(false)}
@@ -1208,8 +1245,21 @@ const MenuComp = () => {
             </button>
           </div>
 
-          {/* Embedded LoginForm */}
-          <LoginForm />
+          {/* <LoginForm
+            fromMenu={true}
+            onLoginSuccess={() => {
+              setLoginModalVisible(false);
+              fetchData();
+              orderMealPending();
+              fetchData()
+                .then(() => {
+                  orderMealPending(); // This will run once fetchData resolves
+                })
+                .catch((error) => {
+                  console.error("Error during login process:", error);
+                });
+            }}
+          /> */}
         </div>
       </div>
     </div>

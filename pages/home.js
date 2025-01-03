@@ -1,15 +1,40 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import { React, useRef, useEffect, useState } from "react";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBowlRice } from "@fortawesome/free-solid-svg-icons";
 
 import NavbarTop from "./components/NavbarTop";
 import FooterMain from "./layout/Footer";
 
-export default function HeroSection() {
+export default function Home() {
+  const [showNavbar, setShowNavbar] = useState(false);
+  const sectionRef = useRef(null);
+  // Setting amount to 0.4 means the animation triggers when 40% of the section is in view
+  const isInView = useInView(sectionRef, {
+    once: true,
+    amount: 0.5,
+  });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setShowNavbar(true);
+      } else {
+        setShowNavbar(false);
+      }
+    };
+
+    // Add the scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const testimonials = [
     {
       id: 1,
@@ -62,26 +87,6 @@ export default function HeroSection() {
     },
   ];
 
-  const [showNavbar, setShowNavbar] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setShowNavbar(true);
-      } else {
-        setShowNavbar(false);
-      }
-    };
-
-    // Add the scroll event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
     <div className="">
       <motion.div
@@ -94,7 +99,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* HERO SECTION */}
-      <section className=" h-screen   bg_light_orange">
+      <section className=" h-screen   bg_light_orange ">
         <div className="max-w-5xl h-screen   mx-auto flex flex-col lg:flex-row items-center justify-between ">
           {/* Left: Text Content */}
           <div className="flex flex-col items-start lg:w-1/2 pl_akm ml_akm">
@@ -137,29 +142,31 @@ export default function HeroSection() {
 
       {/* HOW IT WORKS SECTION */}
 
-      <section className=" py_akm  bg-[url('/images/bra.jpg')] bg-cover bg-center">
+      <section className=" py_akm   h-[50vh]">
         <div className="container max-w-5xl mx-auto my_akm">
           <div className="text-center mb-8 pt_akm">
-            <h2 className=" text-3xl font-poppins font-bold ">How it works?</h2>
+            <h2 className=" text-3xl font-poppins font-bold text_black">
+              How it works?
+            </h2>
             {/* <p className=" mt-2">
               While you work or study, we are here to take care of your meals.
               Here are a few reasons how we make your life easier.
             </p> */}
           </div>
           <div className="grid  md:grid-cols-4 lg:grid-cols-4 pb_akm">
-            <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
-              <div className="h3_akm font-bold font-poppins">Step 1</div>
-              <div>Place your Pre-order</div>
+            <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+              <div className="h3_akm font-bold font-poppins">Step 1 </div>
+              <div>You Place Pre-order</div>
             </div>
 
-            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 2</div>
-              <div>Meals Are Cooked</div>
+              <div>Meals Are Cooked in Bulk</div>
             </div>
 
-            <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+            <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 3</div>
-              <div>Home Delivery </div>
+              <div>Delivered to Your Home </div>
             </div>
 
             <div className="shadow_akm bg_green text_white rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
@@ -170,9 +177,71 @@ export default function HeroSection() {
         </div>
       </section>
 
-      <section className="bg_green py_akm ">
-        <div className="container max-w-7xl mx-auto my_akm">
-          <div className="text-center mb-8 pt_akm">
+      <section
+        className="h-screen bg_green19 flex items-center overflow-hidden"
+        ref={sectionRef}
+      >
+        <div className="grid grid-cols-2 items-center justify-center max-w-5xl mx-auto h-full">
+          <motion.div
+            className="flex flex-col gap_akm"
+            initial={{ x: -100, opacity: 0 }}
+            animate={isInView ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.2,
+              ease: [0.25, 0.1, 0.25, 1.0],
+            }}
+          >
+            <motion.div
+              className="text-6xl font-bebas"
+              initial={{ y: 30, opacity: 0 }}
+              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.3,
+                ease: "easeOut",
+              }}
+            >
+              Freshly picked, <br /> top-quality ingredients.
+            </motion.div>
+
+            <motion.div
+              className="text-2xl font-poppins"
+              initial={{ y: 30, opacity: 0 }}
+              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.5,
+                ease: "easeOut",
+              }}
+            >
+              At Dalbhath, we prepare every meal with premium-quality
+              ingredients, ensuring exceptional taste and optimum health.
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="w-full"
+            initial={{ x: 100, opacity: 0 }}
+            animate={isInView ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.2,
+              ease: [0.25, 0.1, 0.25, 1.0],
+            }}
+          >
+            <Image
+              src={"/images/ingredients_group.png"}
+              width={800}
+              height={800}
+              alt="Fresh ingredients"
+              className="w-full h-auto"
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* <div className="text-center mb-8 pt_akm">
             <h2 className="text_white text-3xl font-extrabold ">
               How We Simplify Your Life?
             </h2>
@@ -180,9 +249,9 @@ export default function HeroSection() {
               While you work or study, we are here to take care of your meals.
               Here are a few reasons how we make your life easier.
             </p>
-          </div>
-          <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-3 pb_akm">
-            {/* Feature 1 */}
+          </div> */}
+      {/* <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-3 pb_akm">
+            
             <div className="bg-white shadow-md rounded-lg p-6">
               <h3 className="text-xl font-semibold text-blue-700 mb-4">
                 Pre-schedule Your Meals
@@ -204,7 +273,7 @@ export default function HeroSection() {
                 .
               </p>
             </div>
-            {/* Feature 2 */}
+           
             <div className="bg-white shadow-md rounded-lg p-6">
               <h3 className="text-xl font-semibold text-green-700 mb-4">
                 Auto-Pay with Built-in Wallet
@@ -220,7 +289,7 @@ export default function HeroSection() {
                 delivery.
               </p>
             </div>
-            {/* Feature 3 */}
+          
             <div className="bg-white shadow-md rounded-lg p-6">
               <h3 className="text-xl font-semibold text-indigo-700 mb-4">
                 Mealbox Swap
@@ -237,9 +306,7 @@ export default function HeroSection() {
                 single order.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
+          </div> */}
 
       <section className="bg_beige py_akm">
         <div className="max-w-7xl mx-auto px_akm py_akm my_akm">

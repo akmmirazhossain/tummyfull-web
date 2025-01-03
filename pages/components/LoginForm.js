@@ -19,6 +19,7 @@ const LoginForm = () => {
   const [formData, setFormData] = useState({ first_name: "", address: "" });
 
   const router = useRouter();
+  const { fromHomePage } = router.query;
 
   useEffect(() => {
     // Fetch config.json on component mount
@@ -179,7 +180,13 @@ const LoginForm = () => {
           {" "}
           <div className="h1_akm ">Login</div>
           <div className="card_akm p-8">
-            <div>Please log in and provide your address to continue.</div>
+            <div>
+              {fromHomePage ? (
+                <p>Please log in to place an order.</p>
+              ) : (
+                <p>Please login and provide your address to continue. </p>
+              )}
+            </div>
             <Spacer y={3} />
             <Input
               value={value}

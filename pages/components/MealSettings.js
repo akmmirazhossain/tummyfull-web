@@ -191,26 +191,25 @@ const MealSettings = () => {
               </div>
             ) : null}
           </div>
-          <div>
-            <Image
-              isBlurred
-              width={240}
-              src="/images/meal-box.webp"
-              alt="NextUI Album Cover"
-              className="m-5"
-            />
-          </div>
+          <div className="grid grid-cols-5">
+            <div className="col-span-2">
+              <Image src="/images/mealbox_exchage.webp" />
+            </div>
+            <div className="col-span-3">
+              <p className="h3_akm">Why choose a mealbox?</p>
+              <ul className="list-disc p-4">
+                <li>
+                  A healthier alternative to single-use plastic containers.
+                </li>
 
-          <div className="p-3">
-            Why choose a mealbox?
-            <ul className="list-disc p-4">
-              <li>A healthier alternative to single-use plastic containers.</li>
-
-              <li>
-                A refund of ৳{settings && <>{settings.mealbox_price}</>} is
-                available if you deactivate the mealbox at any time.
-              </li>
-            </ul>
+                <li>Simple, clean, and ready to eat.</li>
+                <li>Good for the environment.</li>
+                {/* <li>
+                  A refund of ৳{settings && <>{settings.mealbox_price}</>} is
+                  available if you deactivate the mealbox at any time.
+                </li> */}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
