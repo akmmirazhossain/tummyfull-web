@@ -7,6 +7,16 @@ import { faBowlRice } from "@fortawesome/free-solid-svg-icons";
 
 import NavbarTop from "./components/NavbarTop";
 import FooterMain from "./layout/Footer";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css";
+// import "swiper/css/pagination";
+// import "swiper/css/navigation";
+// import { Pagination, Navigation } from "swiper";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Autoplay, Navigation } from "swiper/modules";
 
 export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false);
@@ -14,7 +24,7 @@ export default function Home() {
   // Setting amount to 0.4 means the animation triggers when 40% of the section is in view
   const isInView = useInView(sectionRef, {
     once: true,
-    amount: 0.5,
+    amount: 0.4,
   });
 
   useEffect(() => {
@@ -39,10 +49,10 @@ export default function Home() {
     {
       id: 1,
       quote:
-        "It has a lot of convinient features that has made my meal management very easy, really loving it!",
+        "It has a lot of convinient features that has made my meal management very easy, great job!",
       name: "AKM Miraz",
       title: "Software Engineer",
-      image: "/images/testimonial1.jpg",
+      image: "/images/testimonials/akm_miraz.jpg",
     },
 
     {
@@ -51,7 +61,7 @@ export default function Home() {
         "I was looking for a budget friendly catering, this one is within my budget. ",
       name: "Zaki Abrar ",
       title: "Student",
-      image: "/images/testimonial3.jpg",
+      image: "/images/testimonials/zaki.jpg",
     },
     {
       id: 2,
@@ -59,7 +69,15 @@ export default function Home() {
         "আমি অফিস থেকে বাসায় এসে রান্না করার ঝামেলা নিতে চাইনা, ধন্যবাদ ডালভাত ডট কম কে আমার প্রতিদিনের ডিনার ডেলিভারির জন্য",
       name: "Samia Afrin",
       title: "Marketing Specialist",
-      image: "/images/testimonial2.jpg",
+      image: "/images/testimonials/samia.jpg",
+    },
+    {
+      id: 6,
+      quote:
+        "Pretty good, but I prefer an app like foodpanda rather than a website.",
+      name: "Ikramul Haque",
+      title: "Student",
+      image: "/images/testimonials/ikramul.jpg",
     },
     {
       id: 3,
@@ -67,30 +85,21 @@ export default function Home() {
         "বাসায় খালা রেগুলার মিস দিতো, এবং খাওয়া-দাওয়ার সমস্যা হতো, এখানে অর্ডার করার পর থেকে আমার মিল মিস হচ্ছে না",
       name: "Enamul Chowdhury",
       title: "Student",
-      image: "/images/testimonial3.jpg",
+      image: "/images/testimonials/enamul.jpg",
     },
     {
       id: 4,
       quote: "আমার বাসায় গ্যাস থাকে না, তাই আপাতত ডাল ভাত ডট কমে অর্ডার করছি",
       name: "Namira Mateen",
       title: "House Wife",
-      image: "/images/testimonial3.jpg",
-    },
-
-    {
-      id: 6,
-      quote:
-        "Pretty good, but I prefer an app like foodpanda rather than a website.",
-      name: "Ikramul Haque",
-      title: "Student",
-      image: "/images/testimonial3.jpg",
+      image: "/images/testimonials/namira.jpg",
     },
   ];
 
   return (
     <div className="">
       <motion.div
-        className="fixed w-full"
+        className="fixed w-full z-20"
         initial={{ y: -50, opacity: 0 }}
         animate={showNavbar ? { y: 0, opacity: 1 } : { y: -50, opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -178,7 +187,7 @@ export default function Home() {
       </section>
 
       <section
-        className="h-screen bg_green19 flex items-center overflow-hidden"
+        className="h-screen bg_green flex items-center overflow-hidden"
         ref={sectionRef}
       >
         <div className="grid grid-cols-2 items-center justify-center max-w-5xl mx-auto h-full">
@@ -313,23 +322,140 @@ export default function Home() {
           <h2 className="text-3xl lg:text-4xl font-bold text-center text_green">
             What Our Customers Say
           </h2>
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {testimonials.map(({ id, quote, name, title, image }) => (
-              <div
-                key={id}
-                className="bg-white p-6 rounded_akm shadow_akm flex flex-col items-center text-center"
-              >
-                <img
-                  src={image}
-                  alt={name}
-                  className="w-20 h-20 rounded-full object-cover shadow-lg"
-                />
-                <p className="mt-4 text-gray-700 italic">"{quote}"</p>
-                <h3 className="mt-4 font-bold text-gray-900">{name}</h3>
-                <p className="text-sm text-gray-500">{title}</p>
-              </div>
-            ))}
+
+          <div className="mt-10">
+            <Swiper
+              slidesPerView={1} // Default for small screens (below 640px)
+              spaceBetween={8}
+              slidesPerGroup={1}
+              breakpoints={{
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 16,
+                  // slidesPerGroup: 2,
+                },
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: false,
+              }}
+              modules={[Autoplay, Navigation]}
+              className="mySwiper"
+            >
+              {testimonials.map(({ id, quote, name, title, image }) => (
+                <SwiperSlide key={id} className="h-auto py_akm">
+                  <div className="bg-white p-6 rounded_akm shadow_akm flex flex-col items-center text-center min-h-72">
+                    <img
+                      src={image}
+                      alt={name}
+                      className="w-20 h-20 rounded-full object-cover shadow-lg"
+                    />
+                    <p className="mt-4 text-gray-700 italic">{quote}</p>
+                    <div className="mt-auto pt-4">
+                      <h3 className="font-bold text-gray-900">{name}</h3>
+                      <p className="text-sm text-gray-500">{title}</p>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
+        </div>
+      </section>
+
+      {/* <section className=" py_akm   h-[50vh]">
+        <div className="container max-w-5xl mx-auto my_akm">
+          <div className="text-center mb-8 pt_akm">
+            <h2 className=" text-3xl font-poppins font-bold text_black">
+              How We Simplify Your Life?
+            </h2>
+          </div>
+          <div className="grid  md:grid-cols-4 lg:grid-cols-4 pb_akm">
+            <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+              <div className="h3_akm font-bold font-poppins">Step 1 </div>
+              <div>You Place Pre-order</div>
+            </div>
+
+            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+              <div className="h3_akm font-bold font-poppins">Step 2</div>
+              <div>Meals Are Cooked in Bulk</div>
+            </div>
+
+            <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+              <div className="h3_akm font-bold font-poppins">Step 3</div>
+              <div>Delivered to Your Home </div>
+            </div>
+
+            <div className="shadow_akm bg_green text_white rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+              <div className="h3_akm font-bold font-poppins">Step 4</div>
+              <div>Enjoy & Repeat</div>
+            </div>
+          </div>
+        </div>
+      </section> */}
+
+      <section
+        className="h-screen bg_light_orange flex items-center overflow-hidden"
+        ref={sectionRef}
+      >
+        <div className="grid grid-cols-2 items-center justify-center max-w-5xl mx-auto h-full">
+          <motion.div
+            className="flex flex-col gap_akm"
+            initial={{ x: -100, opacity: 0 }}
+            animate={isInView ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.2,
+              ease: [0.25, 0.1, 0.25, 1.0],
+            }}
+          >
+            <Image
+              src={"/images/boy_chilling.png"}
+              width={800}
+              height={800}
+              alt="Fresh ingredients"
+              className="w-full h-auto"
+            />
+          </motion.div>
+
+          <motion.div
+            className="w-full text_green"
+            initial={{ x: 100, opacity: 0 }}
+            animate={isInView ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.2,
+              ease: [0.25, 0.1, 0.25, 1.0],
+            }}
+          >
+            <motion.div
+              className="text-7xl font-bebas"
+              initial={{ y: 30, opacity: 0 }}
+              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.3,
+                ease: "easeOut",
+              }}
+            >
+              How We Simplify <br /> Your Life?
+            </motion.div>
+
+            <motion.div
+              className="text-2xl font-poppins"
+              initial={{ y: 30, opacity: 0 }}
+              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.5,
+                ease: "easeOut",
+              }}
+            >
+              At Dalbhath, we prepare every meal with premium-quality
+              ingredients, ensuring exceptional taste and optimum health.
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
