@@ -29,3 +29,13 @@ C:\fakepath(77,9-43): warning X3571: pow(f, e) will not work for negative f, use
 [1119/190428.647:ERROR:mf_helpers.cc(14)] Error in dxva_video_decode_accelerator_win.cc on line 1612
 [1119/190428.648:ERROR:mf_helpers.cc(14)] Error in dxva_video_decode_accelerator_win.cc on line 842
 [1120/102605.173:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0103/014203.213:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0103/014208.223:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0103/072840.579:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0105/140703.955:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0105/140704.789:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0105/140709.031:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0105/140709.961:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0107/142113.363:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0107/142113.426:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0107/150727.557:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.

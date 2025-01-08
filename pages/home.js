@@ -3,10 +3,19 @@ import { React, useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBowlRice } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBowlRice,
+  faAngleRight,
+  faDiamond,
+  faCircle,
+  faCaretRight,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { faGem } from "@fortawesome/free-regular-svg-icons";
 
 import NavbarTop from "./components/NavbarTop";
 import FooterMain from "./layout/Footer";
+import { AnimatedSection, AnimatedContent } from "../hooks/animation";
 // import { Swiper, SwiperSlide } from "swiper/react";
 // import "swiper/css";
 // import "swiper/css/pagination";
@@ -20,12 +29,9 @@ import { Autoplay, Navigation } from "swiper/modules";
 
 export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false);
-  const sectionRef = useRef(null);
-  // Setting amount to 0.4 means the animation triggers when 40% of the section is in view
-  const isInView = useInView(sectionRef, {
-    once: true,
-    amount: 0.4,
-  });
+  // const sectionRef = useRef(null);
+
+  // const { sectionRef, isInView } = useAnimatedSection(0.4);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -109,7 +115,7 @@ export default function Home() {
 
       {/* HERO SECTION */}
       <section className=" h-screen   bg_light_orange ">
-        <div className="max-w-5xl h-screen   mx-auto flex flex-col lg:flex-row items-center justify-between ">
+        <div className="max-w-7xl h-screen   mx-auto flex flex-col lg:flex-row items-center justify-between ">
           {/* Left: Text Content */}
           <div className="flex flex-col items-start lg:w-1/2 pl_akm ml_akm">
             <h1 className="text-xl lg:text-8xl font-bold font-bebas text_green tracking-wide">
@@ -122,13 +128,13 @@ export default function Home() {
               We’ve Got Your Meals Covered.
             </p>
             <div className="mt-6 flex space-x-4 ">
-              <button className="btn  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500">
+              <button className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500">
                 <FontAwesomeIcon icon={faBowlRice} /> Start with a free meal!{" "}
                 <motion.div
                   animate={{ x: [0, 10, 0] }} // Moves left to right
                   transition={{ duration: 3, repeat: Infinity }}
                 >
-                  →
+                  <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
                 </motion.div>
               </button>
             </div>
@@ -186,79 +192,43 @@ export default function Home() {
         </div>
       </section>
 
-      <section
-        className="h-screen bg_green flex items-center overflow-hidden"
-        ref={sectionRef}
-      >
-        <div className="grid grid-cols-2 items-center justify-center max-w-5xl mx-auto h-full">
-          <motion.div
-            className="flex flex-col gap_akm"
-            initial={{ x: -100, opacity: 0 }}
-            animate={isInView ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2,
-              ease: [0.25, 0.1, 0.25, 1.0],
-            }}
+      <AnimatedSection className="h-screen bg_green flex items-center">
+        <div className="grid grid-cols-2 items-center justify-center max-w-7xl mx-auto h-full">
+          <AnimatedContent
+            direction="left"
+            className="flex flex-col gap-8 pl-8"
           >
-            <motion.div
-              className="text-6xl font-bebas"
-              initial={{ y: 30, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.3,
-                ease: "easeOut",
-              }}
+            <AnimatedContent
+              direction="up"
+              delay={0.3}
+              className="text-8xl font-bebas flex"
             >
-              Freshly picked, <br /> top-quality ingredients.
-            </motion.div>
+              Fresh, quality <br />
+              ingredients
+            </AnimatedContent>
 
-            <motion.div
+            <AnimatedContent
+              direction="up"
+              delay={0.5}
               className="text-2xl font-poppins"
-              initial={{ y: 30, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.5,
-                ease: "easeOut",
-              }}
             >
               At Dalbhath, we prepare every meal with premium-quality
               ingredients, ensuring exceptional taste and optimum health.
-            </motion.div>
-          </motion.div>
+            </AnimatedContent>
+          </AnimatedContent>
 
-          <motion.div
-            className="w-full"
-            initial={{ x: 100, opacity: 0 }}
-            animate={isInView ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2,
-              ease: [0.25, 0.1, 0.25, 1.0],
-            }}
-          >
+          <AnimatedContent direction="right" className="w-full">
             <Image
-              src={"/images/ingredients_group.png"}
+              src="/images/ingredients_group.png"
               width={800}
               height={800}
               alt="Fresh ingredients"
               className="w-full h-auto"
             />
-          </motion.div>
+          </AnimatedContent>
         </div>
-      </section>
+      </AnimatedSection>
 
-      {/* <div className="text-center mb-8 pt_akm">
-            <h2 className="text_white text-3xl font-extrabold ">
-              How We Simplify Your Life?
-            </h2>
-            <p className="text_white mt-2">
-              While you work or study, we are here to take care of your meals.
-              Here are a few reasons how we make your life easier.
-            </p>
-          </div> */}
       {/* <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-3 pb_akm">
             
             <div className="bg-white shadow-md rounded-lg p-6">
@@ -364,102 +334,129 @@ export default function Home() {
         </div>
       </section>
 
-      {/* <section className=" py_akm   h-[50vh]">
-        <div className="container max-w-5xl mx-auto my_akm">
-          <div className="text-center mb-8 pt_akm">
-            <h2 className=" text-3xl font-poppins font-bold text_black">
-              How We Simplify Your Life?
-            </h2>
-          </div>
-          <div className="grid  md:grid-cols-4 lg:grid-cols-4 pb_akm">
-            <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 1 </div>
-              <div>You Place Pre-order</div>
-            </div>
-
-            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 2</div>
-              <div>Meals Are Cooked in Bulk</div>
-            </div>
-
-            <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 3</div>
-              <div>Delivered to Your Home </div>
-            </div>
-
-            <div className="shadow_akm bg_green text_white rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
-              <div className="h3_akm font-bold font-poppins">Step 4</div>
-              <div>Enjoy & Repeat</div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      <section
-        className="h-screen bg_light_orange flex items-center overflow-hidden"
-        ref={sectionRef}
-      >
-        <div className="grid grid-cols-2 items-center justify-center max-w-5xl mx-auto h-full">
-          <motion.div
-            className="flex flex-col gap_akm"
-            initial={{ x: -100, opacity: 0 }}
-            animate={isInView ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2,
-              ease: [0.25, 0.1, 0.25, 1.0],
-            }}
-          >
-            <Image
-              src={"/images/boy_chilling.png"}
-              width={800}
-              height={800}
-              alt="Fresh ingredients"
-              className="w-full h-auto"
-            />
-          </motion.div>
-
-          <motion.div
-            className="w-full text_green"
-            initial={{ x: 100, opacity: 0 }}
-            animate={isInView ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2,
-              ease: [0.25, 0.1, 0.25, 1.0],
-            }}
-          >
-            <motion.div
+      {/* <AnimatedSection className="h-screen bg_light_orange flex items-center">
+        <div className="w-7xl  grid grid-cols-2 items-center justify-center mx-auto h-full">
+          <AnimatedContent direction="right" className="w-full text_green ">
+            <AnimatedContent
+              direction="up"
+              delay={0.3}
               className="text-7xl font-bebas"
-              initial={{ y: 30, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.3,
-                ease: "easeOut",
-              }}
             >
               How We Simplify <br /> Your Life?
-            </motion.div>
-
-            <motion.div
-              className="text-2xl font-poppins"
-              initial={{ y: 30, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.5,
-                ease: "easeOut",
-              }}
-            >
-              At Dalbhath, we prepare every meal with premium-quality
-              ingredients, ensuring exceptional taste and optimum health.
-            </motion.div>
-          </motion.div>
+            </AnimatedContent>
+            <AnimatedContent
+              direction="up"
+              delay={0.5}
+              className="text-2xl font-poppins grid grid-cols-2"
+            ></AnimatedContent>
+          </AnimatedContent>
         </div>
-      </section>
+      </AnimatedSection> */}
 
-      <section className="bg-gray-50 py-12">
+      <AnimatedSection className="h-screen bg_light_orange flex items-center">
+        {" "}
+        <div className="max-w-7xl grid grid-cols-2  mx-auto w-full">
+          <AnimatedContent direction="left" className="flex flex-col gap-8">
+            <AnimatedContent direction="left" className="flex flex-col gap-8">
+              <Image
+                src={"/images/boy_chilling.png"}
+                width={800}
+                height={800}
+                alt="Fresh ingredients"
+                className="w-full h-auto"
+              />
+            </AnimatedContent>
+          </AnimatedContent>
+
+          <AnimatedContent
+            direction="right"
+            className="flex flex-col justify-center items-center"
+          >
+            <div className="text-8xl font-bebas text_green">
+              How We Simplify <br /> Your Life?
+            </div>
+
+            <AnimatedContent
+              direction="up"
+              delay={0.9}
+              className="flex gap_akm w-full justify-center"
+            >
+              <div className="bg_beige  w-3/7 text_black rounded_akm pad_akm font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
+                <div className=" font-bold pl_akm pb-0.5 text-lg">
+                  Conviniences
+                </div>
+                <ul>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} className="text-xs" />
+                    No grocery shopping
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    No gas refills
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    No maid hiring
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    No kitchen setup
+                  </li>
+                </ul>
+              </div>
+              <div className="bg_green w-3/7 text-white rounded_akm  pad_akm font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
+                <div className=" font-bold pl_akm pb-0.5 text-lg">
+                  App Features
+                </div>
+                <ul>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} className="text-xs" />
+                    Meal Reminder via SMS
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    One Touch Pre-order
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    Any time cancellation
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    Auto Payment
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    Mealbox from Day 1
+                  </li>
+                </ul>
+              </div>
+            </AnimatedContent>
+          </AnimatedContent>
+        </div>
+      </AnimatedSection>
+
+      {/* <AnimatedSection className="h-screen bg_green flex items-center">
+        <div className="max-w-5xl grid grid-cols-2 items-center justify-center  mx-auto  border-blue-600 border">
+          <AnimatedContent direction="left" className="flex flex-col gap-8">
+            <AnimatedContent direction="left" className="flex flex-col gap-8">
+              <Image
+                src={"/images/boy_chilling.png"}
+                width={800}
+                height={800}
+                alt="Fresh ingredients"
+                className="w-full h-auto"
+              />
+            </AnimatedContent>
+          </AnimatedContent>
+
+          <AnimatedContent direction="right" className="w-full grid">
+            
+          </AnimatedContent>
+        </div>
+      </AnimatedSection> */}
+
+      {/* <section className="bg-gray-50 py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-extrabold text-gray-800">
@@ -471,7 +468,6 @@ export default function Home() {
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
-            {/* Mission */}
             <div className="bg-white shadow-md rounded-lg p-6 text-center">
               <h3 className="text-2xl font-semibold text-blue-700 mb-4">
                 Our Mission
@@ -482,7 +478,7 @@ export default function Home() {
                 lives with reliable and delicious meal services.
               </p>
             </div>
-            {/* Vision */}
+
             <div className="bg-white shadow-md rounded-lg p-6 text-center">
               <h3 className="text-2xl font-semibold text-green-700 mb-4">
                 Our Vision
@@ -495,29 +491,31 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className="bg_green text-white py_akm    ">
-        <div className="max-w-7xl mx-auto px_akm my_akm">
-          <div className="text-center lg:text-left">
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              🎉 Get Your First Meal Free!
-            </h2>
-            <p className="mt-2 text-lg">
-              Register today and enjoy a delicious meal on us. It's our way of
-              welcoming you to the family!
-            </p>
-          </div>
-
-          <div className="mt-4 lg:mt-0">
-            <button className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow hover:bg-gray-100">
-              Register Now
-            </button>
-          </div>
+      <section className="bg_green text-white py_akm  lg:h-[70vh]  flex flex-col items-center justify-center">
+        <div className="max-w-7xl mx-auto  flex justify-center items-center flex-col pb-16">
+          <h2 className="text-7xl font-bebas ">Try a free meal!</h2>
+          <p className="font-poppins h3_akm">
+            Register now and enjoy a delicious meal on us.
+          </p>
+          <motion.button
+            className="btn btn-md mt-2 rounded_akm"
+            animate={{
+              scale: [1, 1.1, 1], // Animates between 100%, 120%, and back to 100%
+            }}
+            transition={{
+              duration: 4, // Duration of one animation cycle
+              repeat: Infinity, // Loop the animation indefinitely
+              repeatType: "reverse", // Reverses back to the starting point
+            }}
+          >
+            Register Now
+          </motion.button>
         </div>
       </section>
 
-      <footer className=" bg_beige hidden md:block">
+      <footer className=" bg_beige hidden md:block text_black">
         <FooterMain />
       </footer>
     </div>
