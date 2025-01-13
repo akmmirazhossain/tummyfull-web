@@ -1,4 +1,6 @@
 import { React, useRef, useEffect, useState } from "react";
+import { useWindowSize } from "react-use";
+import Confetti from "react-confetti";
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
@@ -29,6 +31,11 @@ import { Autoplay, Navigation } from "swiper/modules";
 
 export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false);
+  const sectionRef = useRef(null);
+  const { width } = useWindowSize();
+
+  // Get section height for confetti
+  const sectionHeight = sectionRef.current?.clientHeight || 0;
   // const sectionRef = useRef(null);
 
   // const { sectionRef, isInView } = useAnimatedSection(0.4);
@@ -157,7 +164,7 @@ export default function Home() {
 
       {/* HOW IT WORKS SECTION */}
 
-      <section className=" py_akm   h-[50vh]">
+      <section className=" py_akm   h-[50vh] bg_beige">
         <div className="container max-w-5xl mx-auto my_akm">
           <div className="text-center mb-8 pt_akm">
             <h2 className=" text-3xl font-poppins font-bold text_black">
@@ -168,25 +175,25 @@ export default function Home() {
               Here are a few reasons how we make your life easier.
             </p> */}
           </div>
-          <div className="grid  md:grid-cols-4 lg:grid-cols-4 pb_akm">
-            <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+          <div className="grid grid-cols-2  md:grid-cols-3  pb_akm">
+            {/* <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 1 </div>
+              <div>You Place Pre-order</div>
+            </div> */}
+
+            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+              <div className="h3_akm font-bold font-poppins">Step 1</div>
               <div>You Place Pre-order</div>
             </div>
 
-            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 2</div>
-              <div>Meals Are Cooked in Bulk</div>
-            </div>
-
             <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 3</div>
-              <div>Delivered to Your Home </div>
+              <div className="h3_akm font-bold font-poppins">Step 2</div>
+              <div> We Cook Meals in Bulk</div>
             </div>
 
             <div className="shadow_akm bg_green text_white rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
-              <div className="h3_akm font-bold font-poppins">Step 4</div>
-              <div>Enjoy & Repeat</div>
+              <div className="h3_akm font-bold font-poppins">Step 3</div>
+              <div>We Deliver to Your Home</div>
             </div>
           </div>
         </div>
@@ -289,7 +296,7 @@ export default function Home() {
 
       <section className="bg_beige py_akm">
         <div className="max-w-7xl mx-auto px_akm py_akm my_akm">
-          <h2 className="text-3xl lg:text-4xl font-bold text-center text_green">
+          <h2 className="text-3xl lg:text-3xl font-poppins font-bold text-center text_green">
             What Our Customers Say
           </h2>
 
@@ -410,6 +417,15 @@ export default function Home() {
                 </div>
                 <ul>
                   <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    Mealbox from Day 1
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    Any time cancellation
+                  </li>
+
+                  <li className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faAngleRight} className="text-xs" />
                     Meal Reminder via SMS
                   </li>
@@ -417,17 +433,10 @@ export default function Home() {
                     <FontAwesomeIcon icon={faAngleRight} size="xs" />
                     One Touch Pre-order
                   </li>
-                  <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
-                    Any time cancellation
-                  </li>
+
                   <li className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faAngleRight} size="xs" />
                     Auto Payment
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
-                    Mealbox from Day 1
                   </li>
                 </ul>
               </div>
@@ -493,24 +502,44 @@ export default function Home() {
         </div>
       </section> */}
 
-      <section className="bg_green text-white py_akm  lg:h-[70vh]  flex flex-col items-center justify-center">
-        <div className="max-w-7xl mx-auto  flex justify-center items-center flex-col pb-16">
-          <h2 className="text-7xl font-bebas ">Try a free meal!</h2>
+      <section
+        ref={sectionRef}
+        className="relative bg_green text-white py_akm lg:h-[70vh] flex flex-col items-center justify-center overflow-hidden"
+      >
+        <div className="absolute inset-0">
+          <Confetti
+            width={width}
+            height={sectionHeight}
+            confineToContainer={true}
+            cccccccccccccc
+            wds
+            s
+            dw
+            d
+            ddwd
+            recycle={true}
+            numberOfPieces={100}
+            colors={["#FFC107", "#FF9800", "#FF5722", "#F44336", "#FFEB3B"]}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto flex justify-center items-center flex-col pb-16 relative z-10">
+          <h2 className="text-7xl font-bebas">Start with a free meal!</h2>
           <p className="font-poppins h3_akm">
-            Register now and enjoy a delicious meal on us.
+            Login now and enjoy a delicious meal on us.
           </p>
           <motion.button
             className="btn btn-md mt-2 rounded_akm"
             animate={{
-              scale: [1, 1.1, 1], // Animates between 100%, 120%, and back to 100%
+              scale: [1, 1.1, 1],
             }}
             transition={{
-              duration: 4, // Duration of one animation cycle
-              repeat: Infinity, // Loop the animation indefinitely
-              repeatType: "reverse", // Reverses back to the starting point
+              duration: 3,
+              repeat: Infinity,
+              repeatType: "reverse",
             }}
           >
-            Register Now
+            Login and Order Now
           </motion.button>
         </div>
       </section>
