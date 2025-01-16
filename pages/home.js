@@ -220,7 +220,7 @@ export default function Home() {
               className="text-2xl font-poppins"
             >
               At Dalbhath, we prepare every meal with premium-quality
-              ingredients, ensuring exceptional taste and optimum health.
+              ingredients, ensuring great taste and optimum health.
             </AnimatedContent>
           </AnimatedContent>
 
@@ -389,8 +389,8 @@ export default function Home() {
               className="flex gap_akm w-full justify-center"
             >
               <div className="bg_beige  w-3/7 text_black rounded_akm pad_akm font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
-                <div className=" font-bold pl_akm pb-0.5 text-lg">
-                  Conviniences
+                <div className=" font-bold pl_akm pb-0.5 text-lg font-bebas tracking-widest">
+                  Money Saved
                 </div>
                 <ul>
                   <li className="flex items-center gap-2">
@@ -412,19 +412,11 @@ export default function Home() {
                 </ul>
               </div>
               <div className="bg_green w-3/7 text-white rounded_akm  pad_akm font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
-                <div className=" font-bold pl_akm pb-0.5 text-lg">
+                <div className=" font-bold pl_akm pb-0.5 text-lg font-bebas tracking-widest">
                   App Features
                 </div>
-                <ul>
-                  <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
-                    Mealbox from Day 1
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
-                    Any time cancellation
-                  </li>
 
+                <ul>
                   <li className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faAngleRight} className="text-xs" />
                     Meal Reminder via SMS
@@ -432,6 +424,14 @@ export default function Home() {
                   <li className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faAngleRight} size="xs" />
                     One Touch Pre-order
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    Mealbox from Day 1
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    Any time cancellation
                   </li>
 
                   <li className="flex items-center gap-2">
@@ -504,29 +504,24 @@ export default function Home() {
 
       <section
         ref={sectionRef}
-        className="relative bg_green text-white py_akm lg:h-[70vh] flex flex-col items-center justify-center overflow-hidden"
+        className="relative bg-[url('/images/kitchen_bg.png')] bg-cover bg-center bg-no-repeat text-white py_akm lg:h-[70vh] flex flex-col items-center justify-center overflow-hidden"
       >
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[#004225] bg-opacity-30"></div>
+
+        {/* <div className="absolute inset-0">
           <Confetti
             width={width}
             height={sectionHeight}
             confineToContainer={true}
-            cccccccccccccc
-            wds
-            s
-            dw
-            d
-            ddwd
             recycle={true}
             numberOfPieces={100}
             colors={["#FFC107", "#FF9800", "#FF5722", "#F44336", "#FFEB3B"]}
           />
-        </div>
-
-        <div className="max-w-7xl mx-auto flex justify-center items-center flex-col pb-16 relative z-10">
+        </div> */}
+        <div className="max-w-7xl mx-auto flex justify-center items-center flex-col pb-4 relative z-10">
           <h2 className="text-7xl font-bebas">Start with a free meal!</h2>
           <p className="font-poppins h3_akm">
-            Login now and enjoy a delicious meal on us.
+            Login now and enjoy a delicious meal for free.
           </p>
           <motion.button
             className="btn btn-md mt-2 rounded_akm"
@@ -541,6 +536,63 @@ export default function Home() {
           >
             Login and Order Now
           </motion.button>
+        </div>
+        <div className="w-[440px] h-28 mx-auto  relative  border border-red-400 ">
+          <Image
+            className="absolute left-0 top-0"
+            src="/images/food/rice.png"
+            width={120}
+            height={120}
+            alt="Rice"
+          />
+          <Image
+            className="absolute left-24 top-0"
+            src="/images/food/pabda_curry.png"
+            width={120}
+            height={120}
+            alt="Pabda Curry"
+          />
+          <Image
+            className="absolute left-44 top-0"
+            src="/images/food/tilapia_curry.png"
+            width={120}
+            height={120}
+            alt="Tilapia Curry"
+          />
+          <Image
+            className="absolute left-64 top-0"
+            src="/images/food/chicken_curry.png"
+            width={120}
+            height={120}
+            alt="Chicken Curry"
+          />
+          <Image
+            src={"/images/food/rui_curry.png"}
+            className="absolute left-96 top-0"
+            width={120}
+            height={120}
+          />
+          {/* <div className="stack gap-8 w-24">
+          
+
+          {/* <Image src={"/images/food/koi_curry.png"} width={130} height={130} /> */}
+          {/* <Image
+            src={"/images/food/pabda_curry.png"}
+            width={150}
+            height={150}
+          />
+          <Image
+            src={"/images/food/tilapia_curry.png"}
+            width={150}
+            height={150}
+          />
+          <Image
+            src={"/images/food/chicken_curry.png"}
+            width={150}
+            height={150}
+          />
+          <Image src={"/images/food/rui_curry.png"} width={100} height={100} />
+          <Image src={"/images/food/rice.png"} width={100} height={100} /> */}
         </div>
       </section>
 
