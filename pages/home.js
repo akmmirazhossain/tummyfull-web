@@ -154,7 +154,7 @@ export default function Home() {
           {/* Right: Image */}
           <div className="mt-10 lg:mt-0 lg:w-1/2 flex justify-center">
             <Image
-              src={"/images/meal_scheduler_image.svg"}
+              src={"/images/meal_scheduler_image.webp"}
               width={800}
               height={800}
             />
@@ -188,7 +188,7 @@ export default function Home() {
 
             <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 2</div>
-              <div> We Cook Meals in Bulk</div>
+              <div> We Cook Your Meal</div>
             </div>
 
             <div className="shadow_akm bg_green text_white rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
@@ -504,7 +504,7 @@ export default function Home() {
 
       <section
         ref={sectionRef}
-        className="relative bg-[url('/images/kitchen_bg.png')] bg-cover bg-center bg-no-repeat text-white py_akm lg:h-[70vh] flex flex-col items-center justify-center overflow-hidden"
+        className="relative  bg-[url('/images/kitchen_bg.png')] bg-cover bg-center bg-no-repeat text-white py_akm lg:h-[70vh] flex flex-col items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0 bg-[#004225] bg-opacity-30"></div>
 
@@ -537,62 +537,53 @@ export default function Home() {
             Login and Order Now
           </motion.button>
         </div>
-        <div className="w-[440px] h-28 mx-auto  relative  border border-red-400 ">
+        <div className="flex  mx-auto  z-10   ">
           <Image
-            className="absolute left-0 top-0"
+            className=""
+            layout="intrinsic"
+            width={140}
+            height={140}
             src="/images/food/rice.png"
-            width={120}
-            height={120}
             alt="Rice"
           />
           <Image
-            className="absolute left-24 top-0"
+            className=""
             src="/images/food/pabda_curry.png"
-            width={120}
-            height={120}
+            layout="intrinsic"
+            width={140}
+            height={140}
             alt="Pabda Curry"
           />
           <Image
-            className="absolute left-44 top-0"
+            className=""
             src="/images/food/tilapia_curry.png"
-            width={120}
-            height={120}
+            layout="intrinsic"
+            width={140}
+            height={140}
             alt="Tilapia Curry"
           />
           <Image
-            className="absolute left-64 top-0"
+            className=""
             src="/images/food/chicken_curry.png"
-            width={120}
-            height={120}
+            layout="intrinsic"
+            width={140}
+            height={140}
             alt="Chicken Curry"
           />
           <Image
+            className=""
             src={"/images/food/rui_curry.png"}
-            className="absolute left-96 top-0"
-            width={120}
-            height={120}
-          />
-          {/* <div className="stack gap-8 w-24">
-          
-
-          {/* <Image src={"/images/food/koi_curry.png"} width={130} height={130} /> */}
-          {/* <Image
-            src={"/images/food/pabda_curry.png"}
-            width={150}
-            height={150}
+            layout="intrinsic"
+            width={140}
+            height={140}
           />
           <Image
-            src={"/images/food/tilapia_curry.png"}
-            width={150}
-            height={150}
+            className=""
+            src={"/images/food/dal_shobji.png"}
+            layout="intrinsic"
+            width={140}
+            height={140}
           />
-          <Image
-            src={"/images/food/chicken_curry.png"}
-            width={150}
-            height={150}
-          />
-          <Image src={"/images/food/rui_curry.png"} width={100} height={100} />
-          <Image src={"/images/food/rice.png"} width={100} height={100} /> */}
         </div>
       </section>
 
