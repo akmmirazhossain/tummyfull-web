@@ -32,10 +32,10 @@ import { Autoplay, Navigation } from "swiper/modules";
 export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false);
   const sectionRef = useRef(null);
-  const { width } = useWindowSize();
+  // const { width } = useWindowSize();
 
   // Get section height for confetti
-  const sectionHeight = sectionRef.current?.clientHeight || 0;
+  // const sectionHeight = sectionRef.current?.clientHeight || 0;
   // const sectionRef = useRef(null);
 
   // const { sectionRef, isInView } = useAnimatedSection(0.4);
@@ -109,6 +109,15 @@ export default function Home() {
     },
   ];
 
+  const images = [
+    "/images/food/rice.png",
+    "/images/food/pabda_curry.png",
+    "/images/food/tilapia_curry.png",
+    "/images/food/chicken_curry.png",
+    "/images/food/rui_curry.png",
+    "/images/food/dal_shobji.png",
+  ];
+
   return (
     <div className="">
       <motion.div
@@ -121,11 +130,11 @@ export default function Home() {
       </motion.div>
 
       {/* HERO SECTION */}
-      <section className=" h-screen   bg_light_orange ">
-        <div className="max-w-7xl h-screen   mx-auto flex flex-col lg:flex-row items-center justify-between ">
+      <section className=" lg:h-screen   bg_light_orange ">
+        <div className="max-w-7xl lg:h-screen mx-auto px-6 sm:px-8 md:px-0 py-10 sm:py-12   grid grid-cols-1 md:grid-cols-2 items-center justify-between ">
           {/* Left: Text Content */}
-          <div className="flex flex-col items-start lg:w-1/2 pl_akm ml_akm">
-            <h1 className="text-xl lg:text-8xl font-bold font-bebas text_green tracking-wide">
+          <div className="flex flex-col items-start  md:pl-6 md:ml-6">
+            <h1 className="text-6xl sm:text-8xl  md:text-8xl font-bold font-bebas text_green tracking-wide">
               Meal Service
               <br />
               For Students
@@ -134,7 +143,7 @@ export default function Home() {
               Study Hard, Eat Well <br />
               We’ve Got Your Meals Covered.
             </p>
-            <div className="mt-6 flex space-x-4 ">
+            <div className="mt-6  space-x-4 hidden lg:block">
               <button className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500">
                 <FontAwesomeIcon icon={faBowlRice} /> Start with a free meal!{" "}
                 <motion.div
@@ -152,20 +161,32 @@ export default function Home() {
           </div>
 
           {/* Right: Image */}
-          <div className="mt-10 lg:mt-0 lg:w-1/2 flex justify-center">
+          <div className="  flex flex-col items-center justify-center">
             <Image
               src={"/images/meal_scheduler_image.webp"}
               width={800}
               height={800}
             />
+
+            <div className="mb_akm flex space-x-4 lg:hidden">
+              <button className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500">
+                <FontAwesomeIcon icon={faBowlRice} /> Start with a free meal!{" "}
+                <motion.div
+                  animate={{ x: [0, 10, 0] }} // Moves left to right
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                </motion.div>
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* HOW IT WORKS SECTION */}
 
-      <section className=" py_akm   h-[50vh] bg_beige">
-        <div className="container max-w-5xl mx-auto my_akm">
+      <section className=" py_akm  bg_beige">
+        <div className="container p-4 max-w-5xl mx-auto my_akm">
           <div className="text-center mb-8 pt_akm">
             <h2 className=" text-3xl font-poppins font-bold text_black">
               How it works?
@@ -175,40 +196,70 @@ export default function Home() {
               Here are a few reasons how we make your life easier.
             </p> */}
           </div>
-          <div className="grid grid-cols-2  md:grid-cols-3  pb_akm">
+          <div className="grid grid-cols-2  md:grid-cols-3 gap_akm  pb_akm">
             {/* <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 1 </div>
               <div>You Place Pre-order</div>
             </div> */}
 
-            <div className="shadow_akm bg_light_orange  rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+            <div className="  rounded_akm flex flex-col items-center justify-center gap-1 pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 1</div>
-              <div>You Place Pre-order</div>
+              <div className="pb_akm">You Place Pre-order</div>
+              <div>
+                <Image
+                  className=""
+                  layout="intrinsic"
+                  width={140}
+                  height={140}
+                  src="/images/order.png"
+                  alt="Rice"
+                />
+              </div>
             </div>
 
-            <div className="shadow_akm bg_orange rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
+            <div className="  flex flex-col items-center justify-center gap-1 pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 2</div>
-              <div> We Cook Your Meal</div>
+              <div className="pb_akm"> We Cook Your Meal</div>
+              <div>
+                <Image
+                  className=""
+                  layout="intrinsic"
+                  width={140}
+                  height={140}
+                  src="/images/cooking.png"
+                  alt="Rice"
+                />
+              </div>
             </div>
 
-            <div className="shadow_akm bg_green text_white rounded_akm flex flex-col items-center justify-center gap_akm pad_akm">
+            <div className="   flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 3</div>
-              <div>We Deliver to Your Home</div>
+              <div className="pb_akm">We Deliver to You</div>
+              <div>
+                <Image
+                  className=""
+                  layout="intrinsic"
+                  width={140}
+                  height={140}
+                  src="/images/fast-shipping2.png"
+                  alt="Rice"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <AnimatedSection className="h-screen bg_green flex items-center">
-        <div className="grid grid-cols-2 items-center justify-center max-w-7xl mx-auto h-full">
+      <AnimatedSection className="md:h-screen py-12 bg_green flex items-center">
+        <div className="grid md:grid-cols-2 items-center justify-center max-w-7xl mx-auto h-full">
           <AnimatedContent
             direction="left"
-            className="flex flex-col gap-8 pl-8"
+            className="flex flex-col gap-6 md:gap-8 pl-8"
           >
             <AnimatedContent
               direction="up"
               delay={0.3}
-              className="text-8xl font-bebas flex"
+              className=" text-7xl md:text-8xl font-bebas flex"
             >
               Fresh, quality <br />
               ingredients
@@ -226,7 +277,7 @@ export default function Home() {
 
           <AnimatedContent direction="right" className="w-full">
             <Image
-              src="/images/ingredients_group.png"
+              src="/images/ingredients_group.webp"
               width={800}
               height={800}
               alt="Fresh ingredients"
@@ -235,64 +286,6 @@ export default function Home() {
           </AnimatedContent>
         </div>
       </AnimatedSection>
-
-      {/* <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-3 pb_akm">
-            
-            <div className="bg-white shadow-md rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-blue-700 mb-4">
-                Pre-schedule Your Meals
-              </h3>
-              <Image
-                src={"/images/meal_scheduler_image.svg"}
-                width={800}
-                height={800}
-              />
-              <p className="text-gray-600">
-                Unlike traditional catering services, you can pre-schedule your
-                meals and turn them on or off as needed.{" "}
-                <a
-                  href="/menu"
-                  className="text-blue-500 font-medium hover:underline"
-                >
-                  Check our menu
-                </a>
-                .
-              </p>
-            </div>
-           
-            <div className="bg-white shadow-md rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-green-700 mb-4">
-                Auto-Pay with Built-in Wallet
-              </h3>
-              <Image
-                src={"/images/wallet_pay_home.svg"}
-                width={800}
-                height={800}
-              />
-              <p className="text-gray-600">
-                Recharge your Dalbhath wallet periodically to automate payments
-                for each meal delivery, eliminating the need for cash on
-                delivery.
-              </p>
-            </div>
-          
-            <div className="bg-white shadow-md rounded-lg p-6">
-              <h3 className="text-xl font-semibold text-indigo-700 mb-4">
-                Mealbox Swap
-              </h3>
-
-              <Image
-                src={"/images/mealbox_exchage.webp"}
-                width={800}
-                height={800}
-              />
-              <p className="text-gray-600">
-                Unlike other catering services, Dalbhath ensures your food is
-                delivered in a food-grade mealbox from day one, even for a
-                single order.
-              </p>
-            </div>
-          </div> */}
 
       <section className="bg_beige py_akm">
         <div className="max-w-7xl mx-auto px_akm py_akm my_akm">
@@ -341,55 +334,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* <AnimatedSection className="h-screen bg_light_orange flex items-center">
-        <div className="w-7xl  grid grid-cols-2 items-center justify-center mx-auto h-full">
-          <AnimatedContent direction="right" className="w-full text_green ">
-            <AnimatedContent
-              direction="up"
-              delay={0.3}
-              className="text-7xl font-bebas"
-            >
-              How We Simplify <br /> Your Life?
-            </AnimatedContent>
-            <AnimatedContent
-              direction="up"
-              delay={0.5}
-              className="text-2xl font-poppins grid grid-cols-2"
-            ></AnimatedContent>
-          </AnimatedContent>
-        </div>
-      </AnimatedSection> */}
-
-      <AnimatedSection className="h-screen bg_light_orange flex items-center">
+      <AnimatedSection className="  bg_light_orange  flex items-center px-6 py-8">
         {" "}
-        <div className="max-w-7xl grid grid-cols-2  mx-auto w-full">
-          <AnimatedContent direction="left" className="flex flex-col gap-8">
-            <AnimatedContent direction="left" className="flex flex-col gap-8">
-              <Image
-                src={"/images/boy_chilling.png"}
-                width={800}
-                height={800}
-                alt="Fresh ingredients"
-                className="w-full h-auto"
-              />
-            </AnimatedContent>
+        <div className="max-w-7xl flex flex-col-reverse lg:grid lg:grid-cols-7  mx-auto w-full">
+          <AnimatedContent
+            direction="left"
+            delay={0.6}
+            className=" col-span-3 flex flex-col gap-8"
+          >
+            <Image
+              src={"/images/boy_chilling.png"}
+              width={800}
+              height={800}
+              alt="Fresh ingredients"
+              className="w-full h-auto"
+            />
           </AnimatedContent>
 
           <AnimatedContent
             direction="right"
-            className="flex flex-col justify-center items-center"
+            delay={0.6}
+            className="col-span-4 flex flex-col gap_akm justify-center lg:px-6"
           >
-            <div className="text-8xl font-bebas text_green">
-              How We Simplify <br /> Your Life?
+            <div className="text-7xl  lg:text-8xl font-bebas text_green text-left">
+              We Simplify <br /> Your Life!
             </div>
 
             <AnimatedContent
               direction="up"
-              delay={0.9}
-              className="flex gap_akm w-full justify-center"
+              delay={0.8}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 w-full justify-center "
             >
-              <div className="bg_beige  w-3/7 text_black rounded_akm pad_akm font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
-                <div className=" font-bold pl_akm pb-0.5 text-lg font-bebas tracking-widest">
+              <div className="bg_beige shadow-lg hover:shadow-xl  text_black rounded_akm p-4 lg:p-6 font-poppins  transform transition duration-500 hover:-translate-y-1 ">
+                <div className=" font-bold pl_akm pb-0.5 text-xl font-bebas tracking-widest">
                   Money Saved
                 </div>
                 <ul>
@@ -411,9 +388,9 @@ export default function Home() {
                   </li>
                 </ul>
               </div>
-              <div className="bg_green w-3/7 text-white rounded_akm  pad_akm font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
+              <div className="bg_green  text-white rounded_akm p-4 lg:p-6   font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
                 <div className=" font-bold pl_akm pb-0.5 text-lg font-bebas tracking-widest">
-                  App Features
+                  App Benefits
                 </div>
 
                 <ul>
@@ -504,7 +481,7 @@ export default function Home() {
 
       <section
         ref={sectionRef}
-        className="relative  bg-[url('/images/kitchen_bg.png')] bg-cover bg-center bg-no-repeat text-white py_akm lg:h-[70vh] flex flex-col items-center justify-center overflow-hidden"
+        className="relative  py-8  bg-[url('/images/kitchen_bg.png')] bg-cover bg-center bg-no-repeat text-white  lg:h-[70vh] flex flex-col items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0 bg-[#004225] bg-opacity-30"></div>
 
@@ -518,7 +495,7 @@ export default function Home() {
             colors={["#FFC107", "#FF9800", "#FF5722", "#F44336", "#FFEB3B"]}
           />
         </div> */}
-        <div className="max-w-7xl mx-auto flex justify-center items-center flex-col pb-4 relative z-10">
+        <div className="max-w-7xl  mx-auto flex justify-center items-center flex-col px-6 pb-4 relative z-10">
           <h2 className="text-7xl font-bebas">Start with a free meal!</h2>
           <p className="font-poppins h3_akm">
             Login now and enjoy a delicious meal for free.
@@ -537,53 +514,29 @@ export default function Home() {
             Login and Order Now
           </motion.button>
         </div>
-        <div className="flex  mx-auto  z-10   ">
-          <Image
-            className=""
-            layout="intrinsic"
-            width={140}
-            height={140}
-            src="/images/food/rice.png"
-            alt="Rice"
-          />
-          <Image
-            className=""
-            src="/images/food/pabda_curry.png"
-            layout="intrinsic"
-            width={140}
-            height={140}
-            alt="Pabda Curry"
-          />
-          <Image
-            className=""
-            src="/images/food/tilapia_curry.png"
-            layout="intrinsic"
-            width={140}
-            height={140}
-            alt="Tilapia Curry"
-          />
-          <Image
-            className=""
-            src="/images/food/chicken_curry.png"
-            layout="intrinsic"
-            width={140}
-            height={140}
-            alt="Chicken Curry"
-          />
-          <Image
-            className=""
-            src={"/images/food/rui_curry.png"}
-            layout="intrinsic"
-            width={140}
-            height={140}
-          />
-          <Image
-            className=""
-            src={"/images/food/dal_shobji.png"}
-            layout="intrinsic"
-            width={140}
-            height={140}
-          />
+        <div className="overflow-hidden w-full relative">
+          <motion.div
+            className="flex w-max"
+            animate={{ x: ["0%", "-100%"] }}
+            transition={{
+              ease: "linear",
+              duration: 100, // Adjust speed
+              repeat: Infinity,
+            }}
+            style={{ display: "flex", whiteSpace: "nowrap" }}
+          >
+            {/* Triple the images for a smooth, uninterrupted scroll */}
+            {[...images, ...images, ...images].map((src, index) => (
+              <Image
+                key={index}
+                src={src}
+                width={140}
+                height={140}
+                alt="Food Item"
+                className="shrink-0"
+              />
+            ))}
+          </motion.div>
         </div>
       </section>
 
