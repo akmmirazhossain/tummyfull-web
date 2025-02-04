@@ -191,17 +191,73 @@ export default function Home() {
             <h2 className=" text-3xl font-poppins font-bold text_black">
               How it works?
             </h2>
-            {/* <p className=" mt-2">
-              While you work or study, we are here to take care of your meals.
-              Here are a few reasons how we make your life easier.
-            </p> */}
           </div>
-          <div className="grid grid-cols-2  md:grid-cols-3 gap_akm  pb_akm">
-            {/* <div className="shadow_akm bg_beige rounded_akm flex flex-col items-center justify-center gap_akm pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 1 </div>
-              <div>You Place Pre-order</div>
-            </div> */}
 
+          {/* <div className="flex flex-wrap items-center justify-center ">
+            <div className="flex flex-col items-center justify-center gap-4">
+              <div className="flex gap-4">
+                <div className="  rounded_akm flex flex-col items-center justify-center gap-1 pad_akm text_black">
+                  <div className="h3_akm font-bold font-poppins">Step 1</div>
+                  <div className="pb_akm">You Place Pre-order</div>
+                  <div>
+                    <Image
+                      className=""
+                      layout="intrinsic"
+                      width={140}
+                      height={140}
+                      src="/images/order.png"
+                      alt="Rice"
+                    />
+                  </div>
+                </div>
+                <div className="  flex flex-col items-center justify-center gap-1 pad_akm text_black">
+                  <div className="h3_akm font-bold font-poppins">Step 2</div>
+                  <div className="pb_akm"> We Cook Your Meal</div>
+                  <div>
+                    <Image
+                      className=""
+                      layout="intrinsic"
+                      width={140}
+                      height={140}
+                      src="/images/cooking.png"
+                      alt="Rice"
+                    />
+                  </div>
+                </div>
+
+                <div className="  flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
+                  <div className="h3_akm font-bold font-poppins">Step 3</div>
+                  <div className="pb_akm">We Deliver to You</div>
+                  <div>
+                    <Image
+                      className=""
+                      layout="intrinsic"
+                      width={140}
+                      height={140}
+                      src="/images/fast-shipping2.png"
+                      alt="Rice"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="md:hidden   flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
+                <div className="h3_akm font-bold font-poppins">Step 3</div>
+                <div className="pb_akm">We Deliver to You</div>
+                <div>
+                  <Image
+                    className=""
+                    layout="intrinsic"
+                    width={140}
+                    height={140}
+                    src="/images/fast-shipping2.png"
+                    alt="Rice"
+                  />
+                </div>
+              </div>
+            </div>
+          </div> */}
+
+          <div className="grid grid-cols-2  md:grid-cols-3 gap_akm  pb_akm">
             <div className="  rounded_akm flex flex-col items-center justify-center gap-1 pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 1</div>
               <div className="pb_akm">You Place Pre-order</div>
@@ -232,6 +288,24 @@ export default function Home() {
               </div>
             </div>
 
+            <div className="hidden md:flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
+              <div className="h3_akm font-bold font-poppins">Step 3</div>
+              <div className="pb_akm">We Deliver to You</div>
+              <div>
+                <Image
+                  className=""
+                  layout="intrinsic"
+                  width={140}
+                  height={140}
+                  src="/images/fast-shipping2.png"
+                  alt="Rice"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="md:hidden flex items-center justify-center">
+            {" "}
             <div className="   flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
               <div className="h3_akm font-bold font-poppins">Step 3</div>
               <div className="pb_akm">We Deliver to You</div>
