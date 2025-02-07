@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { useRouter } from "next/router";
 import { Button, Card, Chip, Skeleton } from "@nextui-org/react";
+import { Button as MUIButton } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -701,6 +702,10 @@ const MenuComp = () => {
                             >
                               -
                             </Button>
+
+                            <MUIButton variant="contained" color="primary">
+                              MUI Button
+                            </MUIButton>
 
                             <div>{menuData[day].lunch.quantity}</div>
                             <Button
