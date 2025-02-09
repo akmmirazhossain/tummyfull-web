@@ -17,6 +17,7 @@ import {
   faTruckFast,
   faCoins,
   faCreditCard,
+  faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
@@ -155,6 +156,10 @@ const MenuComp = () => {
   const closeLoginModal = () => {
     setLoginModalVisible(false); // Close modal
     router.push("/login"); // Redirect to login after modal closes
+  };
+
+  const foodSwap = () => {
+    console.log("foodSwap triggered");
   };
 
   const checkLogin = () => {
@@ -540,7 +545,7 @@ const MenuComp = () => {
                               : "justify-center col-span-2"
                           } `}
                         >
-                          <div className="h4_akm text-center">
+                          <div className="h4_akm text-center relative">
                             <img
                               src={`/images/food/${food.food_image}`}
                               alt={food.food_name}
@@ -551,6 +556,27 @@ const MenuComp = () => {
                               } rounded-full`}
                             />
                             <span>{food.food_name}</span>
+
+                            {/* <Button
+                              isIconOnly
+                              aria-label="Like"
+                              radius="full"
+                              color="danger"
+                              className="absolute top-0 right-0 "
+                            >
+                              z
+                            </Button> */}
+
+                            <button
+                              className="btn btn-circle btn-xs lg:btn-sm 
+                               absolute top-0 right-0"
+                              onClick={foodSwap}
+                            >
+                              <FontAwesomeIcon
+                                icon={faRotate}
+                                className="text_green"
+                              />
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -702,10 +728,6 @@ const MenuComp = () => {
                             >
                               -
                             </Button>
-
-                            <MUIButton variant="contained" color="primary">
-                              MUI Button
-                            </MUIButton>
 
                             <div>{menuData[day].lunch.quantity}</div>
                             <Button
