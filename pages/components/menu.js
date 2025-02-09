@@ -569,7 +569,7 @@ const MenuComp = () => {
 
                             <button
                               className="btn btn-circle btn-xs lg:btn-sm 
-                               absolute top-0 right-0"
+                               absolute top-0 right-0 bg-opacity-50 border-none"
                               onClick={foodSwap}
                             >
                               <FontAwesomeIcon
