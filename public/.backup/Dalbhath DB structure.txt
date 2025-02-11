@@ -1,0 +1,144 @@
+Dalbhath DB structure
+
+-Columns of mrd_user table:
+mrd_user_id
+mrd_user_first_name
+mrd_user_phone
+mrd_user_credit
+mrd_user_type
+mrd_user_chef_id
+mrd_user_last_otp
+mrd_user_otp_expiration
+mrd_user_otp_attempts
+mrd_user_session_token
+mrd_user_group_id
+mrd_user_last_name
+mrd_user_image_file_name
+mrd_user_verified
+mrd_user_email
+mrd_user_password
+mrd_user_address
+mrd_user_sector_block
+mrd_user_area
+mrd_user_bank_info
+mrd_user_bank_account
+mrd_user_payment_mfs
+mrd_user_payment_phone
+mrd_user_status
+mrd_user_meal_prep_ask
+mrd_user_mealbox
+mrd_user_has_mealbox
+mrd_user_mealbox_paid
+mrd_user_total_meal
+mrd_user_delivery_ask
+mrd_user_delivery_instruction
+mrd_user_meal_size
+mrd_user_credit_to_pay
+mrd_user_date_added
+updated_at
+
+-Columns of mrd_order table:
+mrd_order_id
+mrd_order_date
+mrd_order_user_id
+mrd_order_menu_id
+mrd_order_for
+mrd_order_type
+mrd_order_quantity
+mrd_order_discount
+mrd_order_total_price
+mrd_order_cash_to_get
+mrd_order_status
+mrd_order_user_pay_status
+mrd_order_chef_pay_status
+mrd_order_deliv_pay_status
+mrd_order_supp_pay_status
+mrd_order_chef_commission
+mrd_order_deliv_commission
+mrd_order_supp_commission
+mrd_order_mealbox
+mrd_order_rating
+mrd_order_feedback
+mrd_order_date_insert
+
+-Columns of mrd_menu table:
+mrd_menu_id
+mrd_menu_day
+mrd_menu_food_id
+mrd_menu_period
+mrd_menu_price_promo
+mrd_menu_price
+
+-Columns of mrd_food table:
+mrd_food_id
+mrd_food_name
+mrd_food_price
+mrd_food_img
+mrd_food_type
+mrd_food_desc
+
+-Columns of mrd_notification table:
+mrd_notif_id
+mrd_notif_user_id
+mrd_notif_order_id
+mrd_notif_message
+mrd_notif_type
+mrd_notif_quantity
+mrd_notif_total_price
+mrd_notif_seen
+mrd_notif_date_added
+mrd_notif_data_updated
+
+-Columns of mrd_payment table:
+mrd_payment_id
+mrd_payment_transaction_id
+mrd_payment_status
+mrd_payment_amount
+mrd_payment_user_id
+mrd_payment_order_id
+mrd_payment_order_quantity
+mrd_payment_for
+mrd_payment_collector_id
+mrd_payment_discount
+mrd_payment_method
+mrd_payment_message
+mrd_payment_date_paid
+
+-Columns of mrd_setting table:
+mrd_setting_announcement
+mrd_setting_commission_chef
+mrd_setting_commission_delivery
+mrd_setting_commission_supplier
+mrd_setting_delivery_charge
+mrd_setting_delivery_time_dinner
+mrd_setting_delivery_time_lunch
+mrd_setting_discount_date_range
+mrd_setting_discount_percentage
+mrd_setting_id
+mrd_setting_meal_price
+mrd_setting_mealbox_price
+mrd_setting_order_max_days
+mrd_setting_quantity_max
+mrd_setting_quantity_min
+mrd_setting_time_limit_dinner
+mrd_setting_time_limit_lunch
+
+-Columns of mrd_menu_custom table:
+mrd_menu_cus_id
+mrd_menu_order_id		
+mrd_menu_cus_food_id		
+mrd_menu_cus_date_insert	
+
+
+-Table column relationships:
+mrd_user.mrd_user_id = mrd_order.mrd_order_user_id
+mrd_user.mrd_user_id = mrd_notification.mrd_notif_user_id
+mrd_user.mrd_user_id = mrd_payment.mrd_payment_user_id
+mrd_user.mrd_user_id = mrd_payment.mrd_payment_collector_id
+mrd_menu.mrd_menu_food_id = mrd_food.mrd_food_id
+mrd_order.mrd_order_id = mrd_order.mrd_order_user_id
+mrd_order.mrd_order_id = mrd_notification.mrd_notif_order_id
+mrd_order.mrd_order_id = mrd_notification.mrd_notif_order_id
+mrd_order.mrd_order_id = mrd_notification.mrd_notif_order_id
+mrd_order.mrd_order_id = mrd_menu_custom.mrd_menu_order_id
+mrd_menu_custom.mrd_menu_cus_food_id = mrd_food.mrd_food_id
