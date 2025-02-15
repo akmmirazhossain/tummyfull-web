@@ -98,7 +98,18 @@ const MenuComp = () => {
   const [modalData, setModalData] = useState(null);
 
   const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+
   const [pendingOrder, setPendingOrder] = useState(null);
+  const [foodIndexes, setFoodIndexes] = useState(() => {
+    const savedIndexes = Cookies.get("selectedFoods");
+    return savedIndexes ? JSON.parse(savedIndexes) : {};
+  });
+
+  const updateCookie = (updatedIndexes) => {
+    Cookies.set("selectedFoods", JSON.stringify(updatedIndexes), {
+      expires: 7,
+    });
+  };
 
   const formatToDayMonth = (dateString) =>
     dayjs(dateString).format("D[th] MMM");
@@ -136,7 +147,7 @@ const MenuComp = () => {
           "TFLoginToken"
         )}`
       );
-      console.log("FETCH DATA -> TRY:", menuData);
+      // console.log("FETCH DATA -> TRY:", menuData);
       setMenuData(menuData);
 
       // Fetch settings data
@@ -156,13 +167,101 @@ const MenuComp = () => {
 
   //CLOSE LOGIN MODAL
 
-  const closeLoginModal = () => {
-    setLoginModalVisible(false); // Close modal
-    router.push("/login"); // Redirect to login after modal closes
+  // const closeLoginModal = () => {
+  //   setLoginModalVisible(false); // Close modal
+  //   router.push("/login"); // Redirect to login after modal closes
+  // };
+
+  //MARK: FOOD SWAP
+
+  const foodSwap = (date, mealType, category, currentFoodId) => {
+    console.log(
+      "🚀 ~ foodSwap ~ date, mealType, category, currentFoodId:",
+      date,
+      mealType,
+      category,
+      currentFoodId
+    );
+
+    setMenuData((prevMenuData) => {
+      const dayKey = Object.keys(prevMenuData).find(
+        (key) => prevMenuData[key].date === date
+      );
+      if (!dayKey) return prevMenuData;
+
+      const foodList = prevMenuData[dayKey][mealType].foods[category];
+      if (foodList.length < 2) return prevMenuData; // No swap needed for single-item lists
+
+      // Identify next food item before state updates
+      const nextFoodId = foodList[1].food_id;
+
+      console.log("➡ Switched to Food ID:", nextFoodId); // Log next food before updating state
+
+      // Rotate array: move first item to the last position
+      const updatedFoods = [...foodList.slice(1), foodList[0]];
+
+      // Retrieve the existing customOrder cookie
+      let customOrder = Cookies.get("customOrder");
+      customOrder = customOrder ? JSON.parse(customOrder) : {};
+
+      // Ensure the structure exists
+      if (!customOrder[date]) {
+        customOrder[date] = {};
+      }
+      if (!customOrder[date][mealType]) {
+        customOrder[date][mealType] = { foods: {} };
+      }
+
+      // Preserve all previous categories and only update the swapped one
+      customOrder[date][mealType].foods = {
+        ...customOrder[date][mealType].foods, // Keep existing categories
+        [category]: updatedFoods.map((food) => ({
+          food_id: food.food_id,
+          food_name: food.food_name,
+          food_image: food.food_image,
+        })),
+        // Update swapped category
+      };
+
+      // Ensure all foods for all categories are stored in the cookie
+      Object.keys(prevMenuData[dayKey][mealType].foods).forEach((cat) => {
+        if (!customOrder[date][mealType].foods[cat] || cat !== category) {
+          customOrder[date][mealType].foods[cat] = prevMenuData[dayKey][
+            mealType
+          ].foods[cat].map((food) => ({
+            food_id: food.food_id,
+            food_name: food.food_name,
+            food_image: food.food_image,
+          }));
+        }
+      });
+
+      // Store the updated customOrder in the cookie
+      sessionStorage.setItem("customOrder", JSON.stringify(customOrder));
+
+      return {
+        ...prevMenuData,
+        [dayKey]: {
+          ...prevMenuData[dayKey],
+          [mealType]: {
+            ...prevMenuData[dayKey][mealType],
+            foods: {
+              ...prevMenuData[dayKey][mealType].foods,
+              [category]: updatedFoods,
+            },
+          },
+        },
+      };
+    });
   };
 
-  const foodSwap = () => {
-    console.log("foodSwap triggered");
+  const getMenuFromSession = (date, mealType) => {
+    const storedMenu = sessionStorage.getItem("customOrder");
+    if (storedMenu) {
+      const parsedMenu = JSON.parse(storedMenu);
+      return parsedMenu[date]?.[mealType]?.foods || null;
+    }
+    return null;
   };
 
   const checkLogin = () => {
@@ -419,7 +518,7 @@ const MenuComp = () => {
   const firstDay = days[0];
 
   return (
-    <div className="">
+    <React.Fragment>
       {days.map((day, dayIndex) => (
         <div key={dayIndex}>
           <div className="flex items-center justify-between ">
@@ -436,7 +535,7 @@ const MenuComp = () => {
               {formatDate(menuData[day].date)}
             </Chip>
           </div>
-          <div key={day} className="  ">
+          <div key={day}>
             <div className="grid grid-cols-2 gap_akm">
               {["lunch", "dinner"].map(
                 (mealType) =>
@@ -452,42 +551,67 @@ const MenuComp = () => {
                       </div>
 
                       <div className="relative grid grid-cols-2 p-2 lg:p-12 h-auto border-y-1">
-                        {menuData[day][mealType].foods.map((food, index) => (
-                          <div
-                            key={index}
-                            className={`flex items-center ${
-                              index === 0
-                                ? "justify-end mr-1 lg:mr-2"
-                                : index === 1
-                                ? "justify-start ml-1 lg:ml-2"
-                                : "justify-center col-span-2"
-                            }`}
-                          >
-                            <div className="h4_akm text-center relative">
-                              <img
-                                src={`/images/food/${food.food_image}`}
-                                alt={food.food_name}
-                                className={`${
-                                  index ===
-                                  menuData[day][mealType].foods.length - 1
-                                    ? "w-28 lg:w-44"
-                                    : "w-20 lg:w-32"
-                                } rounded-full`}
-                              />
-                              <span>{food.food_name}</span>
+                        {(() => {
+                          // New variable for fetching data from cookie or API
+                          const foodsData =
+                            getMenuFromCookie(menuData[day].date, mealType) ||
+                            menuData[day][mealType].foods;
 
-                              <button
-                                className="btn btn-circle btn-xs lg:btn-sm absolute top-0 right-0 bg-opacity-50 border-none"
-                                onClick={foodSwap}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faRotate}
-                                  className="text_green"
-                                />
-                              </button>
-                            </div>
-                          </div>
-                        ))}
+                          return Object.keys(foodsData).map(
+                            (category, index) => {
+                              const food = foodsData[category][0]; // Get first item of the category
+
+                              return (
+                                <div
+                                  key={index}
+                                  className={`flex items-center ${
+                                    index === 0
+                                      ? "justify-end mr-1 lg:mr-2"
+                                      : index === 1
+                                      ? "justify-start ml-1 lg:ml-2"
+                                      : "justify-center col-span-2"
+                                  } `}
+                                >
+                                  <div className="h4_akm text-center relative">
+                                    <img
+                                      src={`/images/food/${food.food_image}`}
+                                      alt={food.food_name}
+                                      className={`${
+                                        index ===
+                                        Object.keys(foodsData).length - 1
+                                          ? "w-28 lg:w-44"
+                                          : "w-20 lg:w-32"
+                                      } rounded-full`}
+                                    />
+                                    <span>{food.food_name}</span>
+
+                                    {/* MARK: BTN FSWAP */}
+                                    {foodsData[category].length > 1 && (
+                                      <button
+                                        className="btn btn-circle btn-xs lg:btn-sm absolute top-0 right-0 bg-opacity-50 border-none"
+                                        onClick={() =>
+                                          foodSwap(
+                                            menuData[day].date,
+                                            mealType,
+                                            category,
+                                            food.food_id
+                                          )
+                                        }
+                                      >
+                                        <span className="relative inline-block">
+                                          <FontAwesomeIcon
+                                            icon={faRotate}
+                                            className="text_green fa-light"
+                                          />
+                                        </span>
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            }
+                          );
+                        })()}
 
                         {menuData[day][mealType].status === "enabled" && (
                           <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm text-base slide-up">
@@ -574,48 +698,6 @@ const MenuComp = () => {
 
                         {menuData[day][mealType].status === "enabled" && (
                           <div className="mt-2 flex flex-col pb_akm">
-                            <div className="pb-1">
-                              {menuData[day][mealType].mealbox !== null ? (
-                                <Link href="/settings#mealbox" cla>
-                                  <div className="h4info_akm flex items-center justify-center py-1">
-                                    Mealbox
-                                    {menuData[day]?.lunch?.mealbox === 1 ? (
-                                      <span className="text-green-600 ml-1">
-                                        <FontAwesomeIcon icon={faCircleCheck} />
-                                      </span>
-                                    ) : (
-                                      <span className=" ml-1">
-                                        <FontAwesomeIcon
-                                          icon={faCircleExclamation}
-                                        />
-                                      </span>
-                                    )}
-                                  </div>
-                                </Link>
-                              ) : (
-                                mealboxStatus !== null && (
-                                  <Link href="/settings#mealbox">
-                                    <div className="h4info_akm flex items-center justify-center py-1">
-                                      Mealbox
-                                      {mealboxStatus === 1 ? (
-                                        <span className="text-green-600 ml-1">
-                                          <FontAwesomeIcon
-                                            icon={faCircleCheck}
-                                          />
-                                        </span>
-                                      ) : (
-                                        <span className=" ml-1">
-                                          <FontAwesomeIcon
-                                            icon={faCircleExclamation}
-                                          />
-                                        </span>
-                                      )}
-                                    </div>
-                                  </Link>
-                                )
-                              )}
-                            </div>
-
                             <div className="flex items-center justify-center space-x-2">
                               <Button
                                 radius="full"
@@ -687,6 +769,108 @@ const MenuComp = () => {
                           </div>
                         )}
                       </div>
+
+                      {showModal &&
+                        modalData?.menuId === menuData[day][mealType].id && (
+                          <div
+                            className="modal modal-open"
+                            onClick={() => setShowModal(false)}
+                          >
+                            <div
+                              className="modal-box bg_beige"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <h3 className="font-bold text-lg pb_akm">
+                                Your {mealType} order has been placed.
+                              </h3>
+
+                              <ul className="list-none space-y-1">
+                                <li className="flex items-center">
+                                  <span className="w-6 mr-1 flex items-center justify-start">
+                                    <FontAwesomeIcon icon={faCalendarDays} />
+                                  </span>
+                                  <span className="w-36">Date: </span>
+                                  <span>{formatDate(modalData?.date)}</span>
+                                </li>
+
+                                <li className="flex items-center">
+                                  <span className="w-6 mr-1 flex items-center justify-start">
+                                    <FontAwesomeIcon icon={faClock} />
+                                  </span>
+                                  <span className="w-36">Delivery Time: </span>
+                                  <span>
+                                    {mealType === "lunch"
+                                      ? settings?.delivery_time_lunch
+                                      : settings?.delivery_time_dinner}
+                                  </span>
+                                </li>
+
+                                <li className="flex items-center">
+                                  <span className="w-6 mr-1 flex items-center justify-start">
+                                    <FontAwesomeIcon icon={faLayerGroup} />
+                                  </span>
+                                  <span className="w-36">Quantity: </span>
+                                  <span>{modalData?.quantity}</span>
+                                </li>
+
+                                <li className="flex items-center">
+                                  <span className="w-6 mr-1 flex items-center justify-start">
+                                    <FontAwesomeIcon icon={faTruckFast} />
+                                  </span>
+                                  <span className="w-36">
+                                    Delivery Charge:{" "}
+                                  </span>
+                                  <span>
+                                    ৳{settings.mrd_setting_commission_delivery}
+                                  </span>
+                                </li>
+
+                                <li className="flex items-center">
+                                  <span className="w-6 mr-1 flex items-center justify-start">
+                                    <FontAwesomeIcon icon={faCoins} />
+                                  </span>
+                                  <span className="w-36">Total Price: </span>
+                                  <span>
+                                    {modalData?.price} +{" "}
+                                    {settings.mrd_setting_commission_delivery} ={" "}
+                                    <span className="font-bold">
+                                      {modalData?.price +
+                                        settings.mrd_setting_commission_delivery}
+                                    </span>
+                                  </span>
+                                </li>
+
+                                <li className="flex items-center">
+                                  <span className="w-6 mr-1 flex items-center justify-start">
+                                    <FontAwesomeIcon icon={faCreditCard} />
+                                  </span>
+                                  <span className="w-36">Pay. Method: </span>
+                                  <span className="flex flex-col md:flex-row gap-1">
+                                    Cash on delivery or
+                                    <Link
+                                      href={"/wallet"}
+                                      target="_blank"
+                                      className="btn btn-xs rounded_akm bg_green text-white font-normal"
+                                    >
+                                      Recharge wallet
+                                    </Link>
+                                  </span>
+                                </li>
+                              </ul>
+
+                              <div className="modal-action flex justify-center">
+                                <button
+                                  className="btn bg_green text-white font-normal rounded_akm hover:bg_orange hover:text-inherit"
+                                  onClick={() => {
+                                    setShowModal(false);
+                                  }}
+                                >
+                                  Close
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                     </div>
                   )
               )}
@@ -699,42 +883,7 @@ const MenuComp = () => {
       </div>
 
       {/* MARK: Login Modal */}
-      <div
-        className={`modal ${isLoginModalVisible ? "modal-open" : ""}`}
-        onClick={() => setLoginModalVisible(false)}
-      >
-        <div
-          className="modal-box bg-transparent shadow-none relative"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Modal header */}
-          <div className="flex justify-end items-center absolute right-7 top-7">
-            <button
-              className="btn btn-sm btn-circle btn-ghost"
-              onClick={() => setLoginModalVisible(false)}
-            >
-              ✕
-            </button>
-          </div>
-
-          {/* <LoginForm
-            fromMenu={true}
-            onLoginSuccess={() => {
-              setLoginModalVisible(false);
-              fetchData();
-              orderMealPending();
-              fetchData()
-                .then(() => {
-                  orderMealPending(); // This will run once fetchData resolves
-                })
-                .catch((error) => {
-                  console.error("Error during login process:", error);
-                });
-            }}
-          /> */}
-        </div>
-      </div>
-    </div>
+    </React.Fragment>
   );
 };
 
