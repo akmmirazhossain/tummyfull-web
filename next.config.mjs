@@ -17,7 +17,7 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   // output: "export",
   // basePath: "/", // Replace 'mazftp' with your actual subdirectory name
   // assetPrefix: "/", // Replace 'mazftp' with your actual subdirectory name

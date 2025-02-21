@@ -100,16 +100,6 @@ const MenuComp = () => {
   const [isLoginModalVisible, setLoginModalVisible] = useState(false);
 
   const [pendingOrder, setPendingOrder] = useState(null);
-  const [foodIndexes, setFoodIndexes] = useState(() => {
-    const savedIndexes = Cookies.get("selectedFoods");
-    return savedIndexes ? JSON.parse(savedIndexes) : {};
-  });
-
-  const updateCookie = (updatedIndexes) => {
-    Cookies.set("selectedFoods", JSON.stringify(updatedIndexes), {
-      expires: 7,
-    });
-  };
 
   const formatToDayMonth = (dateString) =>
     dayjs(dateString).format("D[th] MMM");
@@ -173,96 +163,77 @@ const MenuComp = () => {
   // };
 
   //MARK: FOOD SWAP
+  const [foodIndexes, setFoodIndexes] = useState({});
+  const [selectedFoods, setSelectedFoods] = useState({});
 
-  const foodSwap = (date, mealType, category, currentFoodId) => {
-    console.log(
-      "🚀 ~ foodSwap ~ date, mealType, category, currentFoodId:",
-      date,
-      mealType,
-      category,
-      currentFoodId
-    );
+  const foodSwap = (day, mealType, category) => {
+    setFoodIndexes((prevIndexes) => {
+      const currentIndex = prevIndexes?.[day]?.[mealType]?.[category] || 0;
+      const categoryFoods = menuData[day][mealType]?.foods?.[category] || [];
 
-    setMenuData((prevMenuData) => {
-      const dayKey = Object.keys(prevMenuData).find(
-        (key) => prevMenuData[key].date === date
-      );
-      if (!dayKey) return prevMenuData;
+      if (categoryFoods.length <= 1) return prevIndexes; // No swap needed if only one item
 
-      const foodList = prevMenuData[dayKey][mealType].foods[category];
-      if (foodList.length < 2) return prevMenuData; // No swap needed for single-item lists
+      const nextIndex = (currentIndex + 1) % categoryFoods.length;
+      const newFoodId = categoryFoods[nextIndex].food_id; // Get the new food ID
 
-      // Identify next food item before state updates
-      const nextFoodId = foodList[1].food_id;
+      // Update the selected foods for order placement
+      setSelectedFoods((prev) => ({
+        ...prev,
+        [day]: {
+          ...prev[day],
+          [mealType]: {
+            ...prev[day]?.[mealType],
+            [category]: newFoodId, // Store the swapped food ID
+          },
+        },
+      }));
 
-      console.log("➡ Switched to Food ID:", nextFoodId); // Log next food before updating state
+      //UPDATE ORDER IF LOGGED IN
+      const token = Cookies.get("TFLoginToken");
+      if (token) {
+        const updateData = {
+          TFLoginToken: token,
+          day,
+          mealType,
+          category,
+          newFoodId,
+        };
 
-      // Rotate array: move first item to the last position
-      const updatedFoods = [...foodList.slice(1), foodList[0]];
+        setTimeout(() => {
+          fetch(`${apiConfig.apiBaseUrl}order-update`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updateData),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log("Order update response:", data))
+            .catch((error) => console.error("Error updating order:", error));
 
-      // Retrieve the existing customOrder cookie
-      let customOrder = Cookies.get("customOrder");
-      customOrder = customOrder ? JSON.parse(customOrder) : {};
-
-      // Ensure the structure exists
-      if (!customOrder[date]) {
-        customOrder[date] = {};
+          console.log("🚀 ORDER UPDATE DATA SENT:", updateData);
+        }, 1000); // 1-second delay
       }
-      if (!customOrder[date][mealType]) {
-        customOrder[date][mealType] = { foods: {} };
-      }
-
-      // Preserve all previous categories and only update the swapped one
-      customOrder[date][mealType].foods = {
-        ...customOrder[date][mealType].foods, // Keep existing categories
-        [category]: updatedFoods.map((food) => ({
-          food_id: food.food_id,
-          food_name: food.food_name,
-          food_image: food.food_image,
-        })),
-        // Update swapped category
-      };
-
-      // Ensure all foods for all categories are stored in the cookie
-      Object.keys(prevMenuData[dayKey][mealType].foods).forEach((cat) => {
-        if (!customOrder[date][mealType].foods[cat] || cat !== category) {
-          customOrder[date][mealType].foods[cat] = prevMenuData[dayKey][
-            mealType
-          ].foods[cat].map((food) => ({
-            food_id: food.food_id,
-            food_name: food.food_name,
-            food_image: food.food_image,
-          }));
-        }
-      });
-
-      // Store the updated customOrder in the cookie
-      sessionStorage.setItem("customOrder", JSON.stringify(customOrder));
 
       return {
-        ...prevMenuData,
-        [dayKey]: {
-          ...prevMenuData[dayKey],
+        ...prevIndexes,
+        [day]: {
+          ...prevIndexes[day],
           [mealType]: {
-            ...prevMenuData[dayKey][mealType],
-            foods: {
-              ...prevMenuData[dayKey][mealType].foods,
-              [category]: updatedFoods,
-            },
+            ...prevIndexes[day]?.[mealType],
+            [category]: nextIndex,
           },
         },
       };
     });
   };
 
-  const getMenuFromSession = (date, mealType) => {
-    const storedMenu = sessionStorage.getItem("customOrder");
-    if (storedMenu) {
-      const parsedMenu = JSON.parse(storedMenu);
-      return parsedMenu[date]?.[mealType]?.foods || null;
-    }
-    return null;
-  };
+  // const getMenuFromSession = (date, mealType) => {
+  //   const storedMenu = sessionStorage.getItem("customOrder");
+  //   if (storedMenu) {
+  //     const parsedMenu = JSON.parse(storedMenu);
+  //     return parsedMenu[date]?.[mealType]?.foods || null;
+  //   }
+  //   return null;
+  // };
 
   const checkLogin = () => {
     // if (!Cookies.get("TFLoginToken")) {
@@ -279,12 +250,7 @@ const MenuComp = () => {
   //MARK: Order Meal
   const orderMeal = async (day, menuId, date, value, price, mealPeriod) => {
     console.log("orderMeal");
-    // if (!checkLogin()) {
-    //   // Store order details
-    //   setPendingOrder({ day, menuId, date, value, price, mealPeriod });
-    //   return;
-    // }
-    //if (!checkLogin()) return;
+
     checkLogin();
 
     //SWITCH STATUS CHANGER
@@ -312,7 +278,29 @@ const MenuComp = () => {
     if (disabledSwitches[switchKey]) return;
     // Disable the specific switch
     setDisabledSwitches((prev) => ({ ...prev, [switchKey]: true }));
+
+    // Extract default food selections (first item from each category)
+    const defaultFoods = Object.entries(
+      menuData[day][mealPeriod]?.foods || {}
+    ).reduce((acc, [category, items]) => {
+      acc[category] = items[0]?.food_id; // Get first food_id from each category
+      return acc;
+    }, {});
+
+    // Merge with selected swaps (if any)
+    const finalFoods = {
+      ...defaultFoods,
+      ...(selectedFoods?.[day]?.[mealPeriod] || {}),
+    };
+
+    // const isCustomOrder =
+    //   selectedFoods[day] &&
+    //   selectedFoods[day][mealPeriod] &&
+    //   Object.keys(selectedFoods[day][mealPeriod]).length > 0;
+
     // API CALLER
+
+    // Construct API data
     const data = {
       menuId: menuId,
       date: date,
@@ -320,7 +308,23 @@ const MenuComp = () => {
       switchValue: value,
       price: price,
       quantity: 1,
+      selectedFoods: finalFoods, // Send selected food IDs
+      orderType:
+        Object.keys(selectedFoods?.[day]?.[mealPeriod] || {}).length > 0
+          ? "custom"
+          : "default",
     };
+    console.log("🚀 ~ orderMeal ~ data.selectedFoods:", data.selectedFoods);
+    console.log("🚀 ~ orderMeal ~ data.orderType:", data.orderType);
+
+    // const data = {
+    //   menuId: menuId,
+    //   date: date,
+    //   TFLoginToken: Cookies.get("TFLoginToken"),
+    //   switchValue: value,
+    //   price: price,
+    //   quantity: 1,
+    // };
 
     try {
       shakeBell();
@@ -374,13 +378,13 @@ const MenuComp = () => {
   };
 
   //MARK: Pending Order
-  const orderMealPending = () => {
-    if (pendingOrder) {
-      const { day, menuId, date, value, price, mealPeriod } = pendingOrder;
-      orderMeal(day, menuId, date, value, price, mealPeriod);
-      setPendingOrder(null); // Clear pending order after processing
-    }
-  };
+  // const orderMealPending = () => {
+  //   if (pendingOrder) {
+  //     const { day, menuId, date, value, price, mealPeriod } = pendingOrder;
+  //     orderMeal(day, menuId, date, value, price, mealPeriod);
+  //     setPendingOrder(null); // Clear pending order after processing
+  //   }
+  // };
 
   //MARK: Quantity Chng
   const handleQuantityChange = async (day, mealType, change, menuId, date) => {
@@ -551,67 +555,57 @@ const MenuComp = () => {
                       </div>
 
                       <div className="relative grid grid-cols-2 p-2 lg:p-12 h-auto border-y-1">
-                        {(() => {
-                          // New variable for fetching data from cookie or API
-                          const foodsData =
-                            getMenuFromCookie(menuData[day].date, mealType) ||
-                            menuData[day][mealType].foods;
+                        {Object.entries(
+                          menuData[day][mealType]?.foods || {}
+                        ).map(([category, items], index) => {
+                          const currentFoodIndex =
+                            foodIndexes?.[day]?.[mealType]?.[category] || 0;
+                          const food = items[currentFoodIndex]; // Get current item based on index
 
-                          return Object.keys(foodsData).map(
-                            (category, index) => {
-                              const food = foodsData[category][0]; // Get first item of the category
+                          return (
+                            <div
+                              key={index}
+                              className={`flex items-center ${
+                                index === 0
+                                  ? "justify-end mr-1 lg:mr-2"
+                                  : index === 1
+                                  ? "justify-start ml-1 lg:ml-2"
+                                  : "justify-center col-span-2"
+                              }`}
+                            >
+                              <div className="h4_akm text-center relative">
+                                <img
+                                  src={`/images/food/${food.food_image}`}
+                                  alt={food.food_name}
+                                  className={`${
+                                    index ===
+                                    Object.keys(
+                                      menuData[day][mealType]?.foods || {}
+                                    ).length -
+                                      1
+                                      ? "w-28 lg:w-44"
+                                      : "w-20 lg:w-32"
+                                  } rounded-full`}
+                                />
+                                <span>{food.food_name}</span>
 
-                              return (
-                                <div
-                                  key={index}
-                                  className={`flex items-center ${
-                                    index === 0
-                                      ? "justify-end mr-1 lg:mr-2"
-                                      : index === 1
-                                      ? "justify-start ml-1 lg:ml-2"
-                                      : "justify-center col-span-2"
-                                  } `}
-                                >
-                                  <div className="h4_akm text-center relative">
-                                    <img
-                                      src={`/images/food/${food.food_image}`}
-                                      alt={food.food_name}
-                                      className={`${
-                                        index ===
-                                        Object.keys(foodsData).length - 1
-                                          ? "w-28 lg:w-44"
-                                          : "w-20 lg:w-32"
-                                      } rounded-full`}
+                                {items.length > 1 && (
+                                  <button
+                                    className="btn btn-circle btn-xs lg:btn-sm absolute top-0 right-0 bg-opacity-50 border-none"
+                                    onClick={() =>
+                                      foodSwap(day, mealType, category)
+                                    }
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faRotate}
+                                      className="text_green"
                                     />
-                                    <span>{food.food_name}</span>
-
-                                    {/* MARK: BTN FSWAP */}
-                                    {foodsData[category].length > 1 && (
-                                      <button
-                                        className="btn btn-circle btn-xs lg:btn-sm absolute top-0 right-0 bg-opacity-50 border-none"
-                                        onClick={() =>
-                                          foodSwap(
-                                            menuData[day].date,
-                                            mealType,
-                                            category,
-                                            food.food_id
-                                          )
-                                        }
-                                      >
-                                        <span className="relative inline-block">
-                                          <FontAwesomeIcon
-                                            icon={faRotate}
-                                            className="text_green fa-light"
-                                          />
-                                        </span>
-                                      </button>
-                                    )}
-                                  </div>
-                                </div>
-                              );
-                            }
+                                  </button>
+                                )}
+                              </div>
+                            </div>
                           );
-                        })()}
+                        })}
 
                         {menuData[day][mealType].status === "enabled" && (
                           <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm text-base slide-up">
