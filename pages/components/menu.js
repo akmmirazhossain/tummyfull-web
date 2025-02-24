@@ -1,6 +1,6 @@
 // pages/menu2.js
 
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Link from "next/link";
 
 import { useRouter } from "next/router";
@@ -165,8 +165,10 @@ const MenuComp = () => {
   //MARK: FOOD SWAP
   const [foodIndexes, setFoodIndexes] = useState({});
   const [selectedFoods, setSelectedFoods] = useState({});
+  const apiTimeoutRef = useRef(null);
 
-  const foodSwap = (day, mealType, category) => {
+  const foodSwap = (day, mealType, category, orderStatus) => {
+    console.log("🚀 ~ foodSwap ~ orderStatus:", orderStatus);
     setFoodIndexes((prevIndexes) => {
       const currentIndex = prevIndexes?.[day]?.[mealType]?.[category] || 0;
       const categoryFoods = menuData[day][mealType]?.foods?.[category] || [];
@@ -190,7 +192,7 @@ const MenuComp = () => {
 
       //UPDATE ORDER IF LOGGED IN
       const token = Cookies.get("TFLoginToken");
-      if (token) {
+      if (token && orderStatus === "enabled") {
         const updateData = {
           TFLoginToken: token,
           day,
@@ -199,7 +201,12 @@ const MenuComp = () => {
           newFoodId,
         };
 
-        setTimeout(() => {
+        // Clear any existing timeout before setting a new one
+        if (apiTimeoutRef.current) {
+          clearTimeout(apiTimeoutRef.current);
+        }
+
+        apiTimeoutRef.current = setTimeout(() => {
           fetch(`${apiConfig.apiBaseUrl}order-update`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -210,7 +217,7 @@ const MenuComp = () => {
             .catch((error) => console.error("Error updating order:", error));
 
           console.log("🚀 ORDER UPDATE DATA SENT:", updateData);
-        }, 1000); // 1-second delay
+        }, 1000); // 1-second debounce
       }
 
       return {
@@ -593,7 +600,12 @@ const MenuComp = () => {
                                   <button
                                     className="btn btn-circle btn-xs lg:btn-sm absolute top-0 right-0 bg-opacity-50 border-none"
                                     onClick={() =>
-                                      foodSwap(day, mealType, category)
+                                      foodSwap(
+                                        day,
+                                        mealType,
+                                        category,
+                                        menuData[day][mealType].status
+                                      )
                                     }
                                   >
                                     <FontAwesomeIcon
