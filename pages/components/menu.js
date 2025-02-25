@@ -167,7 +167,7 @@ const MenuComp = () => {
   const [selectedFoods, setSelectedFoods] = useState({});
   const apiTimeoutRef = useRef(null);
 
-  const foodSwap = (day, mealType, category, orderStatus) => {
+  const foodSwap = (day, mealType, category, orderStatus, date) => {
     console.log("🚀 ~ foodSwap ~ orderStatus:", orderStatus);
     setFoodIndexes((prevIndexes) => {
       const currentIndex = prevIndexes?.[day]?.[mealType]?.[category] || 0;
@@ -176,7 +176,22 @@ const MenuComp = () => {
       if (categoryFoods.length <= 1) return prevIndexes; // No swap needed if only one item
 
       const nextIndex = (currentIndex + 1) % categoryFoods.length;
-      const newFoodId = categoryFoods[nextIndex].food_id; // Get the new food ID
+      const currentFoodId = categoryFoods[currentIndex]?.food_id;
+      const newFoodId = categoryFoods[nextIndex].food_id;
+
+      const defaultFoods = Object.entries(
+        menuData[day][mealType]?.foods || {}
+      ).reduce((acc, [category, items]) => {
+        acc[category] = items[0]?.food_id; // Get first food_id from each category
+        return acc;
+      }, {});
+
+      // Merge with selected swaps (if any)
+      const finalFoods = {
+        ...defaultFoods,
+        ...(selectedFoods?.[day]?.[mealType] || {}),
+      };
+      console.log("🚀 ~ foodSwap ~ finalFoods:", finalFoods);
 
       // Update the selected foods for order placement
       setSelectedFoods((prev) => ({
@@ -199,6 +214,8 @@ const MenuComp = () => {
           mealType,
           category,
           newFoodId,
+          currentFoodId,
+          date,
         };
 
         // Clear any existing timeout before setting a new one
@@ -207,7 +224,8 @@ const MenuComp = () => {
         }
 
         apiTimeoutRef.current = setTimeout(() => {
-          fetch(`${apiConfig.apiBaseUrl}order-update`, {
+          const startTime = performance.now();
+          fetch(`${apiConfig.apiBaseUrl}order-food-swap`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updateData),
@@ -299,6 +317,7 @@ const MenuComp = () => {
       ...defaultFoods,
       ...(selectedFoods?.[day]?.[mealPeriod] || {}),
     };
+    console.log("🚀 ~ orderMeal ~ finalFoods:", finalFoods);
 
     // const isCustomOrder =
     //   selectedFoods[day] &&
@@ -604,7 +623,8 @@ const MenuComp = () => {
                                         day,
                                         mealType,
                                         category,
-                                        menuData[day][mealType].status
+                                        menuData[day][mealType].status,
+                                        menuData[day].date
                                       )
                                     }
                                   >
