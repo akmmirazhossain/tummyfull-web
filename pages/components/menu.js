@@ -18,6 +18,8 @@ import {
   faCoins,
   faCreditCard,
   faRotate,
+  faCheck,
+  faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
@@ -28,6 +30,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { ApiContext } from "../contexts/ApiContext";
+import { motion, AnimatePresence } from "framer-motion";
 import LoginForm from "./LoginForm";
 
 const IOSSwitch = styled((props) => (
@@ -132,13 +135,15 @@ const MenuComp = () => {
 
     try {
       // Fetch menu data
-      const { data: menuData } = await axios.get(
+      const { data: menu } = await axios.get(
         `${apiConfig.apiBaseUrl}menu?TFLoginToken=${Cookies.get(
           "TFLoginToken"
         )}`
       );
-      // console.log("FETCH DATA -> TRY:", menuData);
-      setMenuData(menuData);
+
+      setMenuData(menu);
+
+      setFoodIndexes(0);
 
       // Fetch settings data
       const { data: settingsData } = await axios.get(
@@ -165,10 +170,18 @@ const MenuComp = () => {
   //MARK: FOOD SWAP
   const [foodIndexes, setFoodIndexes] = useState({});
   const [selectedFoods, setSelectedFoods] = useState({});
+  const [isSwapping, setIsSwapping] = useState(false);
   const apiTimeoutRef = useRef(null);
+  const [swapStatus, setSwapStatus] = useState({});
 
   const foodSwap = (day, mealType, category, orderStatus, date) => {
-    console.log("🚀 ~ foodSwap ~ orderStatus:", orderStatus);
+    // if (isSwapping) {
+    //   console.log("swapStatus -> SWAP IS PROGRESS");
+    //   return;
+    // }
+    console.log("swapStatus ->", isSwapping);
+
+    // console.log("🚀 ~ foodSwap ~ orderStatus:", orderStatus);
     setFoodIndexes((prevIndexes) => {
       const currentIndex = prevIndexes?.[day]?.[mealType]?.[category] || 0;
       const categoryFoods = menuData[day][mealType]?.foods?.[category] || [];
@@ -178,6 +191,9 @@ const MenuComp = () => {
       const nextIndex = (currentIndex + 1) % categoryFoods.length;
       const currentFoodId = categoryFoods[currentIndex]?.food_id;
       const newFoodId = categoryFoods[nextIndex].food_id;
+
+      console.log("🚀 ~ setFoodIndexes ~ currentFoodId:", currentFoodId);
+      console.log("🚀 ~ setFoodIndexes ~ newFoodId:", newFoodId);
 
       const defaultFoods = Object.entries(
         menuData[day][mealType]?.foods || {}
@@ -190,7 +206,9 @@ const MenuComp = () => {
       const finalFoods = {
         ...defaultFoods,
         ...(selectedFoods?.[day]?.[mealType] || {}),
+        [category]: newFoodId, // Ensure the swapped food is updated in finalFoods
       };
+
       console.log("🚀 ~ foodSwap ~ finalFoods:", finalFoods);
 
       // Update the selected foods for order placement
@@ -208,6 +226,7 @@ const MenuComp = () => {
       //UPDATE ORDER IF LOGGED IN
       const token = Cookies.get("TFLoginToken");
       if (token && orderStatus === "enabled") {
+        setIsSwapping(true);
         const updateData = {
           TFLoginToken: token,
           day,
@@ -215,6 +234,7 @@ const MenuComp = () => {
           category,
           newFoodId,
           currentFoodId,
+          finalFoods,
           date,
         };
 
@@ -224,18 +244,60 @@ const MenuComp = () => {
         }
 
         apiTimeoutRef.current = setTimeout(() => {
-          const startTime = performance.now();
+          // setSwapStatus((prev) => ({
+          //   ...prev,
+          //   [day]: {
+          //     ...prev[day],
+          //     [mealType]: {
+          //       ...prev[day]?.[mealType],
+          //       [category]: "updating",
+          //     },
+          //   },
+          // }));
+
           fetch(`${apiConfig.apiBaseUrl}order-food-swap`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updateData),
           })
             .then((res) => res.json())
-            .then((data) => console.log("Order update response:", data))
-            .catch((error) => console.error("Error updating order:", error));
+            .then((data) => {
+              console.log("API Response:", data);
+
+              setSwapStatus((prev) => ({
+                ...prev,
+                [day]: {
+                  ...prev[day],
+                  [mealType]: {
+                    ...prev[day]?.[mealType],
+                    [category]: "updated",
+                  },
+                },
+              }));
+
+              // Clear the "Updated" message after 3 seconds
+              setTimeout(() => {
+                setSwapStatus((prev) => ({
+                  ...prev,
+                  [day]: {
+                    ...prev[day],
+                    [mealType]: {
+                      ...prev[day]?.[mealType],
+                      [category]: null,
+                    },
+                  },
+                }));
+              }, 2000);
+
+              setIsSwapping(false);
+            })
+            .catch((error) => {
+              console.error("Error updating order:", error);
+              setIsSwapping(false); // Enable button on failure
+            });
 
           console.log("🚀 ORDER UPDATE DATA SENT:", updateData);
-        }, 1000); // 1-second debounce
+        }, 1000);
       }
 
       return {
@@ -274,8 +336,6 @@ const MenuComp = () => {
 
   //MARK: Order Meal
   const orderMeal = async (day, menuId, date, value, price, mealPeriod) => {
-    console.log("orderMeal");
-
     checkLogin();
 
     //SWITCH STATUS CHANGER
@@ -317,7 +377,7 @@ const MenuComp = () => {
       ...defaultFoods,
       ...(selectedFoods?.[day]?.[mealPeriod] || {}),
     };
-    console.log("🚀 ~ orderMeal ~ finalFoods:", finalFoods);
+    // console.log("🚀 ~ orderMeal ~ finalFoods:", finalFoods);
 
     // const isCustomOrder =
     //   selectedFoods[day] &&
@@ -340,8 +400,8 @@ const MenuComp = () => {
           ? "custom"
           : "default",
     };
-    console.log("🚀 ~ orderMeal ~ data.selectedFoods:", data.selectedFoods);
-    console.log("🚀 ~ orderMeal ~ data.orderType:", data.orderType);
+    // console.log("🚀 ~ orderMeal ~ data.selectedFoods:", data.selectedFoods);
+    // console.log("🚀 ~ orderMeal ~ data.orderType:", data.orderType);
 
     // const data = {
     //   menuId: menuId,
@@ -435,10 +495,10 @@ const MenuComp = () => {
 
     setMenuData(updatedMenuData);
 
-    console.log(
-      "QuantityChange -> Updated Price:",
-      updatedMenuData[day][mealType].price
-    );
+    // console.log(
+    //   "QuantityChange -> Updated Price:",
+    //   updatedMenuData[day][mealType].price
+    // );
 
     //CALL CALCULATOR
     const totalPrice = calculateTotalPrice(
@@ -457,7 +517,7 @@ const MenuComp = () => {
       totalPrice: totalPrice,
     };
 
-    console.log("QuantityChange -> Quantity Data:", data);
+    // console.log("QuantityChange -> Quantity Data:", data);
 
     try {
       notifLoadTrigger();
@@ -612,21 +672,57 @@ const MenuComp = () => {
                                       ? "w-28 lg:w-44"
                                       : "w-20 lg:w-32"
                                   } rounded-full`}
-                                />
-                                <span>{food.food_name}</span>
-
-                                {items.length > 1 && (
-                                  <button
-                                    className="btn btn-circle btn-xs lg:btn-sm absolute top-0 right-0 bg-opacity-50 border-none"
-                                    onClick={() =>
+                                  onClick={() => {
+                                    if (items.length > 1 && !isSwapping) {
                                       foodSwap(
                                         day,
                                         mealType,
                                         category,
                                         menuData[day][mealType].status,
                                         menuData[day].date
-                                      )
+                                      );
                                     }
+                                  }}
+                                />
+                                <span>{food.food_name}</span>
+
+                                <div className="absolute top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text_white">
+                                  <AnimatePresence mode="wait">
+                                    {swapStatus?.[day]?.[mealType]?.[
+                                      category
+                                    ] === "updated" && (
+                                      <motion.div
+                                        key="updated-message"
+                                        className="badge flex gap-1 bg-opacity-30 border-none"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                      >
+                                        Updated{" "}
+                                        <FontAwesomeIcon
+                                          className="text-green-600"
+                                          icon={faCheckCircle}
+                                        />
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+
+                                {items.length > 1 && (
+                                  <button
+                                    className="btn btn-circle btn-xs lg:btn-sm absolute top-0 -right-2 bg-opacity-50 border-none"
+                                    onClick={() => {
+                                      if (items.length > 1 && !isSwapping) {
+                                        foodSwap(
+                                          day,
+                                          mealType,
+                                          category,
+                                          menuData[day][mealType].status,
+                                          menuData[day].date
+                                        );
+                                      }
+                                    }}
                                   >
                                     <FontAwesomeIcon
                                       icon={faRotate}

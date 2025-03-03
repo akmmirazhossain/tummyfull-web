@@ -1,69 +1,99 @@
-// components/OrderList.js
-import { React, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 
-const OrderList = () => {
+const OrderSummary = () => {
+  const [foodSummary, setFoodSummary] = useState({});
+  const [currentDate, setCurrentDate] = useState("");
+  const [mealPeriod, setMealPeriod] = useState("");
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const token = Cookies.get("TFLoginToken"); // Get the token from cookies
         const response = await axios.get(
-          "http://192.168.0.216/tf-lara/api/orderlist-chef-now",
-          {
-            params: {
-              TFLoginToken: token, // Send the token as a query parameter
-            },
-          }
+          "http://localhost/tf-lara/api/orderlist-chef-now"
         );
-        setOrders(response.data); // Set the fetched data to the state
-      } catch {
-        setError("Failed to fetch orders.");
-      } finally {
-        setLoading(false);
+        const orders = response.data.orders;
+
+        const summary = {};
+
+        orders.forEach((order) => {
+          const quantity = order.mrd_order_quantity;
+          const foodItems = order.food_details;
+
+          foodItems.forEach((food) => {
+            const foodName = food.mrd_food_name;
+            if (summary[foodName]) {
+              summary[foodName] += quantity;
+            } else {
+              summary[foodName] = quantity;
+            }
+          });
+        });
+
+        if (response.data.currentDateTime) {
+          const dateObj = new Date(response.data.currentDateTime);
+          setCurrentDate(
+            dateObj.toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          );
+        }
+
+        if (orders.length > 0) {
+          setMealPeriod(orders[0].mrd_menu_period);
+        }
+        setOrders(orders);
+        setFoodSummary(summary);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
       }
     };
 
     fetchOrders();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-300">
-        <thead>
-          <tr>
-            <th className="py-2 px-4 border-b">Order ID</th>
-            <th className="py-2 px-4 border-b">Date</th>
-            <th className="py-2 px-4 border-b">Status</th>
-            <th className="py-2 px-4 border-b">Total Price</th>
-            <th className="py-2 px-4 border-b">Payment Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.mrd_order_id}>
-              <td className="py-2 px-4 border-b">{order.mrd_order_id}</td>
-              <td className="py-2 px-4 border-b">{order.mrd_order_date}</td>
-              <td className="py-2 px-4 border-b">{order.mrd_order_status}</td>
-              <td className="py-2 px-4 border-b">
-                ${order.mrd_order_total_price}
-              </td>
-              <td className="py-2 px-4 border-b">
-                {order.mrd_order_user_pay_status}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="w-full h-screen bg-black text-white">
+      <h2>Food Item Quantities</h2>
+      <h2>{currentDate}</h2>
+      <h3>Meal Period: {mealPeriod}</h3>
+      <ul>
+        {Object.entries(foodSummary).map(([foodName, quantity]) => (
+          <li key={foodName}>
+            {foodName}: {quantity}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-6 border-t border-gray-500 pt-4">
+        <h2 className="text-lg font-bold">Order Details by Customer</h2>
+        {orders.map((order) => (
+          <div
+            key={order.mrd_order_id}
+            className="mt-2 p-2 border-b border-gray-700"
+          >
+            <p className="font-semibold">{order.mrd_user_first_name}</p>
+            <p>Phone: {order.mrd_user_phone}</p>
+            <p>Address: {order.mrd_user_address}</p>
+            <p>Quantity: {order.mrd_order_quantity}</p>
+            <p>
+              Foods:{" "}
+              {order.food_details
+                .map(
+                  (food) =>
+                    `${food.mrd_food_name} (${order.mrd_order_quantity})`
+                )
+                .join(", ")}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default OrderList;
+export default OrderSummary;

@@ -136,7 +136,7 @@ const Info = () => {
             </div>
             <div className="flex items-center justify-center flex-col">
               <p className="">যে কোন প্রশ্নের জন্য কল করুন:</p>
-              <p className="h3_akm"> +880 1673-692997, +880 1910-355118</p>
+              <p className="h3_akm">+880 1748-417178, +880 1673-692997</p>
             </div>
           </div>
         </section>

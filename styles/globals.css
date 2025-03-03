@@ -57,6 +57,10 @@ body {
   font-family: "montserrat";
 }
 
+#tawk_2_branding {
+  display: none !important;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
