@@ -60,7 +60,7 @@ const NavbarTop = () => {
 
   const navbarItems = [
     {
-      href: "/",
+      href: "/menu",
       icon: faUtensils,
       text: "Menu",
     },
@@ -107,7 +107,7 @@ const NavbarTop = () => {
               src="/logo.png"
               alt={"logo"}
             />
-            <Link color="foreground" href="./">
+            <Link color="foreground" href="/">
               <p className=" font-niljannati text-2xl">ডালভাত.com</p>
             </Link>
           </div>

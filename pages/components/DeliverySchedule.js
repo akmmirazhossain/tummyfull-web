@@ -27,6 +27,37 @@ const DeliveryList = () => {
 
   const token = Cookies.get("TFLoginToken");
 
+  // Add this new function to fetch order details
+  const fetchOrderDetails = async () => {
+    if (!apiConfig) return;
+    try {
+      const response = await axios.get(
+        `${apiConfig.apiBaseUrl}orderlist-chef-now`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Create a map of order details indexed by order ID
+      const orderDetailsMap = {};
+      response.data.orders.forEach((order) => {
+        orderDetailsMap[order.mrd_order_id] = {
+          mrd_order_quantity: order.mrd_order_quantity,
+          food_details: order.food_details,
+        };
+      });
+      console.log("🚀 ~ fetchOrderDetails ~ orderDetailsMap:", orderDetailsMap);
+
+      return orderDetailsMap;
+    } catch (error) {
+      console.error("Error fetching order details:", error);
+      return {};
+    }
+  };
+
+  // Modify your fetchDeliveryList function
   const fetchDeliveryList = async () => {
     if (!apiConfig) return;
     try {
@@ -36,6 +67,9 @@ const DeliveryList = () => {
       );
       setSettings(settingsData);
 
+      // Fetch order details first
+      const orderDetailsMap = await fetchOrderDetails();
+
       const response = await axios.get(`${apiConfig.apiBaseUrl}delivery-list`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -43,7 +77,26 @@ const DeliveryList = () => {
       });
 
       const data = response.data;
+
+      // Enhance delivery data with food details
+      Object.keys(data).forEach((date) => {
+        ["lunch", "dinner"].forEach((period) => {
+          data[date][period].forEach((order) => {
+            // Add food details and order quantity from the second API
+            if (orderDetailsMap[order.mrd_order_id]) {
+              order.food_details =
+                orderDetailsMap[order.mrd_order_id].food_details;
+              // This is redundant as both APIs have mrd_order_quantity, but ensuring we use the second API's data
+              order.mrd_order_quantity =
+                orderDetailsMap[order.mrd_order_id].mrd_order_quantity;
+            }
+          });
+        });
+      });
+
       setDeliveries(data);
+
+      console.log("🚀 ~ fetchDeliveryList ~ data:", data);
 
       // Set default order status and mealbox picked states
       const status = {};
@@ -52,7 +105,6 @@ const DeliveryList = () => {
         ["lunch", "dinner"].forEach((period) => {
           data[date][period].forEach((order) => {
             status[order.mrd_order_id] = order.mrd_order_status;
-            // mealbox[order.mrd_order_id] = order.mrd_user_has_mealbox;
             mealbox[order.mrd_order_id] = null;
           });
         });
@@ -172,8 +224,15 @@ const DeliveryList = () => {
                       >
                         {["cancelled", "delivered", "unavailable"].includes(
                           delivery.mrd_order_status
-                        ) ? (
-                          <div role="alert" className="alert alert-success">
+                        ) && (
+                          <div
+                            role="alert"
+                            className={`alert ${
+                              delivery.mrd_order_status === "delivered"
+                                ? "alert-success"
+                                : "alert-error"
+                            }`}
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               className="h-6 w-6 shrink-0 stroke-current"
@@ -184,13 +243,22 @@ const DeliveryList = () => {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                d={
+                                  delivery.mrd_order_status === "delivered"
+                                    ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                }
                               />
                             </svg>
-                            <span>Submission successful.</span>
+                            <span>
+                              {delivery.mrd_order_status === "delivered" &&
+                                "Delivery completed."}
+                              {delivery.mrd_order_status === "cancelled" &&
+                                "Order cancelled."}
+                              {delivery.mrd_order_status === "unavailable" &&
+                                "Customer unavailable."}
+                            </span>
                           </div>
-                        ) : (
-                          ""
                         )}
                         <div className="flex items-center ">
                           <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
@@ -343,7 +411,7 @@ const DeliveryList = () => {
                             <FontAwesomeIcon icon={faBowlFood} />
                             <span>মিল দিন:</span>
                           </div>
-                          <div className=" w-3/4 py-1 flex items-center gap_akm">
+                          <div className=" w-3/4  flex flex-col items-center py_akm">
                             {delivery.mrd_order_mealbox === 1 &&
                               delivery.mrd_user_has_mealbox < 2 && (
                                 <>
@@ -599,6 +667,25 @@ const DeliveryList = () => {
                                   </div>
                                 )}
                               </>
+                            )}
+                            {delivery.food_details ? (
+                              <div className="flex flex-row gap-1">
+                                {delivery.food_details.map((food, index) => (
+                                  <div
+                                    key={food.mrd_food_id}
+                                    className="badge badge-soft badge-primary"
+                                  >
+                                    {food.mrd_food_name}
+                                    {/* {index < delivery.food_details.length - 1
+                                      ? ", "
+                                      : ""} */}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="no-food-details">
+                                No food confirmed yet.
+                              </div>
                             )}
                           </div>
                         </div>

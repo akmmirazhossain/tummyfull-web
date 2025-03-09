@@ -18,15 +18,15 @@ const Info = () => {
             <div>
               <span className="text_green font-bold">WhatsApp: </span>
               <a
-                href="https://wa.me/8801748417178?text=Hello%20I%20want%20to%20inquire%20about%20meals"
+                href="https://wa.me/8801748417178?text=Hi%21%20I’m%20interested%20in%20your%20meal%20service.%20Can%20you%20guide%20me?"
                 target="_blank"
                 className="underline"
               >
                 +880 1748-417178
               </a>
-              ,
+              ,{" "}
               <a
-                href="https://wa.me/8801673692997?text=Hello%20I%20want%20to%20inquire%20about%20meals"
+                href="https://wa.me/8801673692997?text=Hi%20I’m%20interested%20in%20your%20meal%20service.%20Can%20you%20guide%20me?"
                 target="_blank"
                 className="underline"
               >
@@ -82,7 +82,7 @@ const Info = () => {
                   Unlike traditional catering services, you can pre-schedule
                   your meals and turn them on or off as needed.{" "}
                   <Link
-                    href="/"
+                    href="/menu"
                     target="_blank"
                     className="text-blue-500 text-base font-bold"
                   >

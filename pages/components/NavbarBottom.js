@@ -33,7 +33,7 @@ const NavbarBottom = () => {
 
   const navbarItems = [
     {
-      href: "/",
+      href: "/menu",
       icon: faUtensils,
       text: "Menu",
     },

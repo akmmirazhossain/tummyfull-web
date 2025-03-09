@@ -762,7 +762,7 @@ const MenuComp = () => {
                               {menuData[day][mealType].price}
                             </span>
                           </div>
-                          <div className="h4info_akm line-through">৳125</div>
+                          <div className="h4info_akm line-through">৳140</div>
                         </div>
                         <div className="flex items-center justify-center">
                           <div className="h4_akm flex flex-col items-center">

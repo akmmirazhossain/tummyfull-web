@@ -110,7 +110,7 @@ const LoginForm = () => {
         if (newUser) {
           setShowNameAddrInput(true);
         } else {
-          router.push("/");
+          router.push("/menu");
         }
         console.log("🚀 ~ handleVerifyOTP ~", newUser);
         // router.push("/settings");
@@ -153,7 +153,7 @@ const LoginForm = () => {
 
       console.log("User data updated successfully:", response.data);
 
-      router.push("/");
+      router.push("/menu");
     } catch (error) {
       console.error("Error updating user data:", error);
       alert("An error occurred while updating the profile. Please try again.");

@@ -8,7 +8,7 @@ const FooterMain = () => {
     {
       title: "APP",
       links: [
-        { href: "./", label: "Menu" },
+        { href: "/menu", label: "Menu" },
         { href: "/settings", label: "Settings" },
         { href: "/wallet", label: "Wallet" },
       ],
@@ -48,13 +48,13 @@ const FooterMain = () => {
                 alt={"logo"}
               />
 
-              <Link color="foreground" href="./">
+              <Link color="foreground" href="/">
                 <p className=" font-niljannati text-2xl">ডালভাত.com</p>
               </Link>
 
               <p className="mt-2 text-sm text-gray-500 max-w-80">
-                DalBhath is an easy meal management app for students, job
-                holders, and families seeking convenient daily meal options.
+                DalBhath is an easy meal management app for students seeking
+                convenient daily meal options.
               </p>
             </div>
             {navSections.map((section, sectionIndex) => (

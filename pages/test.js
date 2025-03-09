@@ -57,8 +57,8 @@ const OrderSummary = () => {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-black text-white">
-      <h2>Food Item Quantities</h2>
+    <div className="w-full h-full bg-black text-white">
+      <div className="h1_akm"> To Cook Today</div>
       <h2>{currentDate}</h2>
       <h3>Meal Period: {mealPeriod}</h3>
       <ul>
