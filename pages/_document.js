@@ -23,7 +23,7 @@ export default function Document() {
 
         {/* Tawk.to */}
 
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               function loadTawkTo() {
@@ -60,7 +60,7 @@ export default function Document() {
               }
             `,
           }}
-        />
+        /> */}
 
         {/* <script
           dangerouslySetInnerHTML={{

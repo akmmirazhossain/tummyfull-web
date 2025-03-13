@@ -38,6 +38,20 @@ const Layout = ({ children, title }) => {
       <footer className=" bg_beige hidden md:block">
         <FooterMain />
       </footer>
+
+      {/* WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/8801748417178?text=Hello"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed z-30 bottom-16 right-2 md:bottom-4 md:right-4  p-1 rounded-full hover:scale-110 transition-transform duration-300"
+      >
+        <img
+          src="/images/whatsapp-icon.png"
+          alt="WhatsApp"
+          className="w-12 h-12"
+        />
+      </a>
     </div>
   );
 };

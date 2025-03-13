@@ -114,13 +114,11 @@ const NavbarTop = () => {
           <nav className="hidden md:flex space-x-6 pr-6">
             {/* Replace with your menu items */}
             {navbarItems.map((item) => (
-              <Link
-                key={item.text}
-                href={item.href}
-                className="gap-2  flex justify-center items-center"
-              >
-                <FontAwesomeIcon icon={item.icon} />
-                {item.text}
+              <Link key={item.text} href={item.href}>
+                <div className="gap-2  flex justify-center items-center">
+                  <FontAwesomeIcon icon={item.icon} />
+                  {item.text}
+                </div>
               </Link>
             ))}
           </nav>

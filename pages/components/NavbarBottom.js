@@ -76,7 +76,7 @@ const NavbarBottom = () => {
                   startContent={
                     <FontAwesomeIcon className="w-5 h-5" icon={item.icon} />
                   }
-                  onClick={(event) => handleNavigation(item.href, event)} // Navigate to the corresponding route
+                  onClick={(event) => handleNavigation(item.href, event)}
                 >
                   {item.text}
                 </Button>

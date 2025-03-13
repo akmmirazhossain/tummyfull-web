@@ -1,3 +1,4 @@
+"use client";
 import { React, useRef, useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -13,6 +14,7 @@ import {
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGem } from "@fortawesome/free-regular-svg-icons";
+import Cookies from "js-cookie";
 
 import NavbarTop from "./components/NavbarTop";
 import FooterMain from "./layout/Footer";
@@ -27,10 +29,25 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
 export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false);
   const sectionRef = useRef(null);
+
+  // Inside your component:
+  const [buttonTextHero, setButtonTextHero] = useState(
+    "Start with a free meal!"
+  );
+  const [buttonTextCTA, setButtonTextCTA] = useState("Login and Order Now");
+
+  useEffect(() => {
+    // This code only runs on the client after hydration
+    if (Cookies.get("TFLoginToken")) {
+      setButtonTextHero("Visit menu page");
+      setButtonTextCTA("Visit menu page");
+    }
+  }, []);
   // const { width } = useWindowSize();
 
   // Get section height for confetti
@@ -147,8 +164,8 @@ export default function Home() {
                 href={"/menu"}
                 className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
               >
-                <FontAwesomeIcon icon={faBowlRice} /> Save 100 tk on your first
-                meal!
+                <FontAwesomeIcon icon={faBowlRice} />
+                {buttonTextHero}
                 <motion.div
                   animate={{ x: [0, 10, 0] }} // Moves left to right
                   transition={{ duration: 3, repeat: Infinity }}
@@ -176,8 +193,7 @@ export default function Home() {
                 href={"/menu"}
                 className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
               >
-                <FontAwesomeIcon icon={faBowlRice} /> Save 100 tk on your first
-                meal!
+                <FontAwesomeIcon icon={faBowlRice} /> {buttonTextHero}
                 <motion.div
                   animate={{ x: [0, 10, 0] }} // Moves left to right
                   transition={{ duration: 3, repeat: Infinity }}
@@ -577,11 +593,9 @@ export default function Home() {
           />
         </div> */}
         <div className="max-w-7xl  mx-auto flex justify-center items-center flex-col px-6 pb-4 relative z-10">
-          <h2 className="text-7xl font-bebas">
-            Save 100 tk on your first meal!
-          </h2>
+          <h2 className="text-7xl font-bebas">Start with a free meal!</h2>
           <p className="font-poppins h3_akm">
-            Get started today—claim your 100 tk discount before it’s gone!
+            Claim your free meal now—limited time only!
           </p>
           <Link href={"/menu"}>
             <motion.button
@@ -595,7 +609,7 @@ export default function Home() {
                 repeatType: "reverse",
               }}
             >
-              Login and Order Now
+              {buttonTextCTA}
             </motion.button>
           </Link>
         </div>
@@ -628,6 +642,8 @@ export default function Home() {
       <footer className=" bg_beige hidden md:block text_black">
         <FooterMain />
       </footer>
+
+      <FloatingWhatsApp />
     </div>
   );
 }

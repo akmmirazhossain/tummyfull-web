@@ -192,11 +192,11 @@ const MealSettings = () => {
             ) : null}
           </div>
           <div className="grid grid-cols-5">
-            <div className="col-span-2">
+            <div className="col-span-5 md:col-span-2">
               <Image src="/images/mealbox_exchage.webp" />
             </div>
-            <div className="col-span-3">
-              <p className="h3_akm">Why choose a mealbox?</p>
+            <div className="col-span-5 md:col-span-3">
+              <p className="h3_akm pt_akm md:pt-0">Why choose a mealbox?</p>
               <ul className="list-disc p-4">
                 <li>
                   A healthier alternative to single-use plastic containers.

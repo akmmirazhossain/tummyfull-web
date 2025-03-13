@@ -565,41 +565,170 @@ const MenuComp = () => {
     fri: "Friday",
   };
 
+  //  if (!menuData || !settings) {
+
   if (!menuData || !settings) {
     return (
       <div>
-        <h1 className="h1_akm">
-          <Skeleton className="rounded-lg h-8 w-28 "></Skeleton>
-        </h1>
-        <Card className="h-96 p-6 mb-6">
-          <div>
-            <Skeleton className="rounded-lg h-8 w-60 "></Skeleton>
+        <div>
+          <div className="h1_akm flex items-center justify-between">
+            <Skeleton className="rounded-xl h-8 w-36 lg:h-10 lg:w-64 "></Skeleton>
+            <Skeleton className="rounded-xl h-8 w-20  lg:h-10 lg:w-24 "></Skeleton>
           </div>
+          <div className=" grid grid-cols-2 gap_akm">
+            <Card className="  mb-6">
+              <div className=" pad_akm my-2">
+                <Skeleton className="rounded-xl h-4 w-16 lg:h-8 lg:w-28 ml-2 lg:ml-3"></Skeleton>
+              </div>
 
-          <div className="grid grid-cols-2 gap-6 mt-6 h-full">
-            <div>
-              <Skeleton className="rounded-lg h-full"></Skeleton>
-            </div>
-            <div>
-              <Skeleton className="rounded-lg h-full"></Skeleton>
-            </div>
-          </div>
-        </Card>
+              <div className=" flex  items-center justify-center h-60  lg:h-[440px] border-y-1">
+                <div>
+                  <div className=" flex justify-center gap_akm">
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div>
+                      <Skeleton className="rounded-full h-28 w-28 lg:h-44 lg:w-44 "></Skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        <Card className="h-96 p-6">
-          <div>
-            <Skeleton className="rounded-lg h-8 w-60 "></Skeleton>
-          </div>
+              <div className="flex flex-col gap_akm items-center justify-center pad_akm">
+                <div className="flex flex-col gap_akm items-center justify-center mb-2">
+                  <Skeleton className="rounded-xl h-6 w-16 lg:h-10 lg:w-28 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                </div>
+                <div className="flex flex-col gap_akm items-center justify-center">
+                  <Skeleton className="rounded-full h-16 w-24 lg:h-20 lg:w-36"></Skeleton>
+                  <Skeleton className="rounded-full h-2 w-16 lg:h-4 lg:w-28 "></Skeleton>
+                </div>
+              </div>
+            </Card>
 
-          <div className="grid grid-cols-2 gap-6 mt-6 h-full">
-            <div>
-              <Skeleton className="rounded-lg h-full"></Skeleton>
-            </div>
-            <div>
-              <Skeleton className="rounded-lg h-full"></Skeleton>
-            </div>
+            <Card className="  mb-6">
+              <div className=" pad_akm my-2">
+                <Skeleton className="rounded-xl h-4 w-16 lg:h-8 lg:w-28 ml-2 lg:ml-3"></Skeleton>
+              </div>
+
+              <div className=" flex  items-center justify-center h-60  lg:h-[440px] border-y-1">
+                <div>
+                  <div className=" flex justify-center gap_akm">
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div>
+                      <Skeleton className="rounded-full h-28 w-28 lg:h-44 lg:w-44 "></Skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap_akm items-center justify-center pad_akm">
+                <div className="flex flex-col gap_akm items-center justify-center mb-2">
+                  <Skeleton className="rounded-xl h-6 w-16 lg:h-10 lg:w-28 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                </div>
+                <div className="flex flex-col gap_akm items-center justify-center">
+                  <Skeleton className="rounded-full h-16 w-24 lg:h-20 lg:w-36"></Skeleton>
+                  <Skeleton className="rounded-full h-2 w-16 lg:h-4 lg:w-28 "></Skeleton>
+                </div>
+              </div>
+            </Card>
           </div>
-        </Card>
+        </div>
+
+        <div>
+          <div className="h1_akm flex items-center justify-between">
+            <Skeleton className="rounded-xl h-8 w-36 lg:h-10 lg:w-64 "></Skeleton>
+            <Skeleton className="rounded-xl h-8 w-20  lg:h-10 lg:w-24 "></Skeleton>
+          </div>
+          <div className=" grid grid-cols-2 gap_akm">
+            <Card className="  mb-6">
+              <div className=" pad_akm my-2">
+                <Skeleton className="rounded-xl h-4 w-16 lg:h-8 lg:w-28 ml-2 lg:ml-3"></Skeleton>
+              </div>
+
+              <div className=" flex  items-center justify-center h-60  lg:h-[440px] border-y-1">
+                <div>
+                  <div className=" flex justify-center gap_akm">
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div>
+                      <Skeleton className="rounded-full h-28 w-28 lg:h-44 lg:w-44 "></Skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap_akm items-center justify-center pad_akm">
+                <div className="flex flex-col gap_akm items-center justify-center mb-2">
+                  <Skeleton className="rounded-xl h-6 w-16 lg:h-10 lg:w-28 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                </div>
+                <div className="flex flex-col gap_akm items-center justify-center">
+                  <Skeleton className="rounded-full h-16 w-24 lg:h-20 lg:w-36"></Skeleton>
+                  <Skeleton className="rounded-full h-2 w-16 lg:h-4 lg:w-28 "></Skeleton>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="  mb-6">
+              <div className=" pad_akm my-2">
+                <Skeleton className="rounded-xl h-4 w-16 lg:h-8 lg:w-28 ml-2 lg:ml-3"></Skeleton>
+              </div>
+
+              <div className=" flex  items-center justify-center h-60  lg:h-[440px] border-y-1">
+                <div>
+                  <div className=" flex justify-center gap_akm">
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                    <div>
+                      <Skeleton className="rounded-full w-16 h-16 lg:h-32 lg:w-32 "></Skeleton>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div>
+                      <Skeleton className="rounded-full h-28 w-28 lg:h-44 lg:w-44 "></Skeleton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap_akm items-center justify-center pad_akm">
+                <div className="flex flex-col gap_akm items-center justify-center mb-2">
+                  <Skeleton className="rounded-xl h-6 w-16 lg:h-10 lg:w-28 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                  <Skeleton className="rounded-xl h-2 w-20 lg:h-8 lg:w-36 "></Skeleton>
+                </div>
+                <div className="flex flex-col gap_akm items-center justify-center">
+                  <Skeleton className="rounded-full h-16 w-24 lg:h-20 lg:w-36"></Skeleton>
+                  <Skeleton className="rounded-full h-2 w-16 lg:h-4 lg:w-28 "></Skeleton>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
       </div>
     ); // You can show a loading indicator while fetching data
   }
@@ -663,7 +792,7 @@ const MenuComp = () => {
                                 <img
                                   src={`/images/food/${food.food_image}`}
                                   alt={food.food_name}
-                                  className={`${
+                                  className={` ${
                                     index ===
                                     Object.keys(
                                       menuData[day][mealType]?.foods || {}
@@ -671,7 +800,11 @@ const MenuComp = () => {
                                       1
                                       ? "w-28 lg:w-44"
                                       : "w-20 lg:w-32"
-                                  } rounded-full`}
+                                  } rounded-full ${
+                                    items.length > 1
+                                      ? "cursor-pointer transition-transform active:scale-90"
+                                      : ""
+                                  }`}
                                   onClick={() => {
                                     if (items.length > 1 && !isSwapping) {
                                       foodSwap(
@@ -711,7 +844,7 @@ const MenuComp = () => {
 
                                 {items.length > 1 && (
                                   <button
-                                    className="btn btn-circle btn-xs lg:btn-sm absolute top-0 -right-2 bg-opacity-50 border-none"
+                                    className="btn bg_green text_white btn-circle btn-xs lg:btn-sm absolute top-0 -right-2 bg-opacity-50 border-none hover:bg_green"
                                     onClick={() => {
                                       if (items.length > 1 && !isSwapping) {
                                         foodSwap(
@@ -724,10 +857,7 @@ const MenuComp = () => {
                                       }
                                     }}
                                   >
-                                    <FontAwesomeIcon
-                                      icon={faRotate}
-                                      className="text_green"
-                                    />
+                                    {items.length}
                                   </button>
                                 )}
                               </div>
