@@ -9,10 +9,19 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import Head from "next/head";
 import Link from "next/link";
 import { ApiContext } from "../contexts/ApiContext";
+import { useUser } from "../contexts/UserContext";
 
 const ProfileForm = () => {
   const router = useRouter();
   const apiConfig = useContext(ApiContext);
+  const { refreshUser } = useUser();
+  const [no_address, setNoAddress] = useState("");
+
+  useEffect(() => {
+    if (router.query.no_address) {
+      setNoAddress(router.query.no_address); // Extract message from query params
+    }
+  }, [router.query.no_address]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -96,6 +105,7 @@ const ProfileForm = () => {
       if (response.ok) {
         console.log("User data updated successfully:", result);
         alert("Profile updated successfully!");
+        await refreshUser();
       } else {
         console.error("Failed to update user data:", result);
         alert(result.message || "Failed to update profile. Please try again.");
@@ -209,7 +219,10 @@ const ProfileForm = () => {
         <Spacer y={4} />
         <div>
           <span>Address </span>
-          <span className="text-red-500">*</span>
+          <span className="text-red-500">
+            {" "}
+            {no_address && <> ({no_address})</>} *
+          </span>
         </div>
         <Input
           clearable

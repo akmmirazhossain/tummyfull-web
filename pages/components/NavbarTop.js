@@ -124,7 +124,7 @@ const NavbarTop = () => {
           </nav>
 
           <div className="flex items-center">
-            {!isLoggedIn && (
+            {!isLoggedIn && !isLoading && (
               <Link
                 href="/login"
                 className="gap-2  flex justify-center items-center"

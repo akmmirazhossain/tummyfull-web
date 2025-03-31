@@ -39,3 +39,4 @@ C:\fakepath(77,9-43): warning X3571: pow(f, e) will not work for negative f, use
 [0107/142113.363:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
 [0107/142113.426:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
 [0107/150727.557:WARNING:dns_config_service_win.cc(668)] Failed to read DnsConfig.
+[0315/203113.908:ERROR:browser_gpu_channel_host_factory.cc(139)] Failed to launch GPU process.

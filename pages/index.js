@@ -164,7 +164,7 @@ export default function Home() {
                 href={"/menu"}
                 className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
               >
-                <FontAwesomeIcon icon={faBowlRice} />
+                <FontAwesomeIcon icon={faBowlRice} className="h-5 w-5" />
                 {buttonTextHero}
                 <motion.div
                   animate={{ x: [0, 10, 0] }} // Moves left to right
@@ -193,7 +193,8 @@ export default function Home() {
                 href={"/menu"}
                 className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
               >
-                <FontAwesomeIcon icon={faBowlRice} /> {buttonTextHero}
+                <FontAwesomeIcon icon={faBowlRice} className="h-5 w-5" />{" "}
+                {buttonTextHero}
                 <motion.div
                   animate={{ x: [0, 10, 0] }} // Moves left to right
                   transition={{ duration: 3, repeat: Infinity }}

@@ -24,6 +24,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
 import { useNotification } from "../contexts/NotificationContext";
+import { useUser } from "../contexts/UserContext";
 import Cookies from "js-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -108,6 +109,7 @@ const MenuComp = () => {
     dayjs(dateString).format("D[th] MMM");
 
   const { shakeBell, notifLoadTrigger } = useNotification();
+  const { user, loading, error } = useUser();
   //AUTO REFRESH ON NEXT
   const handleVisibilityChange = () => {
     console.log("handleVisibilityChange");
@@ -127,6 +129,13 @@ const MenuComp = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [apiConfig]);
+
+  useEffect(() => {
+    // Log the user data when it is available
+    if (user) {
+      console.log("User data:", user);
+    }
+  }, [user]);
 
   //FETCH MENU
   const fetchData = async () => {
@@ -244,17 +253,6 @@ const MenuComp = () => {
         }
 
         apiTimeoutRef.current = setTimeout(() => {
-          // setSwapStatus((prev) => ({
-          //   ...prev,
-          //   [day]: {
-          //     ...prev[day],
-          //     [mealType]: {
-          //       ...prev[day]?.[mealType],
-          //       [category]: "updating",
-          //     },
-          //   },
-          // }));
-
           fetch(`${apiConfig.apiBaseUrl}order-food-swap`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -337,6 +335,23 @@ const MenuComp = () => {
   //MARK: Order Meal
   const orderMeal = async (day, menuId, date, value, price, mealPeriod) => {
     checkLogin();
+
+    // Check if address is empty
+    if (
+      (!user.data.address || user.data.address.trim() === "") &&
+      value === true
+    ) {
+      // Redirect to settings with a message in the query params
+
+      // console.log("USER ADDRESS NOT FOUND", value);
+      router.push({
+        pathname: "/settings",
+        query: {
+          no_address: "Please enter your delivery address to place orders",
+        },
+      });
+      return;
+    }
 
     //SWITCH STATUS CHANGER
     const updatedMenuData = { ...menuData };
@@ -892,7 +907,7 @@ const MenuComp = () => {
                               {menuData[day][mealType].price}
                             </span>
                           </div>
-                          <div className="h4info_akm line-through">৳140</div>
+                          <div className="h4info_akm line-through">৳180</div>
                         </div>
                         <div className="flex items-center justify-center">
                           <div className="h4_akm flex flex-col items-center">
