@@ -101,12 +101,13 @@ const MenuComp = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
 
-  const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+  // const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+  // const [pendingOrder, setPendingOrder] = useState(null);
 
-  const [pendingOrder, setPendingOrder] = useState(null);
+  // const formatToDayMonth = (dateString) =>
+  //   dayjs(dateString).format("D[th] MMM");
 
-  const formatToDayMonth = (dateString) =>
-    dayjs(dateString).format("D[th] MMM");
+  const [disabledMeals, setDisabledMeals] = useState({});
 
   const { shakeBell, notifLoadTrigger } = useNotification();
   const { user, loading, error } = useUser();
@@ -137,7 +138,7 @@ const MenuComp = () => {
     }
   }, [user]);
 
-  //FETCH MENU
+  //FETCH MENU & DISABLED MEAL
   const fetchData = async () => {
     console.log("FETCH DATA");
     if (!apiConfig) return;
@@ -150,8 +151,15 @@ const MenuComp = () => {
         )}`
       );
 
-      setMenuData(menu);
+      axios.get(`${apiConfig.apiBaseUrl}disabled-meals`).then((res) => {
+        setDisabledMeals(res.data.disabledMeals);
+        console.log(
+          "🚀 ~ axios.get ~ res.data.disabledMeals:",
+          res.data.disabledMeals
+        );
+      });
 
+      setMenuData(menu);
       setFoodIndexes(0);
 
       // Fetch settings data
@@ -168,6 +176,16 @@ const MenuComp = () => {
   useEffect(() => {
     fetchData();
   }, [apiConfig, Cookies.get("TFLoginToken")]);
+
+  // const isMealDisabled = (day, mealType) => {
+  //   const mealInfo = disabledMeals[menuData[day].date];
+
+  //   if (!mealInfo || !mealInfo[mealType]) return false; // Meal is not disabled
+
+  //   const { start, end } = mealInfo[mealType];
+  //   const now = new Date();
+  //   return now >= new Date(start) && now <= new Date(end);
+  // };
 
   //CLOSE LOGIN MODAL
 
@@ -774,7 +792,42 @@ const MenuComp = () => {
               {["lunch", "dinner"].map(
                 (mealType) =>
                   menuData[day][mealType] && (
-                    <div className="card_akm" key={mealType}>
+                    <div className="card_akm relative" key={mealType}>
+                      {disabledMeals?.[menuData[day].date]?.some(
+                        (entry) => entry[mealType] === "yes"
+                      ) && (
+                        <div className="absolute inset-0 bg-black bg-opacity-20 backdrop-blur-md z-10 flex items-center justify-center rounded_akm">
+                          <div
+                            role="alert"
+                            className="alert alert-info bg_green mx_akm text_white"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              className="h-6 w-6 shrink-0 stroke-current"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              ></path>
+                            </svg>
+                            <span>
+                              {" "}
+                              {disabledMeals[menuData[day].date].find(
+                                (entry) => entry[mealType] === "yes"
+                              )?.message ||
+                                `${
+                                  mealType.charAt(0).toUpperCase() +
+                                  mealType.slice(1)
+                                } is disabled for this day`}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between pad_akm">
                         <div className="h2_akm pl_akm">
                           <span>

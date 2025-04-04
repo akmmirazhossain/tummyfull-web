@@ -15,15 +15,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faGem } from "@fortawesome/free-regular-svg-icons";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 import NavbarTop from "./components/NavbarTop";
 import FooterMain from "./layout/Footer";
 import { AnimatedSection, AnimatedContent } from "../hooks/animation";
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
-// import "swiper/css/pagination";
-// import "swiper/css/navigation";
-// import { Pagination, Navigation } from "swiper";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -34,6 +30,7 @@ import FloatingWhatsApp from "./components/FloatingWhatsApp";
 export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false);
   const sectionRef = useRef(null);
+  const router = useRouter();
 
   // Inside your component:
   const [buttonTextHero, setButtonTextHero] = useState(
