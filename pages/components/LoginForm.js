@@ -97,7 +97,7 @@ const LoginForm = () => {
       console.log("handleVerifyOTP -> Response status:", response.status);
 
       const data = await response.json();
-      console.log("handleVerifyOTP -> OTP verification result:", data);
+      // console.log("handleVerifyOTP -> OTP verification result:", data);
 
       if (data.status === "success") {
         console.log(
@@ -127,7 +127,7 @@ const LoginForm = () => {
 
   const handleSaveAndContinue = async () => {
     const token = Cookies.get("TFLoginToken");
-    console.log(formData.first_name);
+    // console.log(formData.first_name);
 
     if (!token) {
       console.error("No login token found, redirecting to login");
@@ -151,9 +151,10 @@ const LoginForm = () => {
         }
       );
 
-      console.log("User data updated successfully:", response.data);
+      // console.log("User data updated successfully:", response.data);
 
-      router.push("/menu");
+      // router.push("/menu");
+      window.location.href = "/menu";
     } catch (error) {
       console.error("Error updating user data:", error);
       alert("An error occurred while updating the profile. Please try again.");
@@ -252,23 +253,33 @@ const LoginForm = () => {
             />
 
             <div>
-              {" "}
+              <span className="pl_akm text-xs text_grey">
+                Flat no, Lift floor, House no, Road no, Block, Area
+              </span>
+            </div>
+            <div>
               <Textarea
                 name="address"
                 type="text"
                 label="Full Address"
                 variant="bordered"
-                placeholder="Flat no, House no, Road no, Block, Area"
+                placeholder="Flat no, Lift floor, House no, Road no, Block, Area"
                 className=" md:col-span-2"
                 value={formData.address}
                 onChange={handleChange}
                 isRequired
               />
+              <div>
+                <span className="pb-1 text-xs text_grey">
+                  Flat no, Lift floor, House no, Road no, Block, Area
+                </span>
+              </div>
+
               <p className="h4info_akm mt_akm">
                 Our service is currently available only in{" "}
-                <span className="font-bold">Bashundhara R/A. </span>
-                We will expand to all of Dhaka soon and notify you when we reach
-                your area. Stay tuned!{" "}
+                <span className="font-bold">Bashundhara R/A</span>. We’re
+                expanding across Dhaka soon and will notify you once we reach
+                your area. Kindly provide your address to receive updates.
               </p>
             </div>
 

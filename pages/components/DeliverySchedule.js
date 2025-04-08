@@ -684,7 +684,7 @@ const DeliveryList = () => {
                               </div>
                             ) : (
                               <div className="no-food-details">
-                                No food confirmed yet.
+                                Current day default food items
                               </div>
                             )}
                           </div>
@@ -725,7 +725,7 @@ const DeliveryList = () => {
                           <div className=" w-3/4 py-1 flex gap-2">
                             ৳{delivery.mrd_order_total_price}
                             <div className="text-xs font-normal">
-                              (ডেলিভারি চার্জ:
+                              + (ডেলিভারি চার্জ:
                               {delivery.mrd_order_deliv_commission})
                             </div>
                             {/* {delivery.mrd_order_cash_to_get == "0" ? (

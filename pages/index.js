@@ -1,6 +1,7 @@
 "use client";
 import { React, useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import Head from "next/head";
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
@@ -32,11 +33,22 @@ export default function Home() {
   const sectionRef = useRef(null);
   const router = useRouter();
 
+  const [menuRedir, setMenuRedir] = useState(null);
+
   // Inside your component:
-  const [buttonTextHero, setButtonTextHero] = useState(
-    "Start with a free meal!"
-  );
+  const [buttonTextHero, setButtonTextHero] = useState("First Meal 80% Off!");
   const [buttonTextCTA, setButtonTextCTA] = useState("Login and Order Now");
+
+  useEffect(() => {
+    const storedRef = sessionStorage.getItem("menuRedir");
+    const token = Cookies.get("TFLoginToken");
+    setMenuRedir(storedRef);
+    sessionStorage.removeItem("menuRedir");
+
+    if (token && !storedRef) {
+      router.push("/menu");
+    }
+  }, []);
 
   useEffect(() => {
     // This code only runs on the client after hydration
@@ -133,6 +145,10 @@ export default function Home() {
 
   return (
     <div className="">
+      <Head>
+        <title>ডালভাত.com</title>
+      </Head>
+
       <motion.div
         className="fixed w-full z-20"
         initial={{ y: -50, opacity: 0 }}
@@ -591,9 +607,9 @@ export default function Home() {
           />
         </div> */}
         <div className="max-w-7xl  mx-auto flex justify-center items-center flex-col px-6 pb-4 relative z-10">
-          <h2 className="text-7xl font-bebas">Start with a free meal!</h2>
+          <h2 className="text-7xl font-bebas">First Meal 80% Off!</h2>
           <p className="font-poppins h3_akm">
-            Claim your free meal now—limited time only!
+            Claim Your 80% Off Meal – Limited Time!
           </p>
           <Link href={"/menu"}>
             <motion.button

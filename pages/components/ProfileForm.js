@@ -151,7 +151,7 @@ const ProfileForm = () => {
             <div className=" flex flex-col gap_akm ">
               <div> আপনি ডেলিভারি পার্সন হিসেবে লগ ইন করেছেন।</div>
               <div className="flex gap_akm flex-col md:flex-row">
-                <Link href="/delivery0167" target="_blank">
+                <Link href="/delivery" target="_blank">
                   <Button size="lg" color="secondary">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -224,13 +224,19 @@ const ProfileForm = () => {
             {no_address && <> ({no_address})</>} *
           </span>
         </div>
+        <div>
+          <span className="pl_akm text-xs text_grey">
+            Flat no, Lift floor, House no, Road no, Block, Area
+          </span>
+        </div>
         <Input
           clearable
           required
           variant="bordered"
           underlined
           labelPlaceholder="Address"
-          placeholder="Flat no, House no, Road no, Block"
+          placeholder="Flat no, Lift floor, House no, Road no, Block, Area
+"
           fullWidth
           name="address"
           value={formData.address}
@@ -238,8 +244,9 @@ const ProfileForm = () => {
         />
         <span className="h4info_akm">
           Our service is currently available only in{" "}
-          <span className="font-bold">Bashundhara R/A</span>. We will expand to
-          all of Dhaka soon and notify you when we reach your area. Stay tuned!
+          <span className="font-bold">Bashundhara R/A</span>. We’re expanding
+          across Dhaka soon and will notify you once we reach your area. Kindly
+          provide your address to receive updates.
         </span>
         <Spacer y={4} />
 

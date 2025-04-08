@@ -113,7 +113,6 @@ const MenuComp = () => {
   const { user, loading, error } = useUser();
   //AUTO REFRESH ON NEXT
   const handleVisibilityChange = () => {
-    console.log("handleVisibilityChange");
     if (document.visibilityState === "visible" && apiConfig) {
       // Add apiConfig check
       fetchData();
@@ -140,7 +139,7 @@ const MenuComp = () => {
 
   //FETCH MENU & DISABLED MEAL
   const fetchData = async () => {
-    console.log("FETCH DATA");
+    // console.log("FETCH DATA");
     if (!apiConfig) return;
 
     try {
@@ -153,10 +152,6 @@ const MenuComp = () => {
 
       axios.get(`${apiConfig.apiBaseUrl}disabled-meals`).then((res) => {
         setDisabledMeals(res.data.disabledMeals);
-        console.log(
-          "🚀 ~ axios.get ~ res.data.disabledMeals:",
-          res.data.disabledMeals
-        );
       });
 
       setMenuData(menu);

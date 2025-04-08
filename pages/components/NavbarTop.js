@@ -107,8 +107,16 @@ const NavbarTop = () => {
               src="/logo.png"
               alt={"logo"}
             />
-            <Link color="foreground" href="/">
-              <p className=" font-niljannati text-2xl">ডালভাত.com</p>
+            <Link
+              color="foreground"
+              href="/"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  sessionStorage.setItem("menuRedir", "logo");
+                }
+              }}
+            >
+              <p className="font-niljannati text-2xl">ডালভাত.com</p>
             </Link>
           </div>
           <nav className="hidden md:flex space-x-6 pr-6">

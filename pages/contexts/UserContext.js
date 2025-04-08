@@ -81,3 +81,8 @@ export const UserProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
+
+const DummyUserContextComponent = () => (
+  <div>This is a dummy export for UserContext</div>
+);
+export default DummyUserContextComponent;
