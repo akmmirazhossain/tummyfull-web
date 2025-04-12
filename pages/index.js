@@ -36,7 +36,7 @@ export default function Home() {
   const [menuRedir, setMenuRedir] = useState(null);
 
   // Inside your component:
-  const [buttonTextHero, setButtonTextHero] = useState("First Meal 80% Off!");
+  const [buttonTextHero, setButtonTextHero] = useState("First Meal 50% Off!");
   const [buttonTextCTA, setButtonTextCTA] = useState("Login and Order Now");
 
   useEffect(() => {
@@ -607,9 +607,9 @@ export default function Home() {
           />
         </div> */}
         <div className="max-w-7xl  mx-auto flex justify-center items-center flex-col px-6 pb-4 relative z-10">
-          <h2 className="text-7xl font-bebas">First Meal 80% Off!</h2>
+          <h2 className="text-7xl font-bebas">First Meal 50% Off!</h2>
           <p className="font-poppins h3_akm">
-            Claim Your 80% Off Meal – Limited Time!
+            Claim Your 50% Off Meal – Limited Time!
           </p>
           <Link href={"/menu"}>
             <motion.button

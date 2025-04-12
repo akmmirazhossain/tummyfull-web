@@ -110,7 +110,7 @@ const LoginForm = () => {
         if (newUser) {
           setShowNameAddrInput(true);
         } else {
-          router.push("/menu");
+          window.location.href = "/menu";
         }
         console.log("🚀 ~ handleVerifyOTP ~", newUser);
         // router.push("/settings");
@@ -269,11 +269,6 @@ const LoginForm = () => {
                 onChange={handleChange}
                 isRequired
               />
-              <div>
-                <span className="pb-1 text-xs text_grey">
-                  Flat no, Lift floor, House no, Road no, Block, Area
-                </span>
-              </div>
 
               <p className="h4info_akm mt_akm">
                 Our service is currently available only in{" "}

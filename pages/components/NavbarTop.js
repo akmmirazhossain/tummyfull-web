@@ -144,7 +144,6 @@ const NavbarTop = () => {
 
             {isLoggedIn && (
               <div className="flex items-center justify-center ">
-                <NotificationBell />
                 <Link href="/wallet">
                   <Button
                     variant="light"
@@ -166,6 +165,8 @@ const NavbarTop = () => {
                     </div>
                   </Button>
                 </Link>
+
+                <NotificationBell />
 
                 {/* <Link
                   onClick={handleLogout}

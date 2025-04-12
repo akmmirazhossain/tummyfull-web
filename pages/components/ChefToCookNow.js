@@ -17,6 +17,7 @@ export default function Meals() {
       .then((response) => {
         setMeals(response.data);
         setLoading(false);
+        console.log("ChefToCookNow.js ->", response.data);
       })
       .catch((error) => {
         setError(error.message);
@@ -38,6 +39,7 @@ export default function Meals() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  console.log("ChefToCookNow.js ->", meals);
 
   return (
     <div className="container mx-auto ">
@@ -91,7 +93,7 @@ export default function Meals() {
                   </p> */}
                     </div>
                     <div className="space-y-2">
-                      {mealDetails.food_items.map((item) => (
+                      {/* {mealDetails.food_items.map((item) => (
                         <div
                           key={item.mrd_food_id}
                           className="flex items-center space-x-4"
@@ -108,12 +110,12 @@ export default function Meals() {
                             <p className="text-sm text-gray-600">
                               {item.mrd_food_desc}
                             </p>
-                            {/* <p className="text-sm text-gray-800">
-                          Price: {item.mrd_food_price}
-                        </p> */}
+                            <p className="text-sm text-gray-800">
+                              Price: {item.mrd_food_price}
+                            </p>
                           </div>
                         </div>
-                      ))}
+                      ))} */}
                       <div className="border-t-1 pt_akm">
                         লাঞ্চ রান্নার সময়: সকাল ১০ - ১১:৩০ <br />
                         লাঞ্চ ডেলিভারির সময়: দুপুর ১২ - ৩

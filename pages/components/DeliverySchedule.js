@@ -725,8 +725,8 @@ const DeliveryList = () => {
                           <div className=" w-3/4 py-1 flex gap-2">
                             ৳{delivery.mrd_order_total_price}
                             <div className="text-xs font-normal">
-                              + (ডেলিভারি চার্জ:
-                              {delivery.mrd_order_deliv_commission})
+                              + {delivery.mrd_order_deliv_commission}(ডেলিভারি
+                              চার্জ)
                             </div>
                             {/* {delivery.mrd_order_cash_to_get == "0" ? (
                             <div className="text-xs font-normal">

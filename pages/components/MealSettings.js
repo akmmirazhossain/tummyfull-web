@@ -158,8 +158,9 @@ const MealSettings = () => {
         <div className="flex flex-col gap_akm">
           <div className="mt_akm">
             {" "}
-            If activated, each meal you receive will be delivered in a food
-            grade mealbox, in exchange for the previous one.
+            If activated, each meal is delivered in a food-grade mealbox—and
+            you’ll get <span className="font-bold">৳10 cashback</span> to your
+            wallet every time you hand over your last one and take the next.
           </div>
           <div className=" flex flex-col gap_akm">
             <div className="flex gap_akm items-center bg-[#cce8cd] h4_akm py-2 px-4  rounded_akm">

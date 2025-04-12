@@ -1,9 +1,10 @@
 // pages/wallet.js
-import React from "react";
+import React, { useContext } from "react";
 import Layout from "./layout/Layout";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ApiContext } from "./contexts/ApiContext";
 
 const ProtectedPage = () => {
   const { isAuthenticated } = useAuth();
@@ -11,13 +12,16 @@ const ProtectedPage = () => {
   const [currentDate, setCurrentDate] = useState("");
   const [mealPeriod, setMealPeriod] = useState("");
   const [orders, setOrders] = useState([]);
+  const apiConfig = useContext(ApiContext);
 
   useEffect(() => {
     const fetchOrders = async () => {
+      if (!apiConfig) return;
       try {
         const response = await axios.get(
-          "http://localhost/tf-lara/api/orderlist-chef-now"
+          `${apiConfig.apiBaseUrl}orderlist-chef-now`
         );
+
         const orders = response.data.orders;
 
         const summary = {};
@@ -59,7 +63,7 @@ const ProtectedPage = () => {
     };
 
     fetchOrders();
-  }, []);
+  }, [apiConfig]);
 
   if (!isAuthenticated) {
     return (
