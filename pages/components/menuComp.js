@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import Link from "next/link";
 
 import { useRouter } from "next/router";
-import { Button, Card, Chip, Skeleton } from "@nextui-org/react";
+import { Button, Card, Chip, Skeleton, Badge } from "@nextui-org/react";
 import { Button as MUIButton } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,8 +17,7 @@ import {
   faTruckFast,
   faCoins,
   faCreditCard,
-  faRotate,
-  faCheck,
+  faCartShopping,
   faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/material/styles";
@@ -31,6 +30,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { ApiContext } from "../contexts/ApiContext";
+import { useSettings } from "../contexts/SettingContext";
 import { motion, AnimatePresence } from "framer-motion";
 import LoginForm from "./LoginForm";
 
@@ -89,7 +89,7 @@ const MenuComp = () => {
   const [menuData, setMenuData] = useState(null);
   // const [cookies] = useCookies(["TFLoginToken"]);
   const router = useRouter();
-  const [settings, setSettings] = useState(null);
+  // const [settings, setSettings] = useState(null);
   const [orderAcceptText, setOrderAcceptText] = useState({
     lunch: true,
     dinner: true,
@@ -98,6 +98,7 @@ const MenuComp = () => {
   const [disabledSwitches, setDisabledSwitches] = useState({});
   const [mealboxStatus, setMealboxStatus] = useState(null);
   const apiConfig = useContext(ApiContext);
+  const { settings, loadingSettings } = useSettings();
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
 
@@ -130,17 +131,18 @@ const MenuComp = () => {
     };
   }, [apiConfig]);
 
-  useEffect(() => {
-    // Log the user data when it is available
-    if (user) {
-      console.log("User data:", user);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   // Log the user data when it is available
+  //   if (user) {
+  //     console.log("User data:", user);
+  //   }
+  // }, [user]);
 
-  //FETCH MENU & DISABLED MEAL
+  //MARK: FETCH MENU
   const fetchData = async () => {
     // console.log("FETCH DATA");
     if (!apiConfig) return;
+    // if (!settings) return;
 
     try {
       // Fetch menu data
@@ -154,23 +156,33 @@ const MenuComp = () => {
         setDisabledMeals(res.data.disabledMeals);
       });
 
+      //IF MEALBOX ACTIVATED
+      // const mealboxActive = parseInt(user.data?.mrd_user_mealbox) || 0;
+      //      const hasMealbox = parseInt(user.data?.mrd_user_has_mealbox) || 0;
+      // const mealboxPrice = settings?.mealbox_price;
+      // const delivery = settings.mrd_setting_commission_delivery || 0;
+
       setMenuData(menu);
       setFoodIndexes(0);
 
       // Fetch settings data
-      const { data: settingsData } = await axios.get(
-        `${apiConfig.apiBaseUrl}setting`
-      );
-      setSettings(settingsData);
+      // const { data: settingsData } = await axios.get(
+      //   `${apiConfig.apiBaseUrl}setting`
+      // );
+      // setSettings(settingsData);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle error as needed
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [apiConfig, Cookies.get("TFLoginToken")]);
+  useEffect(
+    () => {
+      fetchData();
+    },
+    [apiConfig, Cookies.get("TFLoginToken")],
+    settings
+  );
 
   // const isMealDisabled = (day, mealType) => {
   //   const mealInfo = disabledMeals[menuData[day].date];
@@ -350,10 +362,7 @@ const MenuComp = () => {
     checkLogin();
 
     // Check if address is empty
-    if (
-      (!user.data.address || user.data.address.trim() === "") &&
-      value === true
-    ) {
+    if (user?.data?.address?.trim() === "" && value === true) {
       // Redirect to settings with a message in the query params
 
       // console.log("USER ADDRESS NOT FOUND", value);
@@ -405,12 +414,6 @@ const MenuComp = () => {
       ...defaultFoods,
       ...(selectedFoods?.[day]?.[mealPeriod] || {}),
     };
-    // console.log("🚀 ~ orderMeal ~ finalFoods:", finalFoods);
-
-    // const isCustomOrder =
-    //   selectedFoods[day] &&
-    //   selectedFoods[day][mealPeriod] &&
-    //   Object.keys(selectedFoods[day][mealPeriod]).length > 0;
 
     // API CALLER
 
@@ -428,17 +431,6 @@ const MenuComp = () => {
           ? "custom"
           : "default",
     };
-    // console.log("🚀 ~ orderMeal ~ data.selectedFoods:", data.selectedFoods);
-    // console.log("🚀 ~ orderMeal ~ data.orderType:", data.orderType);
-
-    // const data = {
-    //   menuId: menuId,
-    //   date: date,
-    //   TFLoginToken: Cookies.get("TFLoginToken"),
-    //   switchValue: value,
-    //   price: price,
-    //   quantity: 1,
-    // };
 
     try {
       shakeBell();
@@ -489,6 +481,26 @@ const MenuComp = () => {
       setModalData(data);
       setShowModal(true);
     }
+  };
+
+  //MARK: CART PREVIEW
+
+  const cartPreview = (day, menuId, date, price, mealType) => {
+    console.log("🚀 ~ previewMealOrder ~ menuData:", menuData);
+
+    const calculatedPrice =
+      menuData[day][mealType].price * menuData[day][mealType].quantity;
+
+    setModalData({
+      menuId: menuId,
+      date: date,
+      price: calculatedPrice,
+      perMealPrice: menuData[day][mealType].price,
+      quantity: menuData[day][mealType].quantity || 1, // Default to 1 if quantity is not set
+      mealType: mealType,
+    });
+
+    setShowModal(true);
   };
 
   //MARK: Pending Order
@@ -548,7 +560,6 @@ const MenuComp = () => {
     // console.log("QuantityChange -> Quantity Data:", data);
 
     try {
-      notifLoadTrigger();
       const response = await fetch(`${apiConfig.apiBaseUrl}quantity-changer`, {
         method: "POST",
         headers: {
@@ -562,7 +573,7 @@ const MenuComp = () => {
       }
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response:", responseData);
     } catch (error) {
       console.error("Error sending data to the API:", error.message);
     } finally {
@@ -571,6 +582,7 @@ const MenuComp = () => {
         setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
       }, 10);
     }
+    notifLoadTrigger();
   };
 
   //MARK: Price Calc
@@ -929,19 +941,48 @@ const MenuComp = () => {
                         })}
 
                         {menuData[day][mealType].status === "enabled" && (
-                          <div className="absolute w-full bottom-0 flex justify-center items-center flex-col bg-black bg-opacity-50 text-white pad_akm text-base slide-up">
-                            <div className="text-center">
-                              You have pre-ordered this {mealType}.
+                          <div className="absolute w-full bottom-0 flex flex-row  breakp_akm justify-center items-center  bg-black bg-opacity-50 text-white pad_akm text-base slide-up">
+                            <div>
+                              {/* <Button
+                                isIconOnly
+                                radius="full"
+                                variant="light"
+                                className="bg-[#004225] bg-opacity-50 text_white"
+                                size="lg" // or "sm" / "lg" depending on your design
+                              ></Button> */}
+
+                              <Button
+                                isIconOnly
+                                radius="full"
+                                variant="light"
+                                className="bg-[#004225] bg-opacity-50 text_white"
+                                size="lg"
+                                onClick={() =>
+                                  cartPreview(
+                                    day,
+                                    menuData[day][mealType].id,
+                                    menuData[day].date,
+                                    menuData[day][mealType].price,
+                                    mealType
+                                  )
+                                }
+                              >
+                                <FontAwesomeIcon icon={faCartShopping} />
+                              </Button>
                             </div>
-                            <div className="text-center flex flex-col">
-                              <span>
-                                Total: ৳
-                                {calculateTotalPrice(
-                                  menuData[day][mealType].price,
-                                  menuData[day][mealType].quantity
-                                ) + settings.mrd_setting_commission_delivery}
-                                (Cash on delivery)
-                              </span>
+                            <div>
+                              <div className="text-center">
+                                You have pre-ordered this {mealType}.
+                              </div>
+                              {/* <div className="text-center flex flex-col">
+                                <span>
+                                  Price: ৳
+                                  {calculateTotalPrice(
+                                    menuData[day][mealType].price,
+                                    menuData[day][mealType].quantity
+                                  ) + settings.mrd_setting_commission_delivery}
+                                </span>
+                              </div> */}
                             </div>
                           </div>
                         )}
@@ -1099,35 +1140,178 @@ const MenuComp = () => {
                                 Your {mealType} order has been placed.
                               </h3>
 
+                              <div className="flex flex-row">
+                                <div className="flex flex-row gap_akm items-center">
+                                  <FontAwesomeIcon icon={faClock} />
+                                  <span className="w-36">Delivery Time: </span>
+                                </div>
+                                <div>
+                                  {" "}
+                                  <span>
+                                    {mealType === "lunch"
+                                      ? settings?.delivery_time_lunch
+                                      : settings?.delivery_time_dinner}
+                                    , {formatDate(modalData?.date)}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="flex flex-row">
+                                <div className="flex flex-row gap_akm items-start">
+                                  <FontAwesomeIcon icon={faCoins} />
+                                  <span className="w-36">Total Price: </span>
+                                </div>
+                                <div className="flex flex-col">
+                                  {/* <span>
+                                    ৳{modalData?.perMealPrice} x{" "}
+                                    {modalData?.quantity} = {price} (Meal Price)
+                                  </span>
+                                  <span>
+                                    ৳{mealboxPrice} x {extraBoxes} ={" "}
+                                    {extraBoxes * 90} (Added mealbox price)
+                                  </span>
+                                  <span>৳{delivery} (Delivery charge)</span>
+                                  <div className="divider p-0 m-0"></div>
+                                  <div>Total: ৳{total}</div> */}
+                                  {/* {(() => {
+                                    const quantity = modalData?.quantity || 0;
+                                    const mealboxPrice =
+                                      settings?.mealbox_price;
+                                    const delivery =
+                                      settings.mrd_setting_commission_delivery ||
+                                      0;
+                                    const hasMealbox =
+                                      parseInt(
+                                        user.data?.mrd_user_has_mealbox
+                                      ) || 0;
+                                    const extraBoxes = Math.max(
+                                      quantity - hasMealbox,
+                                      0
+                                    );
+
+                                    const price = modalData?.price || 0;
+                                    const total =
+                                      price +
+                                      delivery +
+                                      extraBoxes * mealboxPrice;
+                                    return (
+                                      <>
+                                        <span>
+                                          ৳{modalData?.perMealPrice} x{" "}
+                                          {quantity} = {price} (Meal Price)
+                                        </span>
+                                        <span>
+                                          ৳{mealboxPrice} x {extraBoxes} ={" "}
+                                          {extraBoxes * 90} (Added mealbox
+                                          price)
+                                        </span>
+                                        <span>
+                                          ৳{delivery} (Delivery charge)
+                                        </span>
+                                        <div className="divider p-0 m-0"></div>
+                                        <div>Total: ৳{total}</div>
+                                      </>
+                                    );
+                                  })()} */}
+                                </div>
+                              </div>
+
                               <ul className="list-none space-y-1">
-                                <li className="flex items-center">
+                                {/* <li className="flex items-center">
                                   <span className="w-6 mr-1 flex items-center justify-start">
                                     <FontAwesomeIcon icon={faCalendarDays} />
                                   </span>
                                   <span className="w-36">Date: </span>
                                   <span>{formatDate(modalData?.date)}</span>
-                                </li>
+                                </li> */}
 
-                                <li className="flex items-center">
+                                <li className="flex items-center"></li>
+
+                                {/* <li className="flex items-center">
                                   <span className="w-6 mr-1 flex items-center justify-start">
-                                    <FontAwesomeIcon icon={faClock} />
+                                    <FontAwesomeIcon icon={faCoins} />
                                   </span>
-                                  <span className="w-36">Delivery Time: </span>
-                                  <span>
-                                    {mealType === "lunch"
-                                      ? settings?.delivery_time_lunch
-                                      : settings?.delivery_time_dinner}
+                                  <span className="w-36">Total Price: </span>
+                                  <span className="flex flex-col">
+                                    {modalData?.price} +{" "}
+                                    {settings.mrd_setting_commission_delivery} ={" "}
+                                    <span className="font-bold">
+                                      {modalData?.price +
+                                        settings.mrd_setting_commission_delivery}
+                                    </span>
+                                    <span>{modalData?.price} (Meal Price)</span>
+                                    <span>
+                                      {settings.mrd_setting_commission_delivery}{" "}
+                                      (Delivery charge)
+                                    </span>
+                                    <span>
+                                      {user.data.mrd_user_has_mealbox} (has
+                                      mealbox)
+                                    </span>
                                   </span>
-                                </li>
+                                </li> */}
 
-                                <li className="flex items-center">
+                                {/* <li className="flex items-center">
+                                  <span className="w-6 mr-1 flex items-start justify-start">
+                                    <FontAwesomeIcon icon={faCoins} />
+                                  </span>
+                                  <span className="w-36">Total Price:</span>
+                                  <span className="flex flex-col">
+                                    {(() => {
+                                      const quantity = modalData?.quantity || 0;
+                                      const mealboxPrice =
+                                        settings?.mealbox_price;
+                                      const hasMealbox =
+                                        parseInt(
+                                          user.data?.mrd_user_has_mealbox
+                                        ) || 0;
+                                      const extraBoxes = Math.max(
+                                        quantity - hasMealbox,
+                                        0
+                                      );
+                                      const delivery =
+                                        settings.mrd_setting_commission_delivery ||
+                                        0;
+                                      const price = modalData?.price || 0;
+                                      const total =
+                                        price +
+                                        delivery +
+                                        extraBoxes * mealboxPrice;
+                                      return (
+                                        <>
+                                          {price} + {delivery} +{" "}
+                                          {extraBoxes * 90} ={" "}
+                                          <span className="font-bold">
+                                            {total}
+                                          </span>
+                                          <span>{price} (Meal Price)</span>
+                                          <span>
+                                            {delivery} (Delivery charge)
+                                          </span>
+                                          <span>
+                                            {extraBoxes * 90} (Extra mealbox
+                                            charge)
+                                          </span>
+                                          <span>
+                                            {hasMealbox} (has mealbox)
+                                          </span>
+                                          <span>
+                                            {quantity} (ordered quantity)
+                                          </span>
+                                        </>
+                                      );
+                                    })()}
+                                  </span>
+                                </li> */}
+
+                                {/* <li className="flex items-center">
                                   <span className="w-6 mr-1 flex items-center justify-start">
                                     <FontAwesomeIcon icon={faLayerGroup} />
                                   </span>
                                   <span className="w-36">Quantity: </span>
                                   <span>{modalData?.quantity}</span>
-                                </li>
-
+                                </li> */}
+                                {/* 
                                 <li className="flex items-center">
                                   <span className="w-6 mr-1 flex items-center justify-start">
                                     <FontAwesomeIcon icon={faTruckFast} />
@@ -1138,22 +1322,7 @@ const MenuComp = () => {
                                   <span>
                                     ৳{settings.mrd_setting_commission_delivery}
                                   </span>
-                                </li>
-
-                                <li className="flex items-center">
-                                  <span className="w-6 mr-1 flex items-center justify-start">
-                                    <FontAwesomeIcon icon={faCoins} />
-                                  </span>
-                                  <span className="w-36">Total Price: </span>
-                                  <span>
-                                    {modalData?.price} +{" "}
-                                    {settings.mrd_setting_commission_delivery} ={" "}
-                                    <span className="font-bold">
-                                      {modalData?.price +
-                                        settings.mrd_setting_commission_delivery}
-                                    </span>
-                                  </span>
-                                </li>
+                                </li> */}
 
                                 <li className="flex items-center">
                                   <span className="w-6 mr-1 flex items-center justify-start">

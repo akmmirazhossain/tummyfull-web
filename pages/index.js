@@ -146,7 +146,27 @@ export default function Home() {
   return (
     <div className="">
       <Head>
-        <title>ডালভাত.com</title>
+        <title>dalbhath.com</title>
+
+        <meta
+          name="description"
+          content="DalBhath is an easy meal management app for students seeking convenient daily meal options."
+        />
+        <meta
+          property="og:logo"
+          content="https://dalbhath.com/images/logo-300x300.png"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.dalbhath.com/" />
+        <meta property="og:title" content="dalbhath.com" />
+        <meta
+          property="og:description"
+          content="DalBhath is an easy meal management app for students seeking convenient daily meal options."
+        />
+        <meta
+          property="og:image"
+          content="https://dalbhath.com/images/og-main.jpg"
+        />
       </Head>
 
       <motion.div
@@ -519,12 +539,12 @@ export default function Home() {
                   </li>
                   <li className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faAngleRight} size="xs" />
-                    Any time cancellation
+                    Easy Cancellation
                   </li>
 
                   <li className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faAngleRight} size="xs" />
-                    Auto Payment
+                    Pay from Dalbhath Wallet
                   </li>
                 </ul>
               </div>

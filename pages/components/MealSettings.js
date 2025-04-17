@@ -1,5 +1,3 @@
-// components/GeneralSettings.js
-
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
@@ -10,6 +8,12 @@ import {
   PopoverTrigger,
   PopoverContent,
   Spinner,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
 } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoneyBill } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +24,8 @@ import { ApiContext } from "../contexts/ApiContext";
 const MealSettings = () => {
   const [isOn, setIsOn] = useState(false);
   const [popOverOpen, setPopOverOpen] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingDeactivation, setPendingDeactivation] = useState(false);
 
   const [userData, setUserData] = useState(null);
   const [settings, setSettings] = useState(null);
@@ -71,17 +77,31 @@ const MealSettings = () => {
     fetchUserData();
   }, [apiConfig]);
 
-  //REDIRECT IF NOT LOGGED IN
-  // const checkAndRedirect = () => {
-  //   const token = Cookies.get("TFLoginToken");
-  //   if (!token) {
-  //     router.push("/login"); // Redirect to login page if the cookie is not available
-  //   } else {
-  //     console.log("MealSettings: checkAndRedirect -> Token found");
-  //   }
-  // };
-
   //MARK: mealboxSw
+  const handleSwitchChange = (value) => {
+    if (value === true) {
+      // Activating the mealbox - no confirmation needed
+      mealboxSwitchChange(true);
+    } else {
+      // Deactivating the mealbox - show confirmation modal
+      setPendingDeactivation(true);
+      setShowConfirmModal(true);
+    }
+  };
+
+  const confirmDeactivation = () => {
+    if (pendingDeactivation) {
+      mealboxSwitchChange(false);
+      setPendingDeactivation(false);
+    }
+    setShowConfirmModal(false);
+  };
+
+  const cancelDeactivation = () => {
+    setPendingDeactivation(false);
+    setShowConfirmModal(false);
+  };
+
   const mealboxSwitchChange = async (value) => {
     shakeBell();
     notifLoadTrigger();
@@ -138,9 +158,7 @@ const MealSettings = () => {
                   isSelected={isOn}
                   size="lg"
                   color="success"
-                  onValueChange={(value) => {
-                    mealboxSwitchChange(value);
-                  }}
+                  onValueChange={handleSwitchChange}
                 ></Switch>
               </PopoverTrigger>
               <PopoverContent className="w-64 ">
@@ -157,10 +175,17 @@ const MealSettings = () => {
 
         <div className="flex flex-col gap_akm">
           <div className="mt_akm">
-            {" "}
-            If activated, each meal is delivered in a food-grade mealbox—and
-            you’ll get <span className="font-bold">৳10 cashback</span> to your
-            wallet every time you hand over your last one and take the next.
+            <p>
+              If activated, each meal is delivered in a food-grade mealbox—and
+              you'll get <span className="font-bold">৳10 cashback</span> to your
+              wallet every time you hand over your last one and take the next.
+            </p>
+
+            <p>
+              If you deactivate the mealbox at any time,{" "}
+              <span className="font-bold">৳{settings?.mealbox_price}</span> will
+              be refunded.
+            </p>
           </div>
           <div className=" flex flex-col gap_akm">
             <div className="flex gap_akm items-center bg-[#cce8cd] h4_akm py-2 px-4  rounded_akm">
@@ -204,7 +229,7 @@ const MealSettings = () => {
                 </li>
 
                 <li>Simple, clean, and ready to eat.</li>
-                <li>Good for the environment.</li>
+                <li>Less plastic in landfills. Better for the planet.</li>
                 {/* <li>
                   A refund of ৳{settings && <>{settings.mealbox_price}</>} is
                   available if you deactivate the mealbox at any time.
@@ -214,6 +239,40 @@ const MealSettings = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal for Deactivation */}
+      <Modal
+        isOpen={showConfirmModal}
+        onClose={cancelDeactivation}
+        backdrop="blur"
+      >
+        <ModalContent className="text_black">
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 ">
+                Deactivate Mealbox
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  Are you sure you want to deactivate your mealbox? Even if
+                  you're not ordering right now, keeping it active ensures
+                  you'll continue earning{" "}
+                  <span className="font-bold">৳10 cashback</span> with future
+                  orders.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button variant="light" onPress={cancelDeactivation}>
+                  Cancel
+                </Button>
+                <Button color="danger" onPress={confirmDeactivation}>
+                  Yes, Deactivate
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 };
