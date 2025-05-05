@@ -4,6 +4,8 @@ import { ApiContext } from "../contexts/ApiContext";
 import { Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 
+import { Button } from "@nextui-org/react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -46,17 +48,17 @@ const CreditDisplay = () => {
   return (
     <>
       <div className="h1_akm ">Wallet</div>
-      <div className="card_akm   p-8">
-        <div className="h3_akm "> Current credit</div>
-        <div className="flex items-center justify-between">
+      <div className="card_akm   p-8 flex items-center justify-between">
+        <div className="flex flex-col items-start justify-start">
+          <div className="h3_akm">Current credit</div>
           <div>
             ৳<span className="h2_akm">{userCredit}</span>
           </div>
-          {/* <div>
-            {" "}
-            <Button color="primary">Withdraw</Button>
-          </div> */}
         </div>
+
+        {/* <Button size="lg" className="bg_green text_white">
+          Request Withdrawal
+        </Button> */}
       </div>
 
       <div className="h1_akm ">Recharge Wallet</div>

@@ -45,7 +45,11 @@ const ProtectedPage = () => {
     <>
       <Layout title="Settings - ডালভাত">
         <ProfileForm />
-        <MealSettings />
+        <div id="mealbox">
+          {" "}
+          <MealSettings />
+        </div>
+
         <LogoutBlock />
       </Layout>
     </>

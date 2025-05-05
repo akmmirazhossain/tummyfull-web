@@ -111,6 +111,7 @@ const DeliveryList = () => {
       });
 
       setOrderStatus(status);
+      console.log("🚀 ~ fetchDeliveryList ~ mealbox:", mealbox);
       setMealboxPicked(mealbox);
     } catch (error) {
       console.error("Error fetching delivery list:", error);
@@ -121,8 +122,20 @@ const DeliveryList = () => {
     fetchDeliveryList();
   }, [token, apiConfig]);
 
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && apiConfig) {
+        fetchDeliveryList();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [token, apiConfig]);
+
   //MARK: Deliv Update
-  const handleConfirm = (orderId, userId, menuId, mealboxPaid) => {
+  const handleConfirm = (orderId, userId, menuId, mealboxPaid, date) => {
     const updatedStatus = orderStatus[orderId];
     const pickedMealbox = mealboxPicked[orderId];
 
@@ -137,6 +150,7 @@ const DeliveryList = () => {
           mealboxPaid: mealboxPaid,
           delivStatus: updatedStatus,
           mboxPick: pickedMealbox,
+          date: date,
         },
         {
           headers: {
@@ -312,7 +326,36 @@ const DeliveryList = () => {
                           </div>
                           <div className=" w-3/4 py-1">
                             <div className="flex items-center gap-2">
-                              <div className="flex items-center gap-2 badge badge-ghost badge-lg badge-outline ">
+                              <div className="flex flex-wrap gap-2">
+                                {[
+                                  ...Array(delivery.mrd_user_has_mealbox + 1),
+                                ].map((_, index) => (
+                                  <div
+                                    key={`mealbox-${index}`}
+                                    className="flex items-center gap-2 badge badge-ghost badge-lg badge-outline"
+                                  >
+                                    <input
+                                      className="radio radio-error radio-sm"
+                                      type="radio"
+                                      name={`mealboxPicked-${delivery.mrd_order_id}`}
+                                      value={index}
+                                      checked={
+                                        mealboxPicked[delivery.mrd_order_id] ===
+                                        index
+                                      }
+                                      onChange={() =>
+                                        setMealboxPicked((prev) => ({
+                                          ...prev,
+                                          [delivery.mrd_order_id]: index,
+                                        }))
+                                      }
+                                    />
+                                    {index}
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* <div className="flex items-center gap-2 badge badge-ghost badge-lg badge-outline ">
                                 <input
                                   className="radio radio-error radio-sm"
                                   type="radio"
@@ -369,7 +412,7 @@ const DeliveryList = () => {
                                   />
                                   2
                                 </div>
-                              )}
+                              )} */}
                               <div
                                 className="tooltip"
                                 data-tip="ইউজারের কাছে আমাদের আগের কোন মিলবক্স থাকলে সেটা কালেক্ট করে এখানে মার্ক করে ফেরত নিয়ে আসুন। &bull; ইউজারের কাছে দুইটা মিল বক্স থাকলে  তাকে ওয়ান টাইম  কন্টেইনারে দেওয়া হবে"
@@ -412,93 +455,32 @@ const DeliveryList = () => {
                             <span>মিল দিন:</span>
                           </div>
                           <div className=" w-3/4  flex flex-col items-center py_akm">
-                            {delivery.mrd_order_mealbox === 1 &&
-                              delivery.mrd_user_has_mealbox < 2 && (
-                                <>
-                                  {delivery.mrd_order_quantity === 1 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          1
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          0
-                                        </Chip>
-                                      </div>
-                                    </div>
+                            <div className="grid grid-cols-2">
+                              <div>
+                                মিলবক্স সহ:{" "}
+                                <Chip size="lg" variant="bordered">
+                                  {delivery.mrd_order_mealbox}
+                                </Chip>
+                              </div>
+                              <div>
+                                ওয়ান টাইম বক্স:{" "}
+                                <Chip size="lg" variant="bordered">
+                                  {delivery.mrd_order_mealbox === 0 ||
+                                  delivery.mrd_order_mealbox === null ? (
+                                    delivery.mrd_order_quantity
+                                  ) : (
+                                    <>0</>
                                   )}
-                                  {delivery.mrd_order_quantity === 2 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          1
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          1
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                  {delivery.mrd_order_quantity === 3 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          1
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          2
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                  {delivery.mrd_order_quantity === 4 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          1
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          3
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                  {delivery.mrd_order_quantity === 5 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          1
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          4
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                </>
-                              )}
+                                </Chip>
+                              </div>
+                            </div>
+                            {/* {delivery.mrd_order_mealbox != "" &&
+                              delivery.mrd_user_has_mealbox <
+                                delivery.mrd_order_quantity && (
+                                
+                              )} */}
 
-                            {delivery.mrd_order_mealbox === 1 &&
+                            {/* {delivery.mrd_order_mealbox === 1 &&
                               delivery.mrd_user_has_mealbox === 2 && (
                                 <>
                                   {delivery.mrd_order_quantity === 1 && (
@@ -667,7 +649,7 @@ const DeliveryList = () => {
                                   </div>
                                 )}
                               </>
-                            )}
+                            )} */}
                             {delivery.food_details ? (
                               <div className="flex flex-row gap-1">
                                 {delivery.food_details.map((food, index) => (
@@ -725,8 +707,7 @@ const DeliveryList = () => {
                           <div className=" w-3/4 py-1 flex gap-2">
                             ৳{delivery.mrd_order_total_price}
                             <div className="text-xs font-normal">
-                              + {delivery.mrd_order_deliv_commission}(ডেলিভারি
-                              চার্জ)
+                              (ডেলিভারি চার্জ সহ)
                             </div>
                             {/* {delivery.mrd_order_cash_to_get == "0" ? (
                             <div className="text-xs font-normal">
@@ -767,20 +748,22 @@ const DeliveryList = () => {
                             
                             TK 95 + 25 (deliv charge)
                             */}
-                            {delivery.mrd_order_mealbox == "1" && (
+
+                            <div>{delivery.mrd_order_cash_to_get}</div>
+                            {/* {delivery.mrd_order_mealbox == "1" && (
                               <div>
                                 {delivery.mrd_user_mealbox_paid == "1" && (
                                   <div>{delivery.mrd_order_cash_to_get}</div>
                                 )}
                               </div>
-                            )}
+                            )} */}
                             {/* if mealbox give = yes
                             if mealbox paid = no
                             Then show cash to get + mealbox_price 
                             
                             TK 95 + 90 + 25 (deliv charge)
                             */}
-                            {delivery.mrd_order_mealbox == "1" && (
+                            {/* {delivery.mrd_order_mealbox == "1" && (
                               <div>
                                 {delivery.mrd_user_mealbox_paid == "0" && (
                                   <div>
@@ -789,15 +772,14 @@ const DeliveryList = () => {
                                   </div>
                                 )}
                               </div>
-                            )}
+                            )} */}
 
                             {/* if no meal box, then only show cash to get */}
-                            {delivery.mrd_order_mealbox == "0" && (
+                            {/* {delivery.mrd_order_mealbox == "0" && (
                               <div>{delivery.mrd_order_cash_to_get}</div>
-                            )}
+                            )} */}
 
                             <div className=" w-3/4 py-1 text-xs font-normal">
-                              {/* if cash to get = 0 */}
                               {delivery.mrd_order_cash_to_get == "0" ? (
                                 <div className="text-xs font-normal">
                                   (মিলের ৳{delivery.mrd_order_total_price} টাকা
@@ -911,7 +893,8 @@ const DeliveryList = () => {
                                   delivery.mrd_user_id,
                                   delivery.mrd_menu_id,
                                   delivery.mrd_order_mealbox,
-                                  delivery.mrd_user_mealbox_paid
+                                  delivery.mrd_user_mealbox_paid,
+                                  date
                                 )
                               }
                               disabled={isButtonDisabled(delivery)}

@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Store user data
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const apiConfig = useContext(ApiContext); // Consume the ApiConfig
 
@@ -37,7 +38,11 @@ export const UserProvider = ({ children }) => {
           Authorization: `Bearer ${token}`, // Include the token in the request header
         },
       });
-      setUser(response.data); // Store user data in context
+      setUser(response.data);
+
+      if (response.data != null) {
+        setIsLoggedIn(true);
+      }
     } catch (err) {
       setError(err);
     } finally {
@@ -52,31 +57,13 @@ export const UserProvider = ({ children }) => {
   }, [apiConfig]); // Run when apiConfig changes
 
   const refreshUser = async () => {
-    setLoading(true);
-    try {
-      const token = Cookies.get("TFLoginToken");
-      if (!token) {
-        setError("No login token found");
-        setLoading(false);
-        return;
-      }
-
-      const response = await axios.get(`${apiConfig.apiBaseUrl}user-fetch`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setUser(response.data); // 🔄 Update user data in context
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
+    fetchUserData();
   };
 
   return (
-    <UserContext.Provider value={{ user, loading, error, refreshUser }}>
+    <UserContext.Provider
+      value={{ user, loading, error, isLoggedIn, refreshUser }}
+    >
       {children}
     </UserContext.Provider>
   );

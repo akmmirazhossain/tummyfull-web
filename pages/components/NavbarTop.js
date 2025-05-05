@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import NotificationBell from "./NotificationBell";
+import MealboxNavTop from "./MealboxNavTop";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUtensils,
@@ -13,44 +14,65 @@ import { Button } from "@nextui-org/react";
 import Cookies from "js-cookie";
 
 import { ApiContext } from "../contexts/ApiContext";
+import { useUser } from "../contexts/UserContext";
 
 const NavbarTop = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [userData, setUserData] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  const { user, loading, error, isLoggedIn, refreshUser } = useUser();
 
   const apiConfig = useContext(ApiContext);
-  const token = Cookies.get("TFLoginToken");
+  // const token = Cookies.get("TFLoginToken");
+
+  //AUTO REFRESH ON NEXT
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible" && apiConfig) {
+      // Add apiConfig check
+
+      refreshUser();
+    }
+  };
 
   useEffect(() => {
-    if (token) {
-      if (!apiConfig) return;
-      setIsLoggedIn(true);
+    // Add event listener when the component mounts
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-      //MARK: Fetch User
-      const fetchUser = async () => {
-        setIsLoading(true);
-        try {
-          const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+    // Cleanup event listener when the component unmounts
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [apiConfig]);
 
-          const data = await response.json();
-          setUserData(data.data.mrd_user_credit);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchUser();
-    } else {
-      setIsLoading(false);
-    }
-  }, [token, apiConfig]);
+  // useEffect(() => {
+  //   if (token) {
+  //     if (!apiConfig) return;
+  //     setIsLoggedIn(true);
+
+  //     //MARK: Fetch User
+  //     const fetchUser = async () => {
+  //       setIsLoading(true);
+  //       try {
+  //         const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
+  //           method: "GET",
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         });
+
+  //         const data = await response.json();
+  //         setUserData(data.data.mrd_user_credit);
+  //       } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     };
+  //     fetchUser();
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // }, [token, apiConfig]);
 
   // const handleLogout = () => {
   //   Cookies.remove("TFLoginToken"); // Remove the cookie
@@ -132,7 +154,7 @@ const NavbarTop = () => {
           </nav>
 
           <div className="flex items-center">
-            {!isLoggedIn && !isLoading && (
+            {!isLoggedIn && !loading && (
               <Link
                 href="/login"
                 className="gap-2  flex justify-center items-center"
@@ -153,12 +175,12 @@ const NavbarTop = () => {
                     radius="full"
                   >
                     <div>
-                      {isLoading ? (
+                      {loading ? (
                         <>
                           {/* <span className="loading loading-dots loading-xs"></span> */}
                         </>
-                      ) : userData !== null ? (
-                        `৳${userData}`
+                      ) : user.data.mrd_user_credit !== null ? (
+                        `৳${user.data.mrd_user_credit}`
                       ) : (
                         "৳"
                       )}
@@ -166,6 +188,7 @@ const NavbarTop = () => {
                   </Button>
                 </Link>
 
+                <MealboxNavTop />
                 <NotificationBell />
 
                 {/* <Link

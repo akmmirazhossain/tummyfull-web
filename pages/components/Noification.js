@@ -2,11 +2,16 @@ import { ApiContext } from "../contexts/ApiContext";
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { faStar } from "@fortawesome/free-regular-svg-icons";
 
 import { Skeleton } from "@nextui-org/react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import FeedbackModal from "./FeedbackModal";
 
 dayjs.extend(relativeTime);
 dayjs.extend(advancedFormat);
@@ -29,6 +34,14 @@ const Notification = () => {
   const [notif, setNotif] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  const [feedbackModal, setFeedbackModal] = useState({
+    isOpen: false,
+    orderId: null,
+    dateAdded: null,
+    message: null,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,7 +101,7 @@ const Notification = () => {
             {notif.notifications.map((notification, index) => (
               <div
                 key={index}
-                className="text-sm  border-b last:border-0 p-2 md:p-3"
+                className="flex flex-col gap-0.5 text-sm border-b last:border-0 p-2 md:p-3"
               >
                 <p
                   className={`${
@@ -99,20 +112,51 @@ const Notification = () => {
                 >
                   {notification.mrd_notif_message}
                 </p>
-                <p className="text-xs text-gray-500 md:text-right">
+                <p className="text-xs text-gray-500">
                   {formatNotificationDate(notification.mrd_notif_date_added)}
                 </p>
-                <div className="flex gap_akm">
+                <div className="flex items-center gap_akm">
+                  {notification.mrd_notif_type == "order" &&
+                    notification.mrd_notif_action == "payment" && (
+                      <Link href={"/wallet"}>
+                        <p className="text-xs">Recharge wallet</p>
+                      </Link>
+                    )}
                   {notification.mrd_notif_quantity && (
                     <p className="text-xs">
-                      Quantity: {notification.mrd_notif_quantity}{" "}
+                      Qty: {notification.mrd_notif_quantity}
                     </p>
                   )}
+
+                  {notification.mrd_notif_mealbox_extra !== 0 &&
+                    notification.mrd_notif_mealbox_extra !== null && (
+                      <p className="text-xs">
+                        Mealbox: {notification.mrd_notif_mealbox_extra}
+                      </p>
+                    )}
+
                   {notification.mrd_notif_total_price && (
                     <p className="text-xs">
                       Total: ৳{notification.mrd_notif_total_price}
                     </p>
                   )}
+
+                  {notification.mrd_notif_type == "order" &&
+                    notification.mrd_notif_action == "delivery" && (
+                      <FontAwesomeIcon
+                        onClick={() => {
+                          setNotifOpen(false);
+                          setFeedbackModal({
+                            isOpen: true,
+                            orderId: notification.mrd_notif_order_id,
+                            dateAdded: notification.mrd_notif_date_added,
+                            message: notification.mrd_notif_message,
+                          });
+                        }}
+                        className="cursor-pointer relative -top-0.5 transition duration-150 ease-in-out hover:scale-110 hover:text-yellow-500 active:scale-95 focus:outline-none focus:ring focus:ring-yellow-400"
+                        icon={faStar}
+                      />
+                    )}
                 </div>
               </div>
             ))}
@@ -120,6 +164,21 @@ const Notification = () => {
         ) : (
           <p>No notifications found.</p>
         )}
+
+        <FeedbackModal
+          isOpen={feedbackModal.isOpen}
+          orderId={feedbackModal.orderId}
+          dateAdded={feedbackModal.dateAdded}
+          message={feedbackModal.message}
+          onClose={() =>
+            setFeedbackModal({
+              isOpen: false,
+              orderId: null,
+              dateAdded: null,
+              message: null,
+            })
+          }
+        />
       </div>
     </div>
   );

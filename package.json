@@ -37,6 +37,7 @@
     "swiper": "^11.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
     "@types/node": "20.14.2",
     "@types/react": "18.3.5",
     "daisyui": "^4.12.10",

@@ -219,6 +219,7 @@ export default function Home() {
               src={"/images/meal_scheduler_image.webp"}
               width={800}
               height={800}
+              alt="meal_scheduler_image"
             />
 
             <div className="mb_akm flex space-x-4 lg:hidden">

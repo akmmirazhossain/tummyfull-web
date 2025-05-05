@@ -20,6 +20,7 @@ import { faMoneyBill } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useNotification } from "../contexts/NotificationContext";
 import { ApiContext } from "../contexts/ApiContext";
+import { useUser } from "../contexts/UserContext"; // Adjust the path
 
 const MealSettings = () => {
   const [isOn, setIsOn] = useState(false);
@@ -31,13 +32,22 @@ const MealSettings = () => {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const apiConfig = useContext(ApiContext);
+  const { refreshUser } = useUser();
 
   const [config, setConfig] = useState(null);
   const { shakeBell, notifLoadTrigger } = useNotification();
+  const [showEnforceMessage, setShowEnforceMessage] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setConfig("");
   }, []);
+
+  useEffect(() => {
+    if (router.isReady && "mealboxEnforceLimit" in router.query) {
+      setShowEnforceMessage(true);
+    }
+  }, [router.isReady, router.query]);
 
   //MARK: FETCH USER
   const fetchUserData = async () => {
@@ -73,6 +83,19 @@ const MealSettings = () => {
   };
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && apiConfig) {
+        fetchSettings();
+        fetchUserData();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [apiConfig]);
+
+  useEffect(() => {
     fetchSettings();
     fetchUserData();
   }, [apiConfig]);
@@ -87,6 +110,7 @@ const MealSettings = () => {
       setPendingDeactivation(true);
       setShowConfirmModal(true);
     }
+    setShowEnforceMessage(false);
   };
 
   const confirmDeactivation = () => {
@@ -125,27 +149,50 @@ const MealSettings = () => {
           TFLoginToken: Cookies.get("TFLoginToken"),
         }
       );
-      console.log("mealboxSwitchChange -> API Response:", response.data);
+      console.log("Mealbox:", response.data);
     } catch (error) {
       console.error("mealboxSwitchChange -> API Error:", error);
     }
     fetchUserData();
+    refreshUser();
   };
 
   return (
     <>
-      <div className="h1_akm" id="mealbox">
-        Meal Settings
-      </div>
+      <div className="h1_akm">Meal Settings</div>
       <div className="card_akm p-8">
+        <div>
+          {" "}
+          {showEnforceMessage && (
+            <div role="alert" className="alert alert-warning mb_akm">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="h-6 w-6 shrink-0 stroke-current"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span>
+                {" "}
+                Please activate mealbox swap to continue placing orders.
+              </span>
+            </div>
+          )}{" "}
+        </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center ">
             <span className="h2_akm">Activate mealbox swap</span>
             <span className="ml-2 text-xl">
-              (৳{settings && <>{settings.mealbox_price}</>})
+              (৳{settings && <>{settings.mealbox_price})</>}
             </span>
           </div>
-          <div className=" ">
+          <div className=" flex items-center gap-2">
             <Popover
               color="foreground"
               isOpen={popOverOpen}
@@ -176,9 +223,9 @@ const MealSettings = () => {
         <div className="flex flex-col gap_akm">
           <div className="mt_akm">
             <p>
-              If activated, each meal is delivered in a food-grade mealbox—and
-              you'll get <span className="font-bold">৳10 cashback</span> to your
-              wallet every time you hand over your last one and take the next.
+              Once activated, each meal will be delivered in a food-grade
+              mealbox. Future meals will arrive in a fresh mealbox in exchange
+              for the previous one.
             </p>
 
             <p>
@@ -197,17 +244,15 @@ const MealSettings = () => {
               >
                 <path d="M312-240h338l19-280H292l20 280Zm-26-360h389l3-50-112-110H394L282-650l4 50Zm-76 68L80-662l56-56 64 64-2-24 162-162h240l162 162-2 24 64-64 56 56-130 130H210Zm28 372-28-372h540l-28 372H238Zm242-440Zm1 80Z" />
               </svg>
-              {userData?.mrd_user_has_mealbox === 0 ? (
-                "You have 0 mealboxes with you."
-              ) : userData?.mrd_user_has_mealbox === 1 ? (
-                "You have 1 mealbox with you."
-              ) : userData?.mrd_user_has_mealbox === 2 ? (
-                "You have 2 mealboxes with you."
+              {typeof userData?.mrd_user_has_mealbox === "number" ? (
+                `You have ${userData.mrd_user_has_mealbox} mealbox${
+                  userData.mrd_user_has_mealbox !== 1 ? "es" : ""
+                } with you.`
               ) : (
                 <Spinner size="sm" />
               )}
             </div>
-
+            {/* 
             {userData?.mrd_user_mealbox === 1 ? (
               <div className="flex gap_akm items-center bg-[#b8e7fb] h4_akm py-2 px-4  rounded_akm">
                 {" "}
@@ -215,7 +260,7 @@ const MealSettings = () => {
                 Mealbox payment:{" "}
                 {userData?.mrd_user_mealbox_paid === 1 ? "Paid" : "Unpaid"}
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <div className="grid grid-cols-5">
             <div className="col-span-5 md:col-span-2">
@@ -253,13 +298,7 @@ const MealSettings = () => {
                 Deactivate Mealbox
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Are you sure you want to deactivate your mealbox? Even if
-                  you're not ordering right now, keeping it active ensures
-                  you'll continue earning{" "}
-                  <span className="font-bold">৳10 cashback</span> with future
-                  orders.
-                </p>
+                <p>Are you sure you want to deactivate your mealbox?</p>
               </ModalBody>
               <ModalFooter>
                 <Button variant="light" onPress={cancelDeactivation}>
