@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ApiContext } from "./contexts/ApiContext";
+import { Chip } from "@nextui-org/react";
 
 const ProtectedPage = () => {
   const { isAuthenticated } = useAuth();
@@ -115,6 +116,26 @@ const ProtectedPage = () => {
                   </p>
                   <p>Total Price: {order.mrd_order_total_price}</p>
                   <p>Cash To Get: {order.mrd_order_cash_to_get}</p>
+
+                  <div className="flex flex-row gap_akm">
+                    <div>
+                      মিলবক্স সহ:{" "}
+                      <Chip size="lg" color="warning">
+                        {order.mrd_order_mealbox}
+                      </Chip>
+                    </div>
+                    <div>
+                      ওয়ান টাইম বক্স:{" "}
+                      <Chip size="lg" color="default">
+                        {order.mrd_order_mealbox === 0 ||
+                        order.mrd_order_mealbox === null ? (
+                          order.mrd_order_quantity
+                        ) : (
+                          <>0</>
+                        )}
+                      </Chip>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Print Button (Excluded from Print) */}

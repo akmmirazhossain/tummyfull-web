@@ -131,7 +131,7 @@ const Notification = () => {
                   {notification.mrd_notif_mealbox_extra !== 0 &&
                     notification.mrd_notif_mealbox_extra !== null && (
                       <p className="text-xs">
-                        Mealbox: {notification.mrd_notif_mealbox_extra}
+                        Added Mealbox: {notification.mrd_notif_mealbox_extra}
                       </p>
                     )}
 

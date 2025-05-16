@@ -5,12 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
 import {
-  Badge,
   Button,
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@nextui-org/react";
+
+import IconButton from "@mui/material/IconButton";
+import Badge from "@mui/material/Badge";
 import Link from "next/link";
 import { useNotification } from "../contexts/NotificationContext";
 import Cookies from "js-cookie";
@@ -101,6 +103,8 @@ const NotificationBell = () => {
   }, [notifLoad]);
 
   const handleBellClick = async () => {
+    setUnseenCount(0);
+    console.log("🚀 ~ handleBellClick ~ handleBellClicked");
     // setShowNotifications((prev) => !prev);
 
     //MARK: Notif seen
@@ -111,8 +115,6 @@ const NotificationBell = () => {
     } catch (error) {
       console.error("Error updating notifications:", error);
     }
-
-    setUnseenCount(0);
   };
 
   return (
@@ -122,36 +124,38 @@ const NotificationBell = () => {
         offset={10}
         placement="bottom"
         isOpen={notifOpen}
-        onOpenChange={setNotifOpen}
+        onOpenChange={(open) => {
+          setNotifOpen(open);
+          if (open) {
+            setTimeout(() => {
+              handleBellClick();
+            }, 200);
+          }
+        }}
       >
-        <Badge
-          // color="secondary"
-          color="danger"
-          content={unseenCount}
-          size="md"
-          shape="circle"
-          isInvisible={unseenCount === 0}
-          className="absolute top-3 right-3"
-        >
-          <PopoverTrigger>
-            <Button
-              radius="full"
-              isIconOnly
-              variant="light"
-              onClick={handleBellClick}
-              size="lg"
-              className="relative"
+        <PopoverTrigger>
+          <Button
+            radius="full"
+            isIconOnly
+            variant="light"
+            size="lg"
+            className="relative"
+          >
+            <Badge
+              badgeContent={unseenCount}
+              invisible={unseenCount === 0}
+              color="error"
             >
               <FontAwesomeIcon
-                className={`font-awesome-icon cursor-pointer  text-lg ${
+                className={`text_black font-awesome-icon cursor-pointer  text-lg ${
                   isShaking ? "shake_bell" : ""
                 }`}
                 icon={faBell}
                 size="2x"
               />
-            </Button>
-          </PopoverTrigger>
-        </Badge>
+            </Badge>
+          </Button>
+        </PopoverTrigger>
         <PopoverContent className="flex justify-start items-start text_black text-left max-w-80 min-w-72">
           {notif && notif.notifications.length > 0 ? (
             <div className="">
@@ -188,7 +192,7 @@ const NotificationBell = () => {
                     {notification.mrd_notif_mealbox_extra !== 0 &&
                       notification.mrd_notif_mealbox_extra !== null && (
                         <p className="text-xs">
-                          Mealbox: {notification.mrd_notif_mealbox_extra}
+                          Added Mealbox: {notification.mrd_notif_mealbox_extra}
                         </p>
                       )}
 

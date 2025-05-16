@@ -368,16 +368,6 @@ const MenuComp = () => {
       return;
     }
 
-    // if (
-    //   user.data.mrd_user_order_delivered >=
-    //     settings.mrd_setting_mealbox_enforce_limit &&
-    //   user.data.mrd_user_mealbox !== 1 &&
-    //   value
-    // ) {
-    //   window.location.href = "/settings?mealboxEnforceLimit#mealbox";
-    //   return;
-    // }
-
     //SWITCH STATUS CHANGER
     const updatedMenuData = { ...menuData };
     if (updatedMenuData[day][mealPeriod].status === "disabled") {
@@ -471,6 +461,7 @@ const MenuComp = () => {
     const totalMealPrice = singleMealPrice * mealQuantity;
     const mealboxPrice = settings.mealbox_price;
     const deliveryCharge = settings.mrd_setting_commission_delivery;
+    const userCredit = user?.data?.mrd_user_credit;
 
     // USER DATA
     const userMealboxActive = user?.data?.mrd_user_mealbox;
@@ -488,6 +479,8 @@ const MenuComp = () => {
     }
 
     const totalPrice = totalMealPrice + extraBoxPrice + deliveryCharge;
+    //wallet
+    const cashToGive = Math.max(totalPrice - userCredit, 0);
 
     return {
       singleMealPrice,
@@ -498,6 +491,8 @@ const MenuComp = () => {
       deliveryCharge,
       totalPrice,
       mealboxPrice,
+      cashToGive,
+      userCredit,
     };
   };
 
@@ -1065,12 +1060,31 @@ const MenuComp = () => {
                                         {details.extraBoxPrice}
                                       </div>
                                     )}
+
                                     <div>
                                       Delivery: {details.deliveryCharge}
                                     </div>
-                                    <div className="divider p-0 m-0"></div>
-                                    <div className="font-bold">
-                                      Total: ৳{details.totalPrice}
+                                    {details.userCredit > 0 && (
+                                      <div>
+                                        Wallet Pay: -{details.userCredit}
+                                      </div>
+                                    )}
+                                    <div className="border-t-1 mt-1 mb-1"></div>
+                                    <div>
+                                      <span> Cash to Give: </span>
+                                      <span> ৳{details.cashToGive}</span>
+                                    </div>
+                                    <div>
+                                      <span>
+                                        Delivery time:{" "}
+                                        {settings?.[
+                                          `delivery_time_${mealType}`
+                                        ] || "N/A"}
+                                        ,{" "}
+                                      </span>
+                                      <span>
+                                        {formatDate(menuData[day].date)}
+                                      </span>
                                     </div>
                                   </div>
                                 );

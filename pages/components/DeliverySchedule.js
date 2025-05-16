@@ -480,176 +480,6 @@ const DeliveryList = () => {
                                 
                               )} */}
 
-                            {/* {delivery.mrd_order_mealbox === 1 &&
-                              delivery.mrd_user_has_mealbox === 2 && (
-                                <>
-                                  {delivery.mrd_order_quantity === 1 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          0
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          1
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                  {delivery.mrd_order_quantity === 2 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          0
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          2
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                  {delivery.mrd_order_quantity === 3 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          0
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          3
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                  {delivery.mrd_order_quantity === 4 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          0
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          4
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                  {delivery.mrd_order_quantity === 5 && (
-                                    <div className="grid grid-cols-2">
-                                      <div>
-                                        মিলবক্স সহ:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          0
-                                        </Chip>
-                                      </div>
-                                      <div>
-                                        ওয়ান টাইম বক্স:{" "}
-                                        <Chip size="lg" variant="bordered">
-                                          5
-                                        </Chip>
-                                      </div>
-                                    </div>
-                                  )}
-                                </>
-                              )}
-
-                            {delivery.mrd_order_mealbox === 0 && (
-                              <>
-                                {delivery.mrd_order_quantity === 1 && (
-                                  <div className="grid grid-cols-2">
-                                    <div>
-                                      মিলবক্স সহ:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        0
-                                      </Chip>
-                                    </div>
-                                    <div>
-                                      ওয়ান টাইম বক্স:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        1
-                                      </Chip>
-                                    </div>
-                                  </div>
-                                )}
-                                {delivery.mrd_order_quantity === 2 && (
-                                  <div className="grid grid-cols-2">
-                                    <div>
-                                      মিলবক্স সহ:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        0
-                                      </Chip>
-                                    </div>
-                                    <div>
-                                      ওয়ান টাইম বক্স:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        2
-                                      </Chip>
-                                    </div>
-                                  </div>
-                                )}
-                                {delivery.mrd_order_quantity === 3 && (
-                                  <div className="grid grid-cols-2">
-                                    <div>
-                                      মিলবক্স সহ:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        0
-                                      </Chip>
-                                    </div>
-                                    <div>
-                                      ওয়ান টাইম বক্স:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        3
-                                      </Chip>
-                                    </div>
-                                  </div>
-                                )}
-                                {delivery.mrd_order_quantity === 4 && (
-                                  <div className="grid grid-cols-2">
-                                    <div>
-                                      মিলবক্স সহ:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        0
-                                      </Chip>
-                                    </div>
-                                    <div>
-                                      ওয়ান টাইম বক্স:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        4
-                                      </Chip>
-                                    </div>
-                                  </div>
-                                )}
-                                {delivery.mrd_order_quantity === 5 && (
-                                  <div className="grid grid-cols-2">
-                                    <div>
-                                      মিলবক্স সহ:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        0
-                                      </Chip>
-                                    </div>
-                                    <div>
-                                      ওয়ান টাইম বক্স:{" "}
-                                      <Chip size="lg" variant="bordered">
-                                        5
-                                      </Chip>
-                                    </div>
-                                  </div>
-                                )}
-                              </>
-                            )} */}
                             {delivery.food_details ? (
                               <div className="flex flex-row gap-1">
                                 {delivery.food_details.map((food, index) => (
@@ -673,14 +503,17 @@ const DeliveryList = () => {
                         </div>
 
                         {delivery.mrd_user_mealbox_paid == "0" &&
-                          delivery.mrd_order_mealbox == "1" && (
+                          delivery.mrd_order_mealbox && (
                             <div className="flex items-center ">
                               <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
                                 <FontAwesomeIcon icon={faCoins} />
                                 <span>নতুন মিলবক্সের দাম:</span>
                               </div>
                               <div className=" w-3/4 py-1 flex items-center gap_akm">
-                                ৳{delivery.mrd_setting_mealbox_price}
+                                {delivery.mrd_order_mealbox_extra}x
+                                {delivery.mrd_setting_mealbox_price} = ৳
+                                {delivery.mrd_setting_mealbox_price *
+                                  delivery.mrd_order_mealbox_extra}
                                 <div
                                   className="tooltip"
                                   data-tip="মিল বক্সের দাম ক্যাশ অন ডেলিভারিতে নিতে হবে।"

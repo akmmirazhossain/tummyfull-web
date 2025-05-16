@@ -10,19 +10,26 @@ const Layout = ({ children, title }) => {
   return (
     <div className="bg_light_orange text_black">
       <Head>
-        <title>{title ? title : "ডালভাত.com"}</title>
+        <title>
+          {title
+            ? title
+            : "ডালভাত.com - Meal & Catering Service in Bashundhara"}
+        </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
-          content="DalBhath is an easy meal management app for students, job holders, and families seeking convenient daily meal options."
+          content="DalBhath.com offers home-cooked meal service, food delivery, and catering in Bashundhara Residential Area. Perfect for NSU, AIUB, and IUB students. Order lunch or dinner online now."
         />
         <meta property="og:logo" content="https://dalbhath.com/logo.png" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.dalbhath.com/" />
-        <meta property="og:title" content="ডালভাত.com" />
+        <meta
+          property="og:title"
+          content="ডালভাত.com - Meal & Catering Service in Bashundhara"
+        />
         <meta
           property="og:description"
-          content="DalBhath is an easy meal management app for students, job holders, and families seeking convenient daily meal options."
+          content="DalBhath.com offers home-cooked meal service, food delivery, and catering in Bashundhara Residential Area. Perfect for NSU, AIUB, and IUB students. Order lunch or dinner online now."
         />
         <meta
           property="og:image"

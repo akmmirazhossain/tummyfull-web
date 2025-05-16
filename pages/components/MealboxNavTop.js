@@ -1,9 +1,10 @@
 import React from "react";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import Badge from "@mui/material/Badge";
 
 import {
-  Badge,
   Button,
   Popover,
   PopoverTrigger,
@@ -40,31 +41,34 @@ const MealboxNavTop = () => {
 
   return (
     <Popover offset={10} placement="bottom">
-      <Badge
-        // color="secondary"
-        content={hasMealbox}
-        isInvisible={unseenCount === 0}
-        size="md"
-        shape="circle"
-        className="absolute top-3 right-3 bg_green text_white"
-      >
-        <PopoverTrigger>
-          <Button
-            radius="full"
-            isIconOnly
-            variant="light"
-            onClick={handleMealboxClick}
-            size="lg"
-            className="relative"
+      <PopoverTrigger>
+        <Button
+          radius="full"
+          isIconOnly
+          variant="light"
+          onClick={handleMealboxClick}
+          size="lg"
+          className="relative"
+        >
+          <Badge
+            badgeContent={hasMealbox}
+            invisible={unseenCount === 0}
+            sx={{
+              "& .MuiBadge-badge": {
+                backgroundColor: "#004225",
+                color: "#f4f4f4",
+              },
+            }}
           >
             <FontAwesomeIcon
-              className={`font-awesome-icon cursor-pointer  text-lg `}
+              className={`text_black font-awesome-icon cursor-pointer  text-lg `}
               icon={faBox}
               size="2x"
             />
-          </Button>
-        </PopoverTrigger>
-      </Badge>
+          </Badge>
+        </Button>
+      </PopoverTrigger>
+
       <PopoverContent>
         <div className="px-1 py-2 text_black">
           You have {hasMealbox} mealbox{hasMealbox === 1 ? "" : "es"} with you.

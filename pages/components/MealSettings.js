@@ -187,10 +187,12 @@ const MealSettings = () => {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center ">
-            <span className="h2_akm">Activate mealbox swap</span>
-            <span className="ml-2 text-xl">
-              (৳{settings && <>{settings.mealbox_price})</>}
-            </span>
+            <div className="h2_akm">
+              Activate mealbox swap
+              <span className="ml-2 font-normal text-xl">
+                (৳{settings && <>{settings.mealbox_price})</>}
+              </span>
+            </div>
           </div>
           <div className=" flex items-center gap-2">
             <Popover
@@ -298,7 +300,8 @@ const MealSettings = () => {
                 Deactivate Mealbox
               </ModalHeader>
               <ModalBody>
-                <p>Are you sure you want to deactivate your mealbox?</p>
+                <p>Are you sure you want to deactivate mealbox swap?</p>
+                <p>This action will cancel all pre-orders.</p>
               </ModalBody>
               <ModalFooter>
                 <Button variant="light" onPress={cancelDeactivation}>
