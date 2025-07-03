@@ -95,7 +95,7 @@ const MenuComp = () => {
   const [disabledMeals, setDisabledMeals] = useState({});
 
   const { shakeBell, notifLoadTrigger } = useNotification();
-  const { user, loading, error, refreshUser } = useUser();
+  const { user, loading, error, isLoggedIn, refreshUser } = useUser();
   const [feedbackModal, setFeedbackModal] = useState({
     isOpen: false,
     orderId: null,
@@ -346,7 +346,13 @@ const MenuComp = () => {
     checkLogin();
 
     // Check if address is empty
-    if (user?.data?.address?.trim() === "" && value === true) {
+
+    const hasValidAddress =
+      user?.data?.address &&
+      typeof user.data.address === "string" &&
+      user.data.address.trim().length > 0;
+
+    if (!hasValidAddress && value === true) {
       router.push({
         pathname: "/settings",
         query: {
@@ -355,6 +361,16 @@ const MenuComp = () => {
       });
       return;
     }
+
+    // if (user?.data?.address?.trim() === "" && value === true) {
+    //   router.push({
+    //     pathname: "/settings",
+    //     query: {
+    //       no_address: "Please enter your delivery address to place orders",
+    //     },
+    //   });
+    //   return;
+    // }
 
     //ENFORCE MEALBOX
 
@@ -471,6 +487,21 @@ const MenuComp = () => {
     let extraBoxes = 0;
     let extraBoxPrice = 0;
 
+    //WALLET PAY logic
+    // credit - (meal price + deliv charge) = Wallet pay
+
+    //if
+    //500 - (650 + 30)
+    //Therefore wallet pay here is -500
+
+    //elseif
+    //800 - (650 + 30)
+    //Therefore wallet pay here is -680
+
+    //elseif
+    //0 - (650 + 30)
+    //Therefore wallet pay should be 0 here
+
     if (userMealboxActive) {
       mealboxOptions = true;
       userHasMealbox = user.data.mrd_user_has_mealbox;
@@ -480,6 +511,10 @@ const MenuComp = () => {
 
     const totalPrice = totalMealPrice + extraBoxPrice + deliveryCharge;
     //wallet
+    const walletPay = Math.min(
+      userCredit,
+      totalMealPrice + deliveryCharge + extraBoxPrice
+    );
     const cashToGive = Math.max(totalPrice - userCredit, 0);
 
     return {
@@ -491,6 +526,7 @@ const MenuComp = () => {
       deliveryCharge,
       totalPrice,
       mealboxPrice,
+      walletPay,
       cashToGive,
       userCredit,
     };
@@ -498,51 +534,51 @@ const MenuComp = () => {
 
   //MARK: CART PREVIEW
 
-  const cartPreview = (day, menuId, date, price, mealType) => {
-    // console.log("menuComp.js ->", settings);
-    // MEAL CALCULATIONS
-    const singleMealPrice = menuData[day][mealType].price;
-    const mealQuantity = menuData[day][mealType].quantity;
-    const totalMealPrice = singleMealPrice * mealQuantity;
-    const mealboxPrice = settings.mealbox_price;
-    const deliveryCharge = settings.mrd_setting_commission_delivery;
+  // const cartPreview = (day, menuId, date, price, mealType) => {
+  //   // console.log("menuComp.js ->", settings);
+  //   // MEAL CALCULATIONS
+  //   const singleMealPrice = menuData[day][mealType].price;
+  //   const mealQuantity = menuData[day][mealType].quantity;
+  //   const totalMealPrice = singleMealPrice * mealQuantity;
+  //   const mealboxPrice = settings.mealbox_price;
+  //   const deliveryCharge = settings.mrd_setting_commission_delivery;
 
-    // USER DATA
-    const userMealboxActive = user.data.mrd_user_mealbox;
+  //   // USER DATA
+  //   const userMealboxActive = user.data.mrd_user_mealbox;
 
-    let mealboxOptions = false;
-    let userHasMealbox = 0;
-    let extraBoxes = 0;
-    let extraBoxPrice = 0;
+  //   let mealboxOptions = false;
+  //   let userHasMealbox = 0;
+  //   let extraBoxes = 0;
+  //   let extraBoxPrice = 0;
 
-    if (userMealboxActive) {
-      mealboxOptions = true;
-      userHasMealbox = user.data.mrd_user_has_mealbox;
-      extraBoxes = Math.max(mealQuantity - userHasMealbox, 0);
-      extraBoxPrice = extraBoxes * mealboxPrice;
-    }
+  //   if (userMealboxActive) {
+  //     mealboxOptions = true;
+  //     userHasMealbox = user.data.mrd_user_has_mealbox;
+  //     extraBoxes = Math.max(mealQuantity - userHasMealbox, 0);
+  //     extraBoxPrice = extraBoxes * mealboxPrice;
+  //   }
 
-    const totalPrice = totalMealPrice + extraBoxPrice + deliveryCharge;
+  //   const totalPrice = totalMealPrice + extraBoxPrice + deliveryCharge;
 
-    // Now all variables are in scope here:
-    setModalData({
-      date: date,
-      menuId: menuId,
-      mealType,
-      singleMealPrice,
-      mealQuantity,
-      totalMealPrice,
-      mealboxOptions,
-      userHasMealbox,
-      mealboxPrice,
-      extraBoxes,
-      extraBoxPrice,
-      deliveryCharge,
-      totalPrice,
-    });
+  //   // Now all variables are in scope here:
+  //   setModalData({
+  //     date: date,
+  //     menuId: menuId,
+  //     mealType,
+  //     singleMealPrice,
+  //     mealQuantity,
+  //     totalMealPrice,
+  //     mealboxOptions,
+  //     userHasMealbox,
+  //     mealboxPrice,
+  //     extraBoxes,
+  //     extraBoxPrice,
+  //     deliveryCharge,
+  //     totalPrice,
+  //   });
 
-    setShowModal(true);
-  };
+  //   setShowModal(true);
+  // };
 
   // const getTotalPrice = (day, mealType) => {
   //   // console.log("getTotalPrice ->", day);
@@ -1066,7 +1102,7 @@ const MenuComp = () => {
                                     </div>
                                     {details.userCredit > 0 && (
                                       <div>
-                                        Wallet Pay: -{details.userCredit}
+                                        Wallet Pay: -{details.walletPay}
                                       </div>
                                     )}
                                     <div className="border-t-1 mt-1 mb-1"></div>
@@ -1093,16 +1129,34 @@ const MenuComp = () => {
                           </div>
                         ) : (
                           <>
-                            <div className="flex items-center justify-center gap-2 py_akm">
-                              <div>
-                                <span className="h3_akm text_green">৳ </span>
-                                <span className="h2_akm text_green">
-                                  {menuData[day][mealType].price}
-                                </span>
-                              </div>
-                              <div className="h4info_akm line-through">
+                            <div className="flex items-center justify-center py_akm">
+                              {user?.data?.mrd_user_order_delivered > 0 &&
+                              isLoggedIn ? (
+                                <div>
+                                  <span className="h3_akm text_green">৳</span>
+                                  <span className="h2_akm text_green">
+                                    {menuData[day][mealType].price}
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center justify-center gap-2">
+                                  <div>
+                                    <span className="h3_akm text_green">৳</span>
+                                    <span className="h2_akm text_green">
+                                      {menuData[day][mealType].price *
+                                        (settings.mrd_setting_discount_reg /
+                                          100)}
+                                    </span>
+                                  </div>
+                                  <span className="h4info_akm line-through">
+                                    ৳100
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* <div className="h4info_akm line-through">
                                 ৳160
-                              </div>
+                              </div> */}
                             </div>
                             <div className="flex items-center justify-center">
                               <div className="h4_akm flex flex-col items-center">

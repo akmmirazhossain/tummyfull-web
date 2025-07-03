@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <title>আজকের রান্নার তালিকা</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+    <div class="max-w-xl mx-auto bg-white shadow-xl rounded-xl p-6 space-y-4">
+      <div class="text-center space-y-1">
+        <div id="bangla-date" class="text-lg font-semibold"></div>
+        <div id="bangla-day" class="text-xl font-bold"></div>
+        <div id="meal-time" class="text-base font-medium text-gray-600"></div>
+      </div>
+      <ul id="food-list" class="space-y-2 text-lg"></ul>
+    </div>
+
+    <script>
+      async function loadData() {
+        const res = await fetch(
+          "https://apis.dalbhath.com/api/orderlist-chef-now"
+        );
+        const data = await res.json();
+
+        const foodCounts = {};
+        const orders = data.orders;
+        if (!orders.length) return;
+
+        const period = orders[0].mrd_menu_period || "dinner";
+        const mealTime = period === "lunch" ? "দুপুরের রান্না" : "রাতের রান্না";
+
+        for (const order of orders) {
+          const qty = order.mrd_order_quantity || 1;
+          for (const food of order.food_details) {
+            const name = food.mrd_food_name;
+            if (!foodCounts[name]) foodCounts[name] = 0;
+            foodCounts[name] += qty;
+          }
+        }
+
+        // Format date in Bangla
+        const date = new Date(data.currentDateTime);
+        const banglaDigits = (n) =>
+          n.toString().replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[d]);
+
+        const banglaMonths = [
+          "জানুয়ারি",
+          "ফেব্রুয়ারি",
+          "মার্চ",
+          "এপ্রিল",
+          "মে",
+          "জুন",
+          "জুলাই",
+          "আগস্ট",
+          "সেপ্টেম্বর",
+          "অক্টোবর",
+          "নভেম্বর",
+          "ডিসেম্বর",
+        ];
+        const banglaDays = [
+          "রবিবার",
+          "সোমবার",
+          "মঙ্গলবার",
+          "বুধবার",
+          "বৃহস্পতিবার",
+          "শুক্রবার",
+          "শনিবার",
+        ];
+
+        const day = banglaDays[date.getDay()];
+        const dateStr = `${banglaMonths[date.getMonth()]} ${banglaDigits(
+          date.getDate()
+        )}, ${banglaDigits(date.getFullYear())}`;
+
+        document.getElementById("bangla-date").textContent = dateStr;
+        document.getElementById("bangla-day").textContent = day;
+        document.getElementById("meal-time").textContent = mealTime;
+
+        // Render list
+        const list = document.getElementById("food-list");
+        list.innerHTML = "";
+        for (const [name, count] of Object.entries(foodCounts)) {
+          const li = document.createElement("li");
+          li.textContent = `${name}: ${banglaDigits(count)}`;
+          li.className = "bg-green-100 rounded px-4 py-2";
+          list.appendChild(li);
+        }
+      }
+
+      loadData();
+    </script>
+  </body>
+</html>
