@@ -96,7 +96,7 @@ const KhalaToCook = () => {
                   key={index}
                   className="flex gap-1 justify-between items-center pad_akm rounded-lg bg-white"
                 >
-                  <span className="text-base font-medium">{name}</span>
+                  <span className="text-lg font-medium">{name}</span>
                   <Chip size="lg" variant="flat" className="font-bold text-lg">
                     {toBanglaNumber(qty)}
                   </Chip>

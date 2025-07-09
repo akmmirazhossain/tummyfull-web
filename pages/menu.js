@@ -4,6 +4,7 @@ import Layout from "./layout/Layout";
 import Slider from "./layout/Slider";
 import MenuComp from "./components/menuComp";
 import Link from "next/link";
+import Head from "next/head";
 import Cookies from "js-cookie";
 
 export default function Menu() {
@@ -17,7 +18,34 @@ export default function Menu() {
 
   return (
     <>
-      <Layout title="Menu - ডালভাত">
+      <Head>
+        <title>Weekly Menu - Customize Your Meals | Dalbhath.com</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <meta
+          name="description"
+          content="Browse this week's menu and customize your meals to fit your taste."
+        />
+        <meta
+          property="og:description"
+          content="Browse this week's menu and customize your meals to fit your taste."
+        />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.dalbhath.com/menu" />
+        <meta
+          property="og:title"
+          content="Weekly Menu - Customize Your Meals | dalbhath.com"
+        />
+
+        <meta
+          property="og:image"
+          content="https://dalbhath.com/images/premium_quality.png"
+        />
+      </Head>
+
+      <Layout>
         {showModal && (
           <div
             className="modal modal-open "

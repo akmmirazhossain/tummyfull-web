@@ -207,58 +207,49 @@ const MenuComp = () => {
   const [swapStatus, setSwapStatus] = useState({});
 
   const foodSwap = (day, mealType, category, orderStatus, date) => {
-    // if (isSwapping) {
-    //   console.log("swapStatus -> SWAP IS PROGRESS");
-    //   return;
-    // }
-    console.log("swapStatus ->", isSwapping);
-
-    // console.log("🚀 ~ foodSwap ~ orderStatus:", orderStatus);
     setFoodIndexes((prevIndexes) => {
       const currentIndex = prevIndexes?.[day]?.[mealType]?.[category] || 0;
       const categoryFoods = menuData[day][mealType]?.foods?.[category] || [];
 
-      if (categoryFoods.length <= 1) return prevIndexes; // No swap needed if only one item
+      if (categoryFoods.length <= 1) return prevIndexes; // No swap needed
 
       const nextIndex = (currentIndex + 1) % categoryFoods.length;
       const currentFoodId = categoryFoods[currentIndex]?.food_id;
-      const newFoodId = categoryFoods[nextIndex].food_id;
+      const newFoodId = categoryFoods[nextIndex]?.food_id;
 
-      console.log("🚀 ~ setFoodIndexes ~ currentFoodId:", currentFoodId);
-      console.log("🚀 ~ setFoodIndexes ~ newFoodId:", newFoodId);
+      console.log("🚀 Swapping:", { currentFoodId, newFoodId });
+
+      // Build fresh snapshot of selected foods
+      const currentSelectedFoods = {
+        ...selectedFoods?.[day]?.[mealType],
+        [category]: newFoodId,
+      };
 
       const defaultFoods = Object.entries(
         menuData[day][mealType]?.foods || {}
-      ).reduce((acc, [category, items]) => {
-        acc[category] = items[0]?.food_id; // Get first food_id from each category
+      ).reduce((acc, [cat, items]) => {
+        acc[cat] = items[0]?.food_id;
         return acc;
       }, {});
 
-      // Merge with selected swaps (if any)
       const finalFoods = {
         ...defaultFoods,
-        ...(selectedFoods?.[day]?.[mealType] || {}),
-        [category]: newFoodId, // Ensure the swapped food is updated in finalFoods
+        ...currentSelectedFoods,
       };
 
-      console.log("🚀 ~ foodSwap ~ finalFoods:", finalFoods);
-
-      // Update the selected foods for order placement
+      // Update selectedFoods state
       setSelectedFoods((prev) => ({
         ...prev,
         [day]: {
           ...prev[day],
-          [mealType]: {
-            ...prev[day]?.[mealType],
-            [category]: newFoodId, // Store the swapped food ID
-          },
+          [mealType]: currentSelectedFoods,
         },
       }));
 
-      //UPDATE ORDER IF LOGGED IN
-      // const token = Cookies.get("TFLoginToken");
+      // Send to backend
       if (LoginToken && orderStatus === "enabled") {
         setIsSwapping(true);
+
         const updateData = {
           TFLoginToken: LoginToken,
           day,
@@ -270,10 +261,8 @@ const MenuComp = () => {
           date,
         };
 
-        // Clear any existing timeout before setting a new one
-        if (apiTimeoutRef.current) {
-          clearTimeout(apiTimeoutRef.current);
-        }
+        // Cancel any previous API call
+        if (apiTimeoutRef.current) clearTimeout(apiTimeoutRef.current);
 
         apiTimeoutRef.current = setTimeout(() => {
           fetch(`${apiConfig.apiBaseUrl}order-food-swap`, {
@@ -283,7 +272,7 @@ const MenuComp = () => {
           })
             .then((res) => res.json())
             .then((data) => {
-              console.log("API Response:", data);
+              console.log("✅ API Response:", data);
 
               setSwapStatus((prev) => ({
                 ...prev,
@@ -296,7 +285,6 @@ const MenuComp = () => {
                 },
               }));
 
-              // Clear the "Updated" message after 3 seconds
               setTimeout(() => {
                 setSwapStatus((prev) => ({
                   ...prev,
@@ -313,14 +301,15 @@ const MenuComp = () => {
               setIsSwapping(false);
             })
             .catch((error) => {
-              console.error("Error updating order:", error);
-              setIsSwapping(false); // Enable button on failure
+              console.error("❌ Error updating order:", error);
+              setIsSwapping(false);
             });
 
           console.log("🚀 ORDER UPDATE DATA SENT:", updateData);
         }, 1000);
       }
 
+      // Update indexes
       return {
         ...prevIndexes,
         [day]: {
@@ -333,6 +322,130 @@ const MenuComp = () => {
       };
     });
   };
+
+  // const foodSwap = (day, mealType, category, orderStatus, date) => {
+
+  //   console.log("swapStatus ->", isSwapping);
+
+  //   setFoodIndexes((prevIndexes) => {
+  //     const currentIndex = prevIndexes?.[day]?.[mealType]?.[category] || 0;
+  //     const categoryFoods = menuData[day][mealType]?.foods?.[category] || [];
+
+  //     if (categoryFoods.length <= 1) return prevIndexes; // No swap needed if only one item
+
+  //     const nextIndex = (currentIndex + 1) % categoryFoods.length;
+  //     const currentFoodId = categoryFoods[currentIndex]?.food_id;
+  //     const newFoodId = categoryFoods[nextIndex].food_id;
+
+  //     console.log("🚀 ~ setFoodIndexes ~ currentFoodId:", currentFoodId);
+  //     console.log("🚀 ~ setFoodIndexes ~ newFoodId:", newFoodId);
+
+  //     const defaultFoods = Object.entries(
+  //       menuData[day][mealType]?.foods || {}
+  //     ).reduce((acc, [category, items]) => {
+  //       acc[category] = items[0]?.food_id; // Get first food_id from each category
+  //       return acc;
+  //     }, {});
+
+  //     // Merge with selected swaps (if any)
+  //     const finalFoods = {
+  //       ...defaultFoods,
+  //       ...(selectedFoods?.[day]?.[mealType] || {}),
+  //       [category]: newFoodId, // Ensure the swapped food is updated in finalFoods
+  //     };
+
+  //     console.log("🚀 ~ foodSwap ~ finalFoods:", finalFoods);
+
+  //     // Update the selected foods for order placement
+  //     setSelectedFoods((prev) => ({
+  //       ...prev,
+  //       [day]: {
+  //         ...prev[day],
+  //         [mealType]: {
+  //           ...prev[day]?.[mealType],
+  //           [category]: newFoodId, // Store the swapped food ID
+  //         },
+  //       },
+  //     }));
+
+  //     //UPDATE ORDER IF LOGGED IN
+  //     // const token = Cookies.get("TFLoginToken");
+  //     if (LoginToken && orderStatus === "enabled") {
+  //       setIsSwapping(true);
+  //       const updateData = {
+  //         TFLoginToken: LoginToken,
+  //         day,
+  //         mealType,
+  //         category,
+  //         newFoodId,
+  //         currentFoodId,
+  //         finalFoods,
+  //         date,
+  //       };
+
+  //       // Clear any existing timeout before setting a new one
+  //       if (apiTimeoutRef.current) {
+  //         clearTimeout(apiTimeoutRef.current);
+  //       }
+
+  //       apiTimeoutRef.current = setTimeout(() => {
+  //         fetch(`${apiConfig.apiBaseUrl}order-food-swap`, {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify(updateData),
+  //         })
+  //           .then((res) => res.json())
+  //           .then((data) => {
+  //             console.log("API Response:", data);
+
+  //             setSwapStatus((prev) => ({
+  //               ...prev,
+  //               [day]: {
+  //                 ...prev[day],
+  //                 [mealType]: {
+  //                   ...prev[day]?.[mealType],
+  //                   [category]: "updated",
+  //                 },
+  //               },
+  //             }));
+
+  //             // Clear the "Updated" message after 3 seconds
+  //             setTimeout(() => {
+  //               setSwapStatus((prev) => ({
+  //                 ...prev,
+  //                 [day]: {
+  //                   ...prev[day],
+  //                   [mealType]: {
+  //                     ...prev[day]?.[mealType],
+  //                     [category]: null,
+  //                   },
+  //                 },
+  //               }));
+  //             }, 2000);
+
+  //             setIsSwapping(false);
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error updating order:", error);
+  //             setIsSwapping(false); // Enable button on failure
+  //           });
+
+  //         console.log("🚀 ORDER UPDATE DATA SENT:", updateData);
+  //       }, 1000);
+  //     }
+
+  //     return {
+  //       ...prevIndexes,
+  //       [day]: {
+  //         ...prevIndexes[day],
+  //         [mealType]: {
+  //           ...prevIndexes[day]?.[mealType],
+  //           [category]: nextIndex,
+  //         },
+  //       },
+  //     };
+  //   });
+  // };
 
   const checkLogin = () => {
     if (!LoginToken) {
@@ -362,15 +475,16 @@ const MenuComp = () => {
       return;
     }
 
-    // if (user?.data?.address?.trim() === "" && value === true) {
-    //   router.push({
-    //     pathname: "/settings",
-    //     query: {
-    //       no_address: "Please enter your delivery address to place orders",
-    //     },
-    //   });
-    //   return;
-    // }
+    //CHECK DUE FLAG
+    const checkDueFlag = user?.data?.mrd_user_status;
+    const userCredit = Number(user?.data?.mrd_user_credit) || 0;
+
+    if (checkDueFlag === "flagged_due" && value === true) {
+      if (userCredit < 130) {
+        window.location.href = "/wallet?rechargeWallet";
+        return;
+      }
+    }
 
     //ENFORCE MEALBOX
 
@@ -1199,8 +1313,8 @@ const MenuComp = () => {
                           }}
                         />
                         {menuData[day][mealType].status === "enabled"
-                          ? "Meal ordered"
-                          : "Tap to order"}
+                          ? "Meal Ordered"
+                          : "Tap to Order"}
                       </div>
 
                       <div className=" px_akm pb_akm">

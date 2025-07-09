@@ -1,4 +1,5 @@
 import { React, useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
 import { Skeleton } from "@nextui-org/react";
@@ -12,6 +13,14 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 const CreditDisplay = () => {
   const apiConfig = useContext(ApiContext);
   const [userCredit, setUserCredit] = useState(null);
+  const router = useRouter();
+  const [showEnforceMessage, setShowEnforceMessage] = useState(false);
+
+  useEffect(() => {
+    if (router.isReady && "rechargeWallet" in router.query) {
+      setShowEnforceMessage(true);
+    }
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
     const fetchUserCredit = async () => {
@@ -48,6 +57,29 @@ const CreditDisplay = () => {
   return (
     <>
       <div className="h1_akm ">Wallet</div>
+
+      {showEnforceMessage && (
+        <div role="alert" className="alert alert-warning mb_akm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="h-6 w-6 shrink-0 stroke-current"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span>
+            {" "}
+            Your wallet balance is too low. Please recharge to continue
+            ordering.{" "}
+          </span>
+        </div>
+      )}
       <div className="card_akm   p-8 flex items-center justify-between">
         <div className="flex flex-col items-start justify-start">
           <div className="h3_akm">Current credit</div>

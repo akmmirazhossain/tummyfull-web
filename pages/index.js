@@ -36,7 +36,7 @@ export default function Home() {
   const [menuRedir, setMenuRedir] = useState(null);
 
   // Inside your component:
-  const [buttonTextHero, setButtonTextHero] = useState("First Meal 50% Off!");
+  const [buttonTextHero, setButtonTextHero] = useState("First Meal 80% Off!");
   const [buttonTextCTA, setButtonTextCTA] = useState("Login and Order Now");
 
   useEffect(() => {
@@ -148,20 +148,22 @@ export default function Home() {
       <Head>
         <title>dalbhath.com</title>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
         <meta
           name="description"
-          content="DalBhath is an easy meal management app for students seeking convenient daily meal options."
+          content="DalBhath.com is the easiest way for students and residents in Bashundhara to order affordable, home-cooked daily meals and catering services."
         />
-        <meta
-          property="og:logo"
-          content="https://dalbhath.com/images/logo-300x300.png"
-        />
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.dalbhath.com/" />
-        <meta property="og:title" content="dalbhath.com" />
+        <meta
+          property="og:title"
+          content="dalbhath.com - Meal & Catering Service in Bashundhara"
+        />
         <meta
           property="og:description"
-          content="DalBhath is an easy meal management app for students seeking convenient daily meal options."
+          content="DalBhath.com offers home-cooked meals, food delivery, and bulk catering in Bashundhara Residential Area. Perfect for students of NSU, AIUB, IUB. Order lunch or dinner today."
         />
         <meta
           property="og:image"
@@ -628,9 +630,9 @@ export default function Home() {
           />
         </div> */}
         <div className="max-w-7xl  mx-auto flex justify-center items-center flex-col px-6 pb-4 relative z-10">
-          <h2 className="text-7xl font-bebas">First Meal 50% Off!</h2>
+          <h2 className="text-7xl font-bebas">First Meal 80% Off!</h2>
           <p className="font-poppins h3_akm">
-            Claim Your 50% Off Meal – Limited Time!
+            Claim Your 80% Off Meal – Limited Time!
           </p>
           <Link href={"/menu"}>
             <motion.button

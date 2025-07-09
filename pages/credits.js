@@ -5,7 +5,7 @@ import Layout from "./layout/Layout";
 
 export default function Credits() {
   return (
-    <Layout title="Credits - ডালভাত">
+    <Layout>
       <div className="min-h-screen flex flex-col items-center py-10 px-5 text-base-content">
         <div className="bg-base-100 shadow-xl rounded-lg p-8 w-full max-w-3xl">
           {/* Profile Section */}

@@ -9,7 +9,7 @@ import FooterMain from "./Footer";
 const Layout = ({ children, title }) => {
   return (
     <div className="bg_light_orange text_black">
-      <Head>
+      {/* <Head>
         <title>
           {title
             ? title
@@ -35,7 +35,7 @@ const Layout = ({ children, title }) => {
           property="og:image"
           content="https://dalbhath.com/images/og-main.png"
         />
-      </Head>
+      </Head> */}
       <header className="fixed w-full z-20">
         <NavbarTop className="" />
       </header>

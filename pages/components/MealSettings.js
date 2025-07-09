@@ -44,7 +44,7 @@ const MealSettings = () => {
   }, []);
 
   useEffect(() => {
-    if (router.isReady && "mealboxEnforceLimit" in router.query) {
+    if (router.isReady && "rechargeWallet" in router.query) {
       setShowEnforceMessage(true);
     }
   }, [router.isReady, router.query]);

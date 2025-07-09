@@ -5,6 +5,7 @@ import { Skeleton } from "@nextui-org/react";
 import ProfileForm from "./components/ProfileForm";
 import MealSettings from "./components/MealSettings";
 import LogoutBlock from "./components/Logout";
+import Head from "next/head";
 
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
@@ -13,36 +14,44 @@ const ProtectedPage = () => {
 
   if (!isAuthenticated) {
     return (
-      <Layout>
-        <div className=" mt_akm pt_akm">
-          <Skeleton className="rounded-lg w-60 h-12 mb_akm" />
-          <div className="card_akm pad_akm ">
-            {" "}
-            <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-20 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-28 w-96 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-12 w-24 my_akm mx_akm" />
+      <>
+        <Head>
+          <title>Settings | Dalbhath.com</title>
+        </Head>
+        <Layout>
+          <div className=" mt_akm pt_akm">
+            <Skeleton className="rounded-lg w-60 h-12 mb_akm" />
+            <div className="card_akm pad_akm ">
+              {" "}
+              <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-20 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-28 w-96 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-12 w-24 my_akm mx_akm" />
+            </div>
           </div>
-        </div>
 
-        <div className=" mt_akm pt_akm">
-          <Skeleton className="rounded-lg w-60 h-12 mb_akm" />
-          <div className="card_akm pad_akm ">
-            {" "}
-            <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-20 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-28 w-96 my_akm mx_akm" />
-            <Skeleton className="rounded-lg h-12 w-24 my_akm mx_akm" />
+          <div className=" mt_akm pt_akm">
+            <Skeleton className="rounded-lg w-60 h-12 mb_akm" />
+            <div className="card_akm pad_akm ">
+              {" "}
+              <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-12 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-20 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-28 w-96 my_akm mx_akm" />
+              <Skeleton className="rounded-lg h-12 w-24 my_akm mx_akm" />
+            </div>
           </div>
-        </div>
-      </Layout>
+        </Layout>
+      </>
     );
   }
 
   return (
     <>
+      <Head>
+        <title>Settings | Dalbhath.com</title>
+      </Head>
       <Layout title="Settings - ডালভাত">
         <ProfileForm />
         <div id="mealbox">
