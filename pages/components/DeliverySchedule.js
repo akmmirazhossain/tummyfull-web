@@ -16,7 +16,10 @@ import {
   faBowlFood,
   faCoins,
   faMoneyBill,
+  faWallet,
 } from "@fortawesome/free-solid-svg-icons";
+
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 const DeliveryList = () => {
   const [deliveries, setDeliveries] = useState([]);
@@ -134,10 +137,32 @@ const DeliveryList = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, [token, apiConfig]);
 
+  //MARK: NOTIF WA
+  const sendWhatsAppMessage = (phone, mealType, cashToGive) => {
+    let message = `Dalbhath Delivery: Your ${mealType} will reach you in 10 min.`;
+
+    if (parseInt(cashToGive) > 0) {
+      message += ` Cash to give: ৳${cashToGive}.`;
+    }
+
+    const encodedMessage = encodeURIComponent(message);
+    const waUrl = `https://wa.me/+88${phone}?text=${encodedMessage}`;
+    window.location.href = waUrl;
+  };
+
   //MARK: Deliv Update
-  const handleConfirm = (orderId, userId, menuId, mealboxPaid, date) => {
+  const handleConfirm = (
+    orderId,
+    userId,
+    menuId,
+    cashToGet,
+    mealPeriod,
+    date
+  ) => {
     const updatedStatus = orderStatus[orderId];
     const pickedMealbox = mealboxPicked[orderId];
+
+    console.log("🚀 ~ DeliveryList ~ cashToGet:", cashToGet);
 
     axios
       .post(
@@ -147,9 +172,11 @@ const DeliveryList = () => {
           userId: userId,
           menuId: menuId,
           // giveMealbox: giveMealbox,
-          mealboxPaid: mealboxPaid,
+          // mealboxPaid: mealboxPaid,
           delivStatus: updatedStatus,
           mboxPick: pickedMealbox,
+          cashToGet: cashToGet,
+          mealPeriod: mealPeriod,
           date: date,
         },
         {
@@ -170,7 +197,7 @@ const DeliveryList = () => {
   const isButtonDisabled = (delivery) => {
     return (
       orderStatus[delivery.mrd_order_id] === "pending" ||
-      ["cancelled", "delivered", "unavailable"].includes(
+      ["cancelled", "delivered", "unavailable", "delivered_with_due"].includes(
         delivery.mrd_order_status
       ) ||
       (delivery.mrd_user_has_mealbox !== "0" &&
@@ -245,6 +272,8 @@ const DeliveryList = () => {
                                 "cancelled",
                                 "delivered",
                                 "unavailable",
+                                "on_hold_due",
+                                "delivered_with_due",
                               ].includes(delivery.mrd_order_status)
                             }
                           />
@@ -254,11 +283,17 @@ const DeliveryList = () => {
                             <div className="flex justify-between items-center">
                               <div
                                 role="alert"
-                                className={`alert ${
+                                className={`flex justify-between alert ${
                                   delivery.mrd_order_status === "delivered"
                                     ? "alert-success"
                                     : delivery.mrd_order_status === "pending"
                                     ? "alert-info"
+                                    : delivery.mrd_order_status ===
+                                      "on_hold_due"
+                                    ? "alert-warning"
+                                    : delivery.mrd_order_status ===
+                                      "delivered_with_due"
+                                    ? "alert-warning"
                                     : ["unavailable", "cancelled"].includes(
                                         delivery.mrd_order_status
                                       )
@@ -266,36 +301,57 @@ const DeliveryList = () => {
                                     : ""
                                 }`}
                               >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-6 w-6 shrink-0 stroke-current"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d={
-                                      delivery.mrd_order_status === "delivered"
-                                        ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        : delivery.mrd_order_status ===
-                                          "pending"
-                                        ? "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    }
-                                  />
-                                </svg>
-                                <span>
-                                  {delivery.mrd_order_status === "delivered" &&
-                                    "Delivery completed."}
-                                  {delivery.mrd_order_status === "pending" &&
-                                    "Pending delivery."}
-                                  {delivery.mrd_order_status === "cancelled" &&
-                                    "Order cancelled."}
-                                  {delivery.mrd_order_status ===
-                                    "unavailable" && "Customer unavailable."}
-                                </span>
+                                <div className="flex gap-2">
+                                  {" "}
+                                  <span>
+                                    <FontAwesomeIcon icon={faUser} />
+                                  </span>
+                                  <span> {delivery.mrd_user_first_name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span>
+                                    {delivery.mrd_order_status ===
+                                      "delivered" && "Delivery completed."}
+                                    {delivery.mrd_order_status === "pending" &&
+                                      "Pending delivery."}
+                                    {delivery.mrd_order_status ===
+                                      "on_hold_due" && "On Hold Due"}
+                                    {delivery.mrd_order_status ===
+                                      "delivered_with_due" &&
+                                      "Delivered With Due"}
+                                    {delivery.mrd_order_status ===
+                                      "cancelled" && "Order cancelled."}
+                                    {delivery.mrd_order_status ===
+                                      "unavailable" && "Customer unavailable."}
+                                  </span>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6 shrink-0 stroke-current"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d={
+                                        delivery.mrd_order_status ===
+                                        "delivered"
+                                          ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                          : delivery.mrd_order_status ===
+                                            "delivered_with_due"
+                                          ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                          : delivery.mrd_order_status ===
+                                            "on_hold_due"
+                                          ? "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                          : delivery.mrd_order_status ===
+                                            "pending"
+                                          ? "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                          : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      }
+                                    />
+                                  </svg>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -306,8 +362,22 @@ const DeliveryList = () => {
                                 <FontAwesomeIcon icon={faLocationDot} />
                                 <span>ঠিকানা:</span>
                               </div>
-                              <div className=" w-3/4 py-1">
+                              <div className="flex justify-between w-3/4 py-1">
                                 {delivery.mrd_user_address}
+                                {delivery.mrd_user_delivery_notify_wa === 1 && (
+                                  <div
+                                    onClick={() =>
+                                      sendWhatsAppMessage(
+                                        delivery.mrd_user_phone,
+                                        mealType,
+                                        delivery.mrd_order_cash_to_get
+                                      )
+                                    }
+                                    className="btn btn-success btn-xs text-white"
+                                  >
+                                    <FontAwesomeIcon icon={faWhatsapp} /> Notify
+                                  </div>
+                                )}
                               </div>
                             </div>
 
@@ -325,15 +395,11 @@ const DeliveryList = () => {
 
                             <div className="flex items-center">
                               <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                                <FontAwesomeIcon icon={faUser} />
-                                <span>নাম:</span>
+                                <FontAwesomeIcon icon={faWallet} />
+                                <span>ওয়ালেট:</span>
                               </div>
                               <div className=" w-3/4 py-1">
-                                {delivery.mrd_user_first_name}{" "}
-                                <span className="text-xs">
-                                  (ওয়ালেট ব্যালেন্স: ৳
-                                  {delivery.mrd_user_credit})
-                                </span>
+                                ৳{delivery.mrd_user_credit}
                               </div>
                             </div>
 
@@ -477,35 +543,34 @@ const DeliveryList = () => {
                               </div>
                             </div>
 
-                            {delivery.mrd_user_mealbox_paid == "0" &&
-                              delivery.mrd_order_mealbox && (
-                                <div className="flex items-center ">
-                                  <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
-                                    <FontAwesomeIcon icon={faCoins} />
-                                    <span>নতুন মিলবক্সের দাম:</span>
-                                  </div>
-                                  <div className=" w-3/4 py-1 flex items-center gap_akm">
-                                    {delivery.mrd_order_mealbox_extra}x
-                                    {delivery.mrd_setting_mealbox_price} = ৳
-                                    {delivery.mrd_setting_mealbox_price *
-                                      delivery.mrd_order_mealbox_extra}
-                                    <div
-                                      className="tooltip"
-                                      data-tip="মিল বক্সের দাম ক্যাশ অন ডেলিভারিতে নিতে হবে।"
+                            {delivery.mrd_order_mealbox && (
+                              <div className="flex items-center ">
+                                <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                                  <FontAwesomeIcon icon={faCoins} />
+                                  <span>নতুন মিলবক্সের দাম:</span>
+                                </div>
+                                <div className=" w-3/4 py-1 flex items-center gap_akm">
+                                  {delivery.mrd_order_mealbox_extra}x
+                                  {delivery.mrd_setting_mealbox_price} = ৳
+                                  {delivery.mrd_setting_mealbox_price *
+                                    delivery.mrd_order_mealbox_extra}
+                                  <div
+                                    className="tooltip"
+                                    data-tip="মিল বক্সের দাম ক্যাশ অন ডেলিভারিতে নিতে হবে।"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      height="24px"
+                                      viewBox="0 -960 960 960"
+                                      width="24px"
+                                      fill="#4287f5"
                                     >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        height="24px"
-                                        viewBox="0 -960 960 960"
-                                        width="24px"
-                                        fill="#4287f5"
-                                      >
-                                        <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
-                                      </svg>
-                                    </div>
+                                      <path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+                                    </svg>
                                   </div>
                                 </div>
-                              )}
+                              </div>
+                            )}
 
                             <div className="flex items-center ">
                               <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
@@ -536,7 +601,7 @@ const DeliveryList = () => {
                               <div className=" w-3/4 py-1 h2_akm flex items-center flex-row gap_akm">
                                 <div>{delivery.mrd_order_cash_to_get}</div>
 
-                                <div className=" w-3/4 py-1 text-xs font-normal">
+                                {/* <div className=" w-3/4 py-1 text-xs font-normal">
                                   {delivery.mrd_order_cash_to_get == "0" ? (
                                     <div className="text-xs font-normal">
                                       (মিলের ৳{delivery.mrd_order_total_price}{" "}
@@ -564,18 +629,18 @@ const DeliveryList = () => {
                                       )}
                                     </>
                                   )}
-                                </div>
+                                </div> */}
                               </div>
                             </div>
 
                             <div className="flex items-center ">
                               <div
                                 htmlFor={`status-${delivery.mrd_order_id}`}
-                                className="flex items-center  w-1/4 py-1 font-bold gap_akm"
+                                className="flex items-center  w-1/5 py-1 font-bold gap_akm"
                               >
                                 <span> ডেলিভারি স্ট্যাটাস:</span>
                               </div>
-                              <div className=" w-3/4 py-1 flex items-center gap_akm">
+                              <div className=" w-4/5 py-1 flex items-center gap_akm">
                                 <select
                                   id={`status-${delivery.mrd_order_id}`}
                                   value={orderStatus[delivery.mrd_order_id]}
@@ -585,11 +650,13 @@ const DeliveryList = () => {
                                       [delivery.mrd_order_id]: e.target.value,
                                     }))
                                   }
-                                  className="ml-2 p-2 border rounded"
+                                  className="ml-2 p-3 text-lg border rounded w-48"
                                   disabled={[
                                     "cancelled",
                                     "delivered",
                                     "unavailable",
+                                    "on_hold_due",
+                                    "delivered_with_due",
                                   ].includes(delivery.mrd_order_status)}
                                 >
                                   <option value="pending">Pending</option>
@@ -598,15 +665,26 @@ const DeliveryList = () => {
                                   <option value="unavailable">
                                     Unavailable
                                   </option>
+                                  <option
+                                    disabled
+                                    value="on_hold_due"
+                                    className="text-[#FFB000]"
+                                  >
+                                    On Hold Due
+                                  </option>
+                                  <option value="deliver_with_due">
+                                    Deliver With Due
+                                  </option>
                                 </select>
                                 <button
-                                  className={`px-4 py-2  rounded flex justify-center gap_akm ${
+                                  className={`px-4 py-3 rounded-full flex justify-center gap_akm   ${
                                     orderStatus[delivery.mrd_order_id] ===
                                       "pending" ||
                                     [
                                       "cancelled",
                                       "delivered",
                                       "unavailable",
+                                      "delivered_with_due",
                                     ].includes(delivery.mrd_order_status) ||
                                     isButtonDisabled(delivery)
                                       ? "bg-gray-400 cursor-not-allowed"
@@ -617,8 +695,9 @@ const DeliveryList = () => {
                                       delivery.mrd_order_id,
                                       delivery.mrd_user_id,
                                       delivery.mrd_menu_id,
-                                      delivery.mrd_order_mealbox,
-                                      delivery.mrd_user_mealbox_paid,
+
+                                      delivery.mrd_order_cash_to_get,
+                                      mealType,
                                       date
                                     )
                                   }
@@ -628,6 +707,7 @@ const DeliveryList = () => {
                                     "cancelled",
                                     "delivered",
                                     "unavailable",
+                                    "delivered_with_due",
                                   ].includes(delivery.mrd_order_status) ? (
                                     <>
                                       <svg

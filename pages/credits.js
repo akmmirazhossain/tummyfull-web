@@ -73,8 +73,7 @@ export default function Credits() {
                 strategy for the app
               </li>
               <li>
-                <strong>Project Manager:</strong> Ensuring smooth execution and
-                timely delivery
+                <strong>Project Manager:</strong> Ensuring smooth execution
               </li>
             </ul>
           </section>
@@ -101,8 +100,9 @@ export default function Credits() {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <span>Login with OTP</span>
+                  <span>Weekly meal pre-order system</span>
                 </li>
+
                 <li class="flex items-center">
                   <svg
                     class="h-5 w-5 text-green-500 mr-2"
@@ -118,7 +118,25 @@ export default function Credits() {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <span>Weekly meal pre-order system</span>
+                  <span>Multiple Kitchen Operation</span>
+                </li>
+
+                <li class="flex items-center">
+                  <svg
+                    class="h-5 w-5 text-green-500 mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span>Login with OTP</span>
                 </li>
                 <li class="flex items-center">
                   <svg
@@ -171,6 +189,24 @@ export default function Credits() {
                     />
                   </svg>
                   <span>Auto pay from wallet on delivery</span>
+                </li>
+
+                <li class="flex items-center">
+                  <svg
+                    class="h-5 w-5 text-green-500 mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span>Handle Due Within App</span>
                 </li>
 
                 <li class="flex items-center">

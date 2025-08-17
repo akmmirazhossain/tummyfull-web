@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
 import { Skeleton } from "@nextui-org/react";
 import Image from "next/image";
+import WalletCredit from "./WalletCredit";
 
 import { Button } from "@nextui-org/react";
 
@@ -11,8 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const CreditDisplay = () => {
-  const apiConfig = useContext(ApiContext);
-  const [userCredit, setUserCredit] = useState(null);
+  // const apiConfig = useContext(ApiContext);
+  // const [userCredit, setUserCredit] = useState(null);
   const router = useRouter();
   const [showEnforceMessage, setShowEnforceMessage] = useState(false);
 
@@ -21,38 +22,6 @@ const CreditDisplay = () => {
       setShowEnforceMessage(true);
     }
   }, [router.isReady, router.query]);
-
-  useEffect(() => {
-    const fetchUserCredit = async () => {
-      if (!apiConfig) return;
-      const token = Cookies.get("TFLoginToken");
-
-      if (token) {
-        const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-          setUserCredit(data.data.mrd_user_credit);
-        }
-      }
-    };
-
-    fetchUserCredit();
-  }, [apiConfig]);
-
-  if (userCredit === null)
-    return (
-      <>
-        <div className="h1_akm ">Wallet</div>
-        <div className="card_akm   p-8 ">
-          <Skeleton className="rounded-lg h-12" />
-        </div>
-      </>
-    );
 
   return (
     <>
@@ -83,9 +52,9 @@ const CreditDisplay = () => {
       <div className="card_akm   p-8 flex items-center justify-between">
         <div className="flex flex-col items-start justify-start">
           <div className="h3_akm">Current credit</div>
-          <div>
-            ৳<span className="h2_akm">{userCredit}</span>
-          </div>
+          <span className="h2_akm">
+            <WalletCredit />
+          </span>
         </div>
 
         {/* <Button size="lg" className="bg_green text_white">

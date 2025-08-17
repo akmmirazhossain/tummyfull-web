@@ -70,12 +70,12 @@ body {
     color: #333333;
   }
 
-  .bg_green {
-    background-color: #004225;
-  }
-
   .text_green {
     color: #004225;
+  }
+
+  .text_orange {
+    color: #ffb000;
   }
 
   .text_white {
@@ -84,6 +84,10 @@ body {
 
   .text_grey {
     @apply text-gray-500;
+  }
+
+  .bg_green {
+    background-color: #004225;
   }
 
   .bg_beige {

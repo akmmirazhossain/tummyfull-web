@@ -11,10 +11,10 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@nextui-org/react";
-import Cookies from "js-cookie";
 
 import { ApiContext } from "../contexts/ApiContext";
 import { useUser } from "../contexts/UserContext";
+import WalletCredit from "./WalletCredit";
 
 const NavbarTop = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,42 +43,6 @@ const NavbarTop = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [apiConfig]);
-
-  // useEffect(() => {
-  //   if (token) {
-  //     if (!apiConfig) return;
-  //     setIsLoggedIn(true);
-
-  //     //MARK: Fetch User
-  //     const fetchUser = async () => {
-  //       setIsLoading(true);
-  //       try {
-  //         const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
-  //           method: "GET",
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         });
-
-  //         const data = await response.json();
-  //         setUserData(data.data.mrd_user_credit);
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       } finally {
-  //         setIsLoading(false);
-  //       }
-  //     };
-  //     fetchUser();
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // }, [token, apiConfig]);
-
-  // const handleLogout = () => {
-  //   Cookies.remove("TFLoginToken"); // Remove the cookie
-  //   setIsLoggedIn(false); // Update the state
-  //   router.push("/"); // Redirect to the login page or home page
-  // };
 
   const navbarItems = [
     {
@@ -167,30 +131,13 @@ const NavbarTop = () => {
             {isLoggedIn && (
               <div className="flex items-center justify-center ">
                 <Link href="/wallet">
-                  <Button
-                    variant="light"
-                    isIconOnly
-                    size="lg"
-                    className="text-green-600"
-                    radius="full"
-                  >
-                    <div>
-                      {loading ? (
-                        <>
-                          {/* <span className="loading loading-dots loading-xs"></span> */}
-                        </>
-                      ) : user.data.mrd_user_credit !== null ? (
-                        `৳${user.data.mrd_user_credit}`
-                      ) : (
-                        "৳"
-                      )}
-                    </div>
+                  <Button variant="light" isIconOnly size="lg" radius="full">
+                    <WalletCredit />
                   </Button>
                 </Link>
 
                 <MealboxNavTop />
                 <NotificationBell />
-
                 {/* <Link
                   onClick={handleLogout}
                   href="/"

@@ -3,18 +3,33 @@ import React, { useEffect, useState } from "react";
 import Layout from "./layout/Layout";
 import Slider from "./layout/Slider";
 import MenuComp from "./components/menuComp";
+import Announcement from "./components/Announcement";
 import Link from "next/link";
 import Head from "next/head";
 import Cookies from "js-cookie";
+import { useSettings } from "./contexts/SettingContext";
 
 export default function Menu() {
   const [showModal, setShowModal] = useState(false);
+  const { settings, loadingSettings } = useSettings();
 
   useEffect(() => {
     if (!Cookies.get("visited")) {
       setShowModal(true); // Show modal on first visit
     }
   }, []);
+
+  const [showAnnouncement, setShowAnnouncement] = useState(false);
+  useEffect(() => {
+    if (!Cookies.get("hideAnnouncement") && settings?.announcement) {
+      setShowAnnouncement(true);
+    }
+  }, [settings?.announcement]);
+
+  const handleCloseAnnouncement = () => {
+    Cookies.set("hideAnnouncement", "true", { expires: 7 });
+    setShowAnnouncement(false);
+  };
 
   return (
     <>
@@ -120,7 +135,35 @@ export default function Menu() {
             </div>
           </div>
         )}
-        <Slider />
+        {/* <Slider /> */}
+        {showAnnouncement && (
+          <div className="alert bg_green text_white shadow-lg border-none mt-4 relative flex items-center gap-2 ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12A9 9 0 113 12a9 9 0 0118 0z"
+              />
+            </svg>
+            <span className="text-sm sm:text-base">
+              {settings.announcement}
+            </span>
+            <button
+              className="ml-auto text-lg leading-none"
+              onClick={handleCloseAnnouncement}
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         <MenuComp />
       </Layout>
     </>

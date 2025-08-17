@@ -32,6 +32,7 @@ export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false);
   const sectionRef = useRef(null);
   const router = useRouter();
+  const [discount, setDiscount] = useState(null);
 
   const [menuRedir, setMenuRedir] = useState(null);
 
@@ -51,19 +52,21 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // This code only runs on the client after hydration
+    fetch("/api/regDiscount")
+      .then((res) => res.json())
+      .then((data) => setDiscount(data.discount));
+  }, []);
+
+  useEffect(() => {
     if (Cookies.get("TFLoginToken")) {
       setButtonTextHero("Visit menu page");
       setButtonTextCTA("Visit menu page");
+    } else {
+      if (discount !== null) {
+        setButtonTextHero(`First Meal ${discount}% Off!`);
+      }
     }
-  }, []);
-  // const { width } = useWindowSize();
-
-  // Get section height for confetti
-  // const sectionHeight = sectionRef.current?.clientHeight || 0;
-  // const sectionRef = useRef(null);
-
-  // const { sectionRef, isInView } = useAnimatedSection(0.4);
+  }, [discount]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -181,23 +184,40 @@ export default function Home() {
       </motion.div>
 
       {/* HERO SECTION */}
-      <section className=" lg:h-screen   bg_light_orange ">
-        <div className="max-w-7xl lg:h-screen mx-auto px-6 sm:px-8 md:px-0 py-10 sm:py-12   grid grid-cols-1 md:grid-cols-2 items-center justify-between ">
-          {/* Left: Text Content */}
-          <div className="flex flex-col items-start  md:pl-6 md:ml-6">
-            <h1 className="text-6xl sm:text-8xl  md:text-8xl font-bold font-bebas text_green tracking-wide">
-              Meal Service
-              <br />
-              For Students
-            </h1>
-            <p className="mt-4 text-2xl text-gray-700 font-poppins">
+
+      <AnimatedSection className="md:h-screen py-12 bg_light_orange flex items-center">
+        <div className="grid md:grid-cols-2 items-center justify-center max-w-7xl mx-auto h-full">
+          <div className="flex flex-col gap-6 md:gap-5 pl-8">
+            <AnimatedContent
+              direction="right"
+              delay={0}
+              className="  flex flex-col text-6xl sm:text-8xl  md:text-8xl font-bold font-bebas text_green tracking-wide"
+            >
+              <h1 className="">
+                Meal Service
+                <br />
+                For Students
+              </h1>
+            </AnimatedContent>
+
+            <AnimatedContent
+              direction="left"
+              delay={0.4}
+              className=" text-2xl text-gray-700 font-poppins"
+            >
               Study Hard, Eat Well <br />
               We’ve Got Your Meals Covered.
-            </p>
-            <div className="mt-6  space-x-4 hidden lg:block">
+            </AnimatedContent>
+
+            {/* GO TO MENU BUTTION FOR BIG SCREEN */}
+            <AnimatedContent
+              direction="up"
+              delay={1.4}
+              className="  items-center justify-center  hidden lg:block mt-1"
+            >
               <Link
                 href={"/menu"}
-                className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
+                className="btn  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
               >
                 <FontAwesomeIcon icon={faBowlRice} className="h-5 w-5" />
                 {buttonTextHero}
@@ -208,40 +228,45 @@ export default function Home() {
                   <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
                 </motion.div>
               </Link>
-            </div>
-
-            {/* <div className="h4info_akm mt-1 pl-1">
-              (No delivery charge, it's completely free!)
-            </div> */}
+            </AnimatedContent>
           </div>
 
-          {/* Right: Image */}
-          <div className="  flex flex-col items-center justify-center">
+          {/* IMAGE */}
+          <AnimatedContent
+            direction="right"
+            delay={0.8}
+            className="w-full flex flex-col items-center justify-center p-4 m:p-0"
+          >
             <Image
               src={"/images/meal_scheduler_image.webp"}
               width={800}
               height={800}
               alt="meal_scheduler_image"
             />
+          </AnimatedContent>
 
-            <div className="mb_akm flex space-x-4 lg:hidden">
-              <Link
-                href={"/menu"}
-                className="btn flex items-center justify-center  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
+          {/* GO TO MENU BUTTION FOR SMALL SCREEN */}
+          <AnimatedContent
+            direction="left"
+            delay={1.2}
+            className="flex  items-center justify-center  lg:hidden py_akm"
+          >
+            <Link
+              href={"/menu"}
+              className="btn  text-xl btn-lg  rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
+            >
+              <FontAwesomeIcon icon={faBowlRice} className="h-5 w-5" />
+              {buttonTextHero}
+              <motion.div
+                animate={{ x: [0, 10, 0] }} // Moves left to right
+                transition={{ duration: 3, repeat: Infinity }}
               >
-                <FontAwesomeIcon icon={faBowlRice} className="h-5 w-5" />{" "}
-                {buttonTextHero}
-                <motion.div
-                  animate={{ x: [0, 10, 0] }} // Moves left to right
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-                </motion.div>
-              </Link>
-            </div>
-          </div>
+                <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+              </motion.div>
+            </Link>
+          </AnimatedContent>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* HOW IT WORKS SECTION */}
 
@@ -252,70 +277,6 @@ export default function Home() {
               How it works?
             </h2>
           </div>
-
-          {/* <div className="flex flex-wrap items-center justify-center ">
-            <div className="flex flex-col items-center justify-center gap-4">
-              <div className="flex gap-4">
-                <div className="  rounded_akm flex flex-col items-center justify-center gap-1 pad_akm text_black">
-                  <div className="h3_akm font-bold font-poppins">Step 1</div>
-                  <div className="pb_akm">You Place Pre-order</div>
-                  <div>
-                    <Image
-                      className=""
-                      layout="intrinsic"
-                      width={140}
-                      height={140}
-                      src="/images/order.png"
-                      alt="Rice"
-                    />
-                  </div>
-                </div>
-                <div className="  flex flex-col items-center justify-center gap-1 pad_akm text_black">
-                  <div className="h3_akm font-bold font-poppins">Step 2</div>
-                  <div className="pb_akm"> We Cook Your Meal</div>
-                  <div>
-                    <Image
-                      className=""
-                      layout="intrinsic"
-                      width={140}
-                      height={140}
-                      src="/images/cooking.png"
-                      alt="Rice"
-                    />
-                  </div>
-                </div>
-
-                <div className="  flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
-                  <div className="h3_akm font-bold font-poppins">Step 3</div>
-                  <div className="pb_akm">We Deliver to You</div>
-                  <div>
-                    <Image
-                      className=""
-                      layout="intrinsic"
-                      width={140}
-                      height={140}
-                      src="/images/fast-shipping2.png"
-                      alt="Rice"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="md:hidden   flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
-                <div className="h3_akm font-bold font-poppins">Step 3</div>
-                <div className="pb_akm">We Deliver to You</div>
-                <div>
-                  <Image
-                    className=""
-                    layout="intrinsic"
-                    width={140}
-                    height={140}
-                    src="/images/fast-shipping2.png"
-                    alt="Rice"
-                  />
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           <div className="grid grid-cols-2  md:grid-cols-3 gap_akm  pb_akm">
             <div className="  rounded_akm flex flex-col items-center justify-center gap-1 pad_akm text_black">
@@ -630,10 +591,17 @@ export default function Home() {
           />
         </div> */}
         <div className="max-w-7xl  mx-auto flex justify-center items-center flex-col px-6 pb-4 relative z-10">
-          <h2 className="text-7xl font-bebas">First Meal 80% Off!</h2>
+          <h2 className="text-7xl font-bebas">
+            {discount !== null
+              ? `First Meal ${discount}% Off!`
+              : "First Meal Discount!"}
+          </h2>
           <p className="font-poppins h3_akm">
-            Claim Your 80% Off Meal – Limited Time!
+            {discount !== null
+              ? `Claim Your ${discount}% Off Meal – Limited Time!`
+              : "Claim Your Discounted Meal – Limited Time!"}
           </p>
+
           <Link href={"/menu"}>
             <motion.button
               className="btn btn-md mt-2 rounded_akm"

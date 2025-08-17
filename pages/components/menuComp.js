@@ -8,7 +8,10 @@ import { Button, Card, Chip, Skeleton, Badge } from "@nextui-org/react";
 // import { Button as MUIButton } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheckCircle,
+  faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
 import { useNotification } from "../contexts/NotificationContext";
@@ -323,130 +326,6 @@ const MenuComp = () => {
     });
   };
 
-  // const foodSwap = (day, mealType, category, orderStatus, date) => {
-
-  //   console.log("swapStatus ->", isSwapping);
-
-  //   setFoodIndexes((prevIndexes) => {
-  //     const currentIndex = prevIndexes?.[day]?.[mealType]?.[category] || 0;
-  //     const categoryFoods = menuData[day][mealType]?.foods?.[category] || [];
-
-  //     if (categoryFoods.length <= 1) return prevIndexes; // No swap needed if only one item
-
-  //     const nextIndex = (currentIndex + 1) % categoryFoods.length;
-  //     const currentFoodId = categoryFoods[currentIndex]?.food_id;
-  //     const newFoodId = categoryFoods[nextIndex].food_id;
-
-  //     console.log("🚀 ~ setFoodIndexes ~ currentFoodId:", currentFoodId);
-  //     console.log("🚀 ~ setFoodIndexes ~ newFoodId:", newFoodId);
-
-  //     const defaultFoods = Object.entries(
-  //       menuData[day][mealType]?.foods || {}
-  //     ).reduce((acc, [category, items]) => {
-  //       acc[category] = items[0]?.food_id; // Get first food_id from each category
-  //       return acc;
-  //     }, {});
-
-  //     // Merge with selected swaps (if any)
-  //     const finalFoods = {
-  //       ...defaultFoods,
-  //       ...(selectedFoods?.[day]?.[mealType] || {}),
-  //       [category]: newFoodId, // Ensure the swapped food is updated in finalFoods
-  //     };
-
-  //     console.log("🚀 ~ foodSwap ~ finalFoods:", finalFoods);
-
-  //     // Update the selected foods for order placement
-  //     setSelectedFoods((prev) => ({
-  //       ...prev,
-  //       [day]: {
-  //         ...prev[day],
-  //         [mealType]: {
-  //           ...prev[day]?.[mealType],
-  //           [category]: newFoodId, // Store the swapped food ID
-  //         },
-  //       },
-  //     }));
-
-  //     //UPDATE ORDER IF LOGGED IN
-  //     // const token = Cookies.get("TFLoginToken");
-  //     if (LoginToken && orderStatus === "enabled") {
-  //       setIsSwapping(true);
-  //       const updateData = {
-  //         TFLoginToken: LoginToken,
-  //         day,
-  //         mealType,
-  //         category,
-  //         newFoodId,
-  //         currentFoodId,
-  //         finalFoods,
-  //         date,
-  //       };
-
-  //       // Clear any existing timeout before setting a new one
-  //       if (apiTimeoutRef.current) {
-  //         clearTimeout(apiTimeoutRef.current);
-  //       }
-
-  //       apiTimeoutRef.current = setTimeout(() => {
-  //         fetch(`${apiConfig.apiBaseUrl}order-food-swap`, {
-  //           method: "POST",
-  //           headers: { "Content-Type": "application/json" },
-  //           body: JSON.stringify(updateData),
-  //         })
-  //           .then((res) => res.json())
-  //           .then((data) => {
-  //             console.log("API Response:", data);
-
-  //             setSwapStatus((prev) => ({
-  //               ...prev,
-  //               [day]: {
-  //                 ...prev[day],
-  //                 [mealType]: {
-  //                   ...prev[day]?.[mealType],
-  //                   [category]: "updated",
-  //                 },
-  //               },
-  //             }));
-
-  //             // Clear the "Updated" message after 3 seconds
-  //             setTimeout(() => {
-  //               setSwapStatus((prev) => ({
-  //                 ...prev,
-  //                 [day]: {
-  //                   ...prev[day],
-  //                   [mealType]: {
-  //                     ...prev[day]?.[mealType],
-  //                     [category]: null,
-  //                   },
-  //                 },
-  //               }));
-  //             }, 2000);
-
-  //             setIsSwapping(false);
-  //           })
-  //           .catch((error) => {
-  //             console.error("Error updating order:", error);
-  //             setIsSwapping(false); // Enable button on failure
-  //           });
-
-  //         console.log("🚀 ORDER UPDATE DATA SENT:", updateData);
-  //       }, 1000);
-  //     }
-
-  //     return {
-  //       ...prevIndexes,
-  //       [day]: {
-  //         ...prevIndexes[day],
-  //         [mealType]: {
-  //           ...prevIndexes[day]?.[mealType],
-  //           [category]: nextIndex,
-  //         },
-  //       },
-  //     };
-  //   });
-  // };
-
   const checkLogin = () => {
     if (!LoginToken) {
       router.push("/login?fromHomePage=true");
@@ -577,6 +456,9 @@ const MenuComp = () => {
         setDisabledSwitches((prev) => ({ ...prev, [switchKey]: false }));
       }, 100);
     }
+
+    //DUE CHECK, REFRESH MENU
+    fetchMenu();
   };
 
   //MARK: ORDER DETAILS
@@ -1160,31 +1042,53 @@ const MenuComp = () => {
                       >
                         {menuData[day][mealType].status === "enabled" ? (
                           <div className=" w-full bottom-0 flex flex-row  breakup_akm justify-center items-center    text-base slide-up">
-                            {/* <div>
-                              <Button
-                                isIconOnly
-                                radius="full"
-                                variant="light"
-                                className="bg-[#004225] bg-opacity-50 text_white"
-                                size="lg"
-                                onClick={() =>
-                                  cartPreview(
-                                    day,
-                                    menuData[day][mealType].id,
-                                    menuData[day].date,
-                                    menuData[day][mealType].price,
-                                    mealType
-                                  )
-                                }
-                              >
-                                <FontAwesomeIcon icon={faCartShopping} />
-                              </Button>
-                            </div> */}
                             <div>
-                              <div className="h3_akm ">
+                              <div
+                                className={`h3_akm ${
+                                  menuData[day][mealType].on_hold_due === "yes"
+                                    ? "text_orange"
+                                    : ""
+                                }`}
+                              >
+                                {menuData[day][mealType].on_hold_due ===
+                                  "yes" && (
+                                  <FontAwesomeIcon
+                                    className="text_orange"
+                                    icon={faCircleExclamation}
+                                    style={{ marginRight: "6px" }}
+                                  />
+                                )}
                                 {mealType.charAt(0).toUpperCase() +
                                   mealType.slice(1)}{" "}
-                                pre-ordered
+                                {menuData[day][mealType].on_hold_due === "yes"
+                                  ? "pre-order on hold"
+                                  : "pre-ordered"}
+                              </div>
+
+                              <div>
+                                {menuData[day][mealType].on_hold_due ===
+                                  "yes" && (
+                                  <div className="h4_akm flex flex-col items-start gap-1 border-b pb-2">
+                                    <div className="text_orange">
+                                      {" "}
+                                      Please{" "}
+                                      <Link
+                                        href={"/wallet"}
+                                        className="underline"
+                                      >
+                                        clear your due
+                                      </Link>{" "}
+                                      to confirm this order
+                                    </div>
+
+                                    {/* <Link
+                                      href={"/wallet"}
+                                      className="btn btn-xs"
+                                    >
+                                      Recharge Wallet
+                                    </Link> */}
+                                  </div>
+                                )}
                               </div>
 
                               {(() => {
@@ -1257,9 +1161,12 @@ const MenuComp = () => {
                                   <div>
                                     <span className="h3_akm text_green">৳</span>
                                     <span className="h2_akm text_green">
-                                      {menuData[day][mealType].price *
-                                        (settings.mrd_setting_discount_reg /
-                                          100)}
+                                      {(
+                                        menuData[day][mealType].price *
+                                        (1 -
+                                          settings.mrd_setting_discount_reg /
+                                            100)
+                                      ).toFixed(0)}
                                     </span>
                                   </div>
                                   <span className="h4info_akm line-through">
@@ -1312,8 +1219,16 @@ const MenuComp = () => {
                             );
                           }}
                         />
-                        {menuData[day][mealType].status === "enabled"
-                          ? "Meal Ordered"
+                        {menuData[day][mealType].on_hold_due === "yes"
+                          ? `${
+                              mealType.charAt(0).toUpperCase() +
+                              mealType.slice(1)
+                            } On Hold`
+                          : menuData[day][mealType].status === "enabled"
+                          ? `${
+                              mealType.charAt(0).toUpperCase() +
+                              mealType.slice(1)
+                            } Ordered`
                           : "Tap to Order"}
                       </div>
 

@@ -25,12 +25,12 @@ const ProtectedPage = () => {
 
         <meta
           name="description"
-          content="Recharge your Dalbhath wallet instantly using bKash and enjoy hassle-free meal orders."
+          content="Recharge your Dalbhath wallet using bKash and enjoy cash-free payment."
         />
 
         <meta
           property="og:description"
-          content="Recharge your Dalbhath wallet instantly using bKash and enjoy hassle-free meal orders."
+          content="Recharge your Dalbhath wallet using bKash and enjoy cash-free payment."
         />
 
         <meta

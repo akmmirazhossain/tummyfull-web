@@ -5,6 +5,7 @@ export default function Document() {
   return (
     <Html lang="en" data-theme="light">
       <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* Google Analytics */}
         <script
           async
