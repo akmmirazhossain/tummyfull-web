@@ -13,7 +13,12 @@ const KhalaToCook = () => {
   const [orders, setOrders] = useState([]);
   const [date, setDate] = useState("");
   const [weekday, setWeekday] = useState("");
-  const specialPhones = ["01748936454", "01673692997", "01775868104"];
+  const specialPhones = [
+    "01673692997",
+    "01775868104",
+    "01869983134",
+    "01839518156",
+  ];
   const [periodLabel, setPeriodLabel] = useState("");
   const [loading, setLoading] = useState(true);
 

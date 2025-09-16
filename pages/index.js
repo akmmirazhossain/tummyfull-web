@@ -189,7 +189,7 @@ export default function Home() {
         <div className="grid md:grid-cols-2 items-center justify-center max-w-7xl mx-auto h-full">
           <div className="flex flex-col gap-6 md:gap-5 pl-8">
             <AnimatedContent
-              direction="right"
+              direction="up"
               delay={0}
               className="  flex flex-col text-6xl sm:text-8xl  md:text-8xl font-bold font-bebas text_green tracking-wide"
             >
@@ -201,8 +201,8 @@ export default function Home() {
             </AnimatedContent>
 
             <AnimatedContent
-              direction="left"
-              delay={0.4}
+              direction="up"
+              delay={0}
               className=" text-2xl text-gray-700 font-poppins"
             >
               Study Hard, Eat Well <br />
@@ -212,7 +212,7 @@ export default function Home() {
             {/* GO TO MENU BUTTION FOR BIG SCREEN */}
             <AnimatedContent
               direction="up"
-              delay={1.4}
+              delay={0}
               className="  items-center justify-center  hidden lg:block mt-1"
             >
               <Link
@@ -233,8 +233,8 @@ export default function Home() {
 
           {/* IMAGE */}
           <AnimatedContent
-            direction="right"
-            delay={0.8}
+            direction="up"
+            delay={0}
             className="w-full flex flex-col items-center justify-center p-4 m:p-0"
           >
             <Image
@@ -247,8 +247,8 @@ export default function Home() {
 
           {/* GO TO MENU BUTTION FOR SMALL SCREEN */}
           <AnimatedContent
-            direction="left"
-            delay={1.2}
+            direction="up"
+            delay={0}
             className="flex  items-center justify-center  lg:hidden py_akm"
           >
             <Link

@@ -947,7 +947,7 @@ const MenuComp = () => {
                           return (
                             <div
                               key={index}
-                              className={`flex items-center ${
+                              className={`flex items-center relative ${
                                 index === 0
                                   ? "justify-end mr-1 lg:mr-2"
                                   : index === 1
@@ -984,7 +984,9 @@ const MenuComp = () => {
                                     }
                                   }}
                                 />
-                                <span>{food.food_name}</span>
+                                <span className="absolute bottom-0 md:bottom-1 text-xs md:text-sm left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-[#004225]/70 text-white px-1.5 py-0.5 rounded-xl">
+                                  {food.food_name}
+                                </span>
 
                                 <div className="absolute top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text_white">
                                   <AnimatePresence mode="wait">
