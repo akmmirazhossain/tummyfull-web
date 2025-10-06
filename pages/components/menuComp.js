@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
   faCircleExclamation,
+  faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../lib/formatDate";
@@ -934,6 +935,9 @@ const MenuComp = () => {
                               mealType.slice(1)}
                           </span>
                         </div>
+                        <Button className="w-fit">
+                          <FontAwesomeIcon icon={faEllipsisVertical} />
+                        </Button>
                       </div>
 
                       <div className="relative grid grid-cols-2 p-2 lg:p-12 h-auto border-y-1">
@@ -1171,9 +1175,13 @@ const MenuComp = () => {
                                       ).toFixed(0)}
                                     </span>
                                   </div>
-                                  <span className="h4info_akm line-through">
-                                    ৳100
-                                  </span>
+
+                                  <div className="h4info_akm line-through">
+                                    <span className="h3_akm text_green">৳</span>
+                                    <span className="h2_akm text_green">
+                                      {menuData[day][mealType].price}
+                                    </span>
+                                  </div>
                                 </div>
                               )}
 
