@@ -26,7 +26,7 @@ dayjs.extend(customParseFormat);
 import { ApiContext } from "../contexts/ApiContext";
 import { useSettings } from "../contexts/SettingContext";
 import { motion, AnimatePresence } from "framer-motion";
-import LoginForm from "./LoginForm";
+import MealPeriodPopover from "./MealPeriodPopover";
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" {...props} />
@@ -935,9 +935,12 @@ const MenuComp = () => {
                               mealType.slice(1)}
                           </span>
                         </div>
-                        <Button className="w-fit">
-                          <FontAwesomeIcon icon={faEllipsisVertical} />
-                        </Button>
+
+                        <MealPeriodPopover
+                          mealDay={dayMap[day.toLowerCase()]}
+                          mealType={mealType}
+                          LoginToken={LoginToken}
+                        />
                       </div>
 
                       <div className="relative grid grid-cols-2 p-2 lg:p-12 h-auto border-y-1">
@@ -1177,10 +1180,11 @@ const MenuComp = () => {
                                   </div>
 
                                   <div className="h4info_akm line-through">
-                                    <span className="h3_akm text_green">৳</span>
-                                    <span className="h2_akm text_green">
-                                      {menuData[day][mealType].price}
-                                    </span>
+                                    ৳{menuData[day][mealType].price}
+                                    {/* <span className="h3_akm text_green"></span>
+                                    <span className="h4info_akm line-through">
+                                    
+                                    </span> */}
                                   </div>
                                 </div>
                               )}

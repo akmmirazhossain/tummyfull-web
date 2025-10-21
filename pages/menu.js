@@ -15,7 +15,7 @@ export default function Menu() {
 
   useEffect(() => {
     if (!Cookies.get("visited")) {
-      setShowModal(true); // Show modal on first visit
+      //setShowModal(true);
     }
   }, []);
 
@@ -135,7 +135,7 @@ export default function Menu() {
             </div>
           </div>
         )}
-        {/* <Slider /> */}
+        <Slider />
         {showAnnouncement && (
           <div className="alert bg_green text_white shadow-lg border-none mt-4 relative flex items-center gap-2 ">
             <svg

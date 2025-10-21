@@ -194,9 +194,9 @@ export default function Home() {
               className="  flex flex-col text-6xl sm:text-8xl  md:text-8xl font-bold font-bebas text_green tracking-wide"
             >
               <h1 className="">
-                Meal Service
+                ফুল মিল
                 <br />
-                For Students
+                মাত্র <span className="font-normal text-7xl">৳</span>৯৯!
               </h1>
             </AnimatedContent>
 
@@ -205,8 +205,7 @@ export default function Home() {
               delay={0}
               className=" text-2xl text-gray-700 font-poppins"
             >
-              Study Hard, Eat Well <br />
-              We’ve Got Your Meals Covered.
+              বসুন্ধরার সেরা মিল — এখন মাত্র ৯৯ টাকায়!
             </AnimatedContent>
 
             {/* GO TO MENU BUTTION FOR BIG SCREEN */}
