@@ -4,7 +4,6 @@ import Layout from "./layout/Layout";
 import axios from "axios";
 import dayjs from "dayjs";
 import "dayjs/locale/bn";
-import { Card, CardBody, Chip, Divider } from "@nextui-org/react";
 
 const toBanglaNumber = (num) =>
   num.toString().replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[d]);
@@ -140,10 +139,10 @@ const KhalaToCook = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto pad_akm space-y-4 text-black">
+    <div className="max-w-lg mx-auto space-y-4 text-black pad_akm">
       <div className="space-y-2 ">
         {specialOrders.length > 0 && (
-          <div className="border p-3 rounded-lg bg-yellow-50 shadow space-y-2 pad_akm">
+          <div className="p-3 space-y-2 border rounded-lg shadow bg-yellow-50 pad_akm">
             <p className="text-2xl font-semibold text-orange-600 pb_akm">
               বাসার টেবিলে রাখেন:
             </p>
@@ -160,8 +159,8 @@ const KhalaToCook = () => {
                   key={`special-${idx}`}
                   className="space-y-1 pb_akm text_black"
                 >
-                  <p className="font-bold text-lg">
-                    {order.mrd_user_first_name} এর খাবার
+                  <p className="text-lg font-bold">
+                    {order.mrd_user_full_name} এর খাবার
                   </p>
                   <p className="flex flex-wrap gap-3 text-lg">
                     {Object.entries(foodMap).map(([name, qty], idx) => (
@@ -181,31 +180,31 @@ const KhalaToCook = () => {
       </div>
 
       <Card className="pad_akm">
-        <CardBody className="flex justify-center items-center text-center space-y-2">
+        <CardBody className="flex items-center justify-center space-y-2 text-center">
           <h2 className="text-lg ">{date}</h2>
           <p className="text-2xl font-bold">{weekday}</p>
           <p className="text-xl "> {periodLabel}</p>
           <Divider className="my-4" />
           <div className="grid grid-cols-2 gap-2">
             {loading ? (
-              <div className="col-span-2 flex justify-center items-center py-4 ">
-                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="flex items-center justify-center col-span-2 py-4 ">
+                <div className="w-8 h-8 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
               </div>
             ) : Object.keys(foodCountMap).length === 0 ? (
-              <div className="col-span-2 text-center text-red-500 font-semibold">
+              <div className="col-span-2 font-semibold text-center text-red-500">
                 আপাতত কোন রান্না নেই
               </div>
             ) : (
               Object.entries(foodCountMap).map(([name, data], index) => (
                 <div
                   key={index}
-                  className="flex flex-col gap-2 justify-between items-center pad_akm rounded-lg bg-white"
+                  className="flex flex-col items-center justify-between gap-2 bg-white rounded-lg pad_akm"
                 >
                   <div>
                     <img
                       src={`https://dalbhath.com/images/food/${data.img}`}
                       alt={name}
-                      className="w-16 h-16 rounded-full object-cover"
+                      className="object-cover w-16 h-16 rounded-full"
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -213,7 +212,7 @@ const KhalaToCook = () => {
                     <Chip
                       size="lg"
                       variant="flat"
-                      className="font-bold text-xl"
+                      className="text-xl font-bold"
                     >
                       {toBanglaNumber(data.qty)}
                     </Chip>
@@ -226,7 +225,7 @@ const KhalaToCook = () => {
       </Card>
       <div>
         {nextCurry?.first && (
-          <div className="pad_akm h3_akm text-center">
+          <div className="text-center pad_akm h3_akm">
             পরের বেলা:{" "}
             <span className="font-bold">
               {nextCurry.first.food_name}

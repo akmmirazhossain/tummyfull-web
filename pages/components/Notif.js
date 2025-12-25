@@ -1,22 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import {
-  Image,
-  Switch,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Spinner,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "@nextui-org/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoneyBill } from "@fortawesome/free-solid-svg-icons";
+
 import axios from "axios";
 import { useNotification } from "../contexts/NotificationContext";
 import { ApiContext } from "../contexts/ApiContext";
@@ -54,9 +39,12 @@ const MealSettings = () => {
     if (!apiConfig) return;
     const token = Cookies.get("TFLoginToken");
     try {
-      const resUserData = await axios.get(`${apiConfig.apiBaseUrl}user-fetch`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const resUserData = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}user-fetch`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const mealboxStatus = resUserData.data.data.mrd_user_mealbox;
 
       setUserData(resUserData.data.data);
@@ -73,7 +61,9 @@ const MealSettings = () => {
     if (!apiConfig) return;
 
     try {
-      const resSettings = await axios.get(`${apiConfig.apiBaseUrl}setting`);
+      const resSettings = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}setting`
+      );
 
       setSettings(resSettings.data);
     } catch (error) {
@@ -160,7 +150,7 @@ const MealSettings = () => {
   return (
     <>
       <div className="h1_akm">Meal Settings</div>
-      <div className="card_akm p-8">
+      <div className="p-8 card_akm">
         <div>
           {" "}
           {showEnforceMessage && (
@@ -169,7 +159,7 @@ const MealSettings = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                className="h-6 w-6 shrink-0 stroke-current"
+                className="w-6 h-6 stroke-current shrink-0"
               >
                 <path
                   strokeLinecap="round"
@@ -189,12 +179,12 @@ const MealSettings = () => {
           <div className="flex items-center ">
             <div className="h2_akm">
               Activate mealbox swap
-              <span className="ml-2 font-normal text-xl">
-                (৳{settings && <>{settings.mealbox_price})</>}
+              <span className="ml-2 text-xl font-normal">
+                (৳{settings && <>{settings.settingMealboxPrice})</>}
               </span>
             </div>
           </div>
-          <div className=" flex items-center gap-2">
+          <div className="flex items-center gap-2 ">
             <Popover
               color="foreground"
               isOpen={popOverOpen}
@@ -212,7 +202,7 @@ const MealSettings = () => {
               </PopoverTrigger>
               <PopoverContent className="w-64 ">
                 <div className="px-1 py-2">
-                  <div className="text-small font-bold">Mealbox activated!</div>
+                  <div className="font-bold text-small">Mealbox activated!</div>
                   <div className="text-tiny">
                     Your upcoming meals will be delivered in a mealbox.
                   </div>
@@ -232,11 +222,13 @@ const MealSettings = () => {
 
             <p>
               If you deactivate the mealbox at any time,{" "}
-              <span className="font-bold">৳{settings?.mealbox_price}</span> will
-              be refunded.
+              <span className="font-bold">
+                ৳{settings?.settingMealboxPrice}
+              </span>{" "}
+              will be refunded.
             </p>
           </div>
-          <div className=" flex flex-col gap_akm">
+          <div className="flex flex-col gap_akm">
             <div className="flex gap_akm items-center bg-[#cce8cd] h4_akm py-2 px-4  rounded_akm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +262,7 @@ const MealSettings = () => {
             </div>
             <div className="col-span-5 md:col-span-3">
               <p className="h3_akm pt_akm md:pt-0">Why choose a mealbox?</p>
-              <ul className="list-disc p-4">
+              <ul className="p-4 list-disc">
                 <li>
                   A healthier alternative to single-use plastic containers.
                 </li>
@@ -278,7 +270,7 @@ const MealSettings = () => {
                 <li>Simple, clean, and ready to eat.</li>
                 <li>Less plastic in landfills. Better for the planet.</li>
                 {/* <li>
-                  A refund of ৳{settings && <>{settings.mealbox_price}</>} is
+                  A refund of ৳{settings && <>{settings.settingMealboxPrice}</>} is
                   available if you deactivate the mealbox at any time.
                 </li> */}
               </ul>

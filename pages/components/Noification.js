@@ -3,11 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { faStar } from "@fortawesome/free-regular-svg-icons";
-
-import { Skeleton } from "@nextui-org/react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import advancedFormat from "dayjs/plugin/advancedFormat";
@@ -71,9 +67,9 @@ const Notification = () => {
     return (
       <>
         <div className="h1_akm ">Notifications</div>
-        <div className="card_akm   p-8 min-h-screen  space-y-3">
+        <div className="min-h-screen p-8 space-y-3 card_akm">
           {Array.from({ length: 20 }).map((_, index) => (
-            <Skeleton key={index} className="rounded-lg h-4" />
+            <Skeleton key={index} className="h-4 rounded-lg" />
           ))}
         </div>
       </>
@@ -83,9 +79,9 @@ const Notification = () => {
     return (
       <>
         <div className="h1_akm ">Notifications</div>
-        <div className="card_akm   p-8 min-h-screen  space-y-3">
+        <div className="min-h-screen p-8 space-y-3 card_akm">
           {Array.from({ length: 20 }).map((_, index) => (
-            <Skeleton key={index} className="rounded-lg h-4" />
+            <Skeleton key={index} className="h-4 rounded-lg" />
           ))}
         </div>
       </>
@@ -95,7 +91,7 @@ const Notification = () => {
   return (
     <div>
       <div className="h1_akm ">Notifications</div>
-      <div className="card_akm p-8 min-h-screen">
+      <div className="min-h-screen p-8 card_akm">
         {notif && notif.notifications && notif.notifications.length > 0 ? (
           <>
             {notif.notifications.map((notification, index) => (
@@ -116,7 +112,7 @@ const Notification = () => {
                   {formatNotificationDate(notification.mrd_notif_date_added)}
                 </p>
                 <div className="flex items-center gap_akm">
-                  {notification.mrd_notif_type == "order" &&
+                  {notification.mrd_notif_category == "order" &&
                     notification.mrd_notif_action == "payment" && (
                       <Link href={"/wallet"}>
                         <p className="text-xs">Recharge wallet</p>
@@ -141,7 +137,7 @@ const Notification = () => {
                     </p>
                   )}
 
-                  {notification.mrd_notif_type == "order" &&
+                  {notification.mrd_notif_category == "order" &&
                     notification.mrd_notif_action == "delivery" && (
                       <FontAwesomeIcon
                         onClick={() => {

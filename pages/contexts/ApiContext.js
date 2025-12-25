@@ -1,6 +1,6 @@
 // ApiContext.js
 import React, { createContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
+
 const ApiContext = createContext();
 
 const ApiProvider = ({ children }) => {
@@ -25,10 +25,10 @@ const ApiProvider = ({ children }) => {
   );
 };
 
-// Add PropTypes validation for children
-ApiProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+// // Add PropTypes validation for children
+// ApiProvider.propTypes = {
+//   children: PropTypes.node.isRequired,
+// };
 
 export { ApiContext, ApiProvider };
 

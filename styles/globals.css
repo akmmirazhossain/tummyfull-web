@@ -57,10 +57,6 @@ body {
   font-family: "montserrat";
 }
 
-#tawk_2_branding {
-  display: none !important;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -105,11 +101,11 @@ body {
   }
 }
 .h1_akm {
-  @apply text-2xl sm:text-2xl lg:text-3xl py-4 lg:py-6 font-bold;
+  @apply py-4 text-2xl font-bold sm:text-2xl lg:text-3xl lg:py-6;
 }
 
 .h2_akm {
-  @apply text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-semibold;
+  @apply text-lg font-semibold sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl;
 }
 
 .h3_akm {
@@ -207,7 +203,7 @@ body {
 }
 
 .card_akm {
-  @apply bg-gray-50   shadow_akm rounded_akm;
+  @apply bg-gray-50 shadow_akm rounded_akm;
 }
 
 .breakup_akm {

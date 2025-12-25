@@ -1,6 +1,5 @@
 //NotificationContext.js
 import React, { createContext, useState, useContext } from "react";
-import PropTypes from "prop-types";
 
 const NotificationContext = createContext();
 
@@ -35,9 +34,9 @@ export const NotificationProvider = ({ children }) => {
 };
 
 // Add PropTypes validation for children
-NotificationProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+// NotificationProvider.propTypes = {
+//   children: PropTypes.node.isRequired,
+// };
 
 export const useNotification = () => useContext(NotificationContext);
 const DefaultComponent2 = () => <div>ApiContext Placeholder Page</div>;

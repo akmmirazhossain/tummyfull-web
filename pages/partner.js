@@ -3,7 +3,6 @@ import React from "react";
 import Layout from "./layout/Layout";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
 
 const Info = () => {
   return (
@@ -30,12 +29,12 @@ const Info = () => {
             </Link>
           </div>
           <div className="h1_akm">ডালভাত ডট কমে পার্টনার হওয়ার সুবিধা:</div>
-          <div className="card_akm pad_akm flex flex-col gap_akm">
+          <div className="flex flex-col card_akm pad_akm gap_akm">
             {/* Daily meal catering facility is easier like never before, our service is carefully constructed which will let you */}
 
             <div className="grid grid-cols-1 md:grid-cols-5 ">
-              <div className="flex justify-center items-start pad_akm md:col-span-3 flex-col">
-                <span className="h3_akm font-bold px_akm pb-1">
+              <div className="flex flex-col items-start justify-center pad_akm md:col-span-3">
+                <span className="pb-1 font-bold h3_akm px_akm">
                   মার্কেটিং কিংবা ইউজার ম্যানেজ করার ঝামেলা নেই:
                 </span>
                 <span className="px_akm">
@@ -53,7 +52,7 @@ const Info = () => {
                   height={400}
                   width={400}
                   alt=""
-                  className="object-cover h-full w-full pad_akm"
+                  className="object-cover w-full h-full pad_akm"
                 />
               </div>
             </div>
@@ -61,8 +60,8 @@ const Info = () => {
             <span className="border-b-2"></span>
 
             <div className="grid grid-cols-1 md:grid-cols-5 ">
-              <div className="flex justify-center items-start pad_akm md:col-span-3 flex-col">
-                <span className="h3_akm font-bold px_akm pb-1">
+              <div className="flex flex-col items-start justify-center pad_akm md:col-span-3">
+                <span className="pb-1 font-bold h3_akm px_akm">
                   শুধু দুই বেলা রান্না:
                 </span>
                 <span className="px_akm">
@@ -79,7 +78,7 @@ const Info = () => {
                   height={400}
                   width={400}
                   alt=""
-                  className="object-cover h-full w-full pad_akm"
+                  className="object-cover w-full h-full pad_akm"
                 />
               </div>
             </div>
@@ -87,8 +86,8 @@ const Info = () => {
             <span className="border-b-2"></span>
 
             <div className="grid grid-cols-1 md:grid-cols-5 ">
-              <div className="flex justify-center items-start pad_akm md:col-span-3 flex-col">
-                <span className="h3_akm font-bold px_akm pb-1">
+              <div className="flex flex-col items-start justify-center pad_akm md:col-span-3">
+                <span className="pb-1 font-bold h3_akm px_akm">
                   পোর্টালে মিলের সংখ্যা দেখুন এবং রান্না করুন:
                 </span>
                 <span className="px_akm">
@@ -105,7 +104,7 @@ const Info = () => {
                   height={400}
                   width={400}
                   alt=""
-                  className="object-cover h-full w-full pad_akm"
+                  className="object-cover w-full h-full pad_akm"
                 />
               </div>
             </div>
@@ -113,8 +112,8 @@ const Info = () => {
             <span className="border-b-2"></span>
 
             <div className="grid grid-cols-1 md:grid-cols-5 ">
-              <div className="flex justify-center items-start pad_akm md:col-span-3 flex-col">
-                <span className="h3_akm font-bold px_akm pb-1">
+              <div className="flex flex-col items-start justify-center pad_akm md:col-span-3">
+                <span className="pb-1 font-bold h3_akm px_akm">
                   সাপ্তাহিক পেমেন্ট:
                 </span>
                 <span className="px_akm">
@@ -130,11 +129,11 @@ const Info = () => {
                   height={400}
                   width={400}
                   alt=""
-                  className="object-cover h-full w-full pad_akm"
+                  className="object-cover w-full h-full pad_akm"
                 />
               </div>
             </div>
-            <div className="flex items-center justify-center flex-col">
+            <div className="flex flex-col items-center justify-center">
               <p className="">যে কোন প্রশ্নের জন্য কল করুন:</p>
               <p className="h3_akm">+880 1748-417178, +880 1673-692997</p>
             </div>

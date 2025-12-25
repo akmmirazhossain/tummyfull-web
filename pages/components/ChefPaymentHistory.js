@@ -3,7 +3,6 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
-import { Chip } from "@nextui-org/react";
 import { ApiContext } from "../contexts/ApiContext";
 
 const ChefPaymentHistory = () => {
@@ -44,19 +43,19 @@ const ChefPaymentHistory = () => {
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Date</th>
-            <th className="py-2 px-4 border-b">Total Qty.</th>
+            <th className="px-4 py-2 border-b">Date</th>
+            <th className="px-4 py-2 border-b">Total Qty.</th>
 
-            {/* <th className="py-2 px-4 border-b">Status</th> */}
-            <th className="py-2 px-4 border-b">Total Comission</th>
-            <th className="py-2 px-4 border-b">Order ID</th>
-            <th className="py-2 px-4 border-b">Payment from Dalbhath</th>
+            {/* <th className="px-4 py-2 border-b">Status</th> */}
+            <th className="px-4 py-2 border-b">Total Comission</th>
+            <th className="px-4 py-2 border-b">Order ID</th>
+            <th className="px-4 py-2 border-b">Payment from Dalbhath</th>
           </tr>
         </thead>
         <tbody>
           {payments.length === 0 ? (
             <tr>
-              <td colSpan="5" className="py-2 px-4 border-b text-center">
+              <td colSpan="5" className="px-4 py-2 text-center border-b">
                 No payments
               </td>
             </tr>
@@ -67,24 +66,24 @@ const ChefPaymentHistory = () => {
               );
               return (
                 <tr key={payment.mrd_payment_id}>
-                  <td className="py-2 px-4 border-b text-center">
+                  <td className="px-4 py-2 text-center border-b">
                     {formattedDate}
                   </td>
-                  <td className="py-2 px-4 border-b text-center">
+                  <td className="px-4 py-2 text-center border-b">
                     {payment.mrd_payment_order_quantity}
                   </td>
 
-                  {/* <td className="py-2 px-4 border-b text-center">
+                  {/* <td className="px-4 py-2 text-center border-b">
                   {order.mrd_order_status}
                 </td> */}
-                  <td className="py-2 px-4 border-b text-center">
+                  <td className="px-4 py-2 text-center border-b">
                     <span className="text-xs">৳</span>
                     {payment.mrd_payment_amount}
                   </td>
-                  <td className="py-2 px-4 border-b text-center">
+                  <td className="px-4 py-2 text-center border-b">
                     {payment.mrd_payment_order_id}
                   </td>
-                  <td className="py-2 px-4 border-b text-center">
+                  <td className="px-4 py-2 text-center border-b">
                     {payment.mrd_payment_status === "unpaid" ? (
                       <Chip color="warning">unpaid</Chip>
                     ) : (

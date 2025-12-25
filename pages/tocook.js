@@ -5,7 +5,6 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ApiContext } from "./contexts/ApiContext";
-import { Chip } from "@nextui-org/react";
 
 const ProtectedPage = () => {
   const { isAuthenticated } = useAuth();
@@ -77,7 +76,7 @@ const ProtectedPage = () => {
   return (
     <>
       <Layout title="To Cook">
-        <div className="w-full h-full bg-black text-white px_akm">
+        <div className="w-full h-full text-white bg-black px_akm">
           <div className="h1_akm">
             {" "}
             To Cook Today <span className="h3_akm">({currentDate})</span>
@@ -92,17 +91,17 @@ const ProtectedPage = () => {
             ))}
           </ul>
 
-          <div className="mt-6 border-t border-gray-500 pt-4">
+          <div className="pt-4 mt-6 border-t border-gray-500">
             <h2 className="text-lg font-bold">Order Details by Customer</h2>
             {orders.map((order) => (
               <div
                 key={order.mrd_order_id}
                 id={`print-${order.mrd_order_id}`}
-                className="mt-2 p-2 border-b border-gray-700"
+                className="p-2 mt-2 border-b border-gray-700"
               >
                 <div className="printable-content">
                   <p className="font-semibold">
-                    Name: {order.mrd_user_first_name}
+                    Name: {order.mrd_user_full_name}
                   </p>
 
                   <p>Phone: {order.mrd_user_phone}</p>
@@ -127,8 +126,8 @@ const ProtectedPage = () => {
                     <div>
                       ওয়ান টাইম বক্স:{" "}
                       <Chip size="lg" color="default">
-                        {order.mrd_order_mealbox === 0 ||
-                        order.mrd_order_mealbox === null ? (
+                        {order.mrd_order_mealbox_give === 0 ||
+                        order.mrd_order_mealbox_give === null ? (
                           order.mrd_order_quantity
                         ) : (
                           <>0</>
@@ -140,7 +139,7 @@ const ProtectedPage = () => {
 
                 {/* Print Button (Excluded from Print) */}
                 <button
-                  className="mt-2 px-3 py-1 bg-blue-500 text-white rounded no-print"
+                  className="px-3 py-1 mt-2 text-white bg-blue-500 rounded no-print"
                   onClick={() => {
                     const printContent = document.querySelector(
                       `#print-${order.mrd_order_id} .printable-content`

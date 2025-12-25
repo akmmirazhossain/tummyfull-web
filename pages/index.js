@@ -5,16 +5,7 @@ import Head from "next/head";
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBowlRice,
-  faAngleRight,
-  faDiamond,
-  faCircle,
-  faCaretRight,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { faGem } from "@fortawesome/free-regular-svg-icons";
+
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 
@@ -175,7 +166,7 @@ export default function Home() {
       </Head>
 
       <motion.div
-        className="fixed w-full z-20"
+        className="fixed z-20 w-full"
         initial={{ y: -50, opacity: 0 }}
         animate={showNavbar ? { y: 0, opacity: 1 } : { y: -50, opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -185,46 +176,47 @@ export default function Home() {
 
       {/* HERO SECTION */}
 
-      <AnimatedSection className="md:h-screen py-12 bg_light_orange flex items-center">
-        <div className="grid md:grid-cols-2 items-center justify-center max-w-7xl mx-auto h-full">
-          <div className="flex flex-col gap-6 md:gap-5 pl-8">
+      <AnimatedSection className="flex items-center py-12 md:h-screen bg_light_orange">
+        <div className="grid items-center justify-center h-full mx-auto md:grid-cols-2 max-w-7xl">
+          <div className="flex flex-col gap-6 pl-8 md:gap-5">
             <AnimatedContent
               direction="up"
               delay={0}
-              className="  flex flex-col text-6xl sm:text-8xl  md:text-8xl font-bold font-bebas text_green tracking-wide"
+              className="flex flex-col text-6xl font-bold tracking-wide sm:text-8xl md:text-8xl font-bebas text_green"
             >
               <h1 className="">
-                ফুল মিল
+                MEAL SERVICE
                 <br />
-                মাত্র <span className="font-normal text-7xl">৳</span>৯৯!
+                FOR STUDENTS
               </h1>
             </AnimatedContent>
 
             <AnimatedContent
               direction="up"
               delay={0}
-              className=" text-2xl text-gray-700 font-poppins"
+              className="text-2xl text-gray-700 font-poppins"
             >
-              বসুন্ধরার সেরা মিল — এখন মাত্র ৯৯ টাকায়!
+              Study Hard, Eat Well <br />
+              We’ve Got Your Meals Covered.
             </AnimatedContent>
 
             {/* GO TO MENU BUTTION FOR BIG SCREEN */}
             <AnimatedContent
               direction="up"
               delay={0}
-              className="  items-center justify-center  hidden lg:block mt-1"
+              className="items-center justify-center hidden mt-1 lg:block"
             >
               <Link
                 href={"/menu"}
-                className="btn  text-xl btn-lg rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
+                className="text-xl font-medium text-white btn btn-lg rounded_akm bg_green font-poppins hover:bg-orange-500"
               >
-                <FontAwesomeIcon icon={faBowlRice} className="h-5 w-5" />
+                {/* <FontAwesomeIcon icon={faBowlRice} className="w-5 h-5" /> */}
                 {buttonTextHero}
                 <motion.div
                   animate={{ x: [0, 10, 0] }} // Moves left to right
                   transition={{ duration: 3, repeat: Infinity }}
                 >
-                  <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                  {/* <FontAwesomeIcon icon={faArrowRight} className="text-sm" /> */}
                 </motion.div>
               </Link>
             </AnimatedContent>
@@ -234,7 +226,7 @@ export default function Home() {
           <AnimatedContent
             direction="up"
             delay={0}
-            className="w-full flex flex-col items-center justify-center p-4 m:p-0"
+            className="flex flex-col items-center justify-center w-full p-4 m:p-0"
           >
             <Image
               src={"/images/meal_scheduler_image.webp"}
@@ -248,19 +240,19 @@ export default function Home() {
           <AnimatedContent
             direction="up"
             delay={0}
-            className="flex  items-center justify-center  lg:hidden py_akm"
+            className="flex items-center justify-center lg:hidden py_akm"
           >
             <Link
               href={"/menu"}
-              className="btn  text-xl btn-lg  rounded_akm bg_green font-poppins font-medium text-white hover:bg-orange-500"
+              className="text-xl font-medium text-white btn btn-lg rounded_akm bg_green font-poppins hover:bg-orange-500"
             >
-              <FontAwesomeIcon icon={faBowlRice} className="h-5 w-5" />
+              {/* <FontAwesomeIcon icon={faBowlRice} className="w-5 h-5" /> */}
               {buttonTextHero}
               <motion.div
                 animate={{ x: [0, 10, 0] }} // Moves left to right
                 transition={{ duration: 3, repeat: Infinity }}
               >
-                <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-sm" /> */}
               </motion.div>
             </Link>
           </AnimatedContent>
@@ -269,17 +261,17 @@ export default function Home() {
 
       {/* HOW IT WORKS SECTION */}
 
-      <section className=" py_akm  bg_beige">
-        <div className="container p-4 max-w-5xl mx-auto my_akm">
-          <div className="text-center mb-8 pt_akm">
-            <h2 className=" text-3xl font-poppins font-bold text_black">
+      <section className=" py_akm bg_beige">
+        <div className="container max-w-5xl p-4 mx-auto my_akm">
+          <div className="mb-8 text-center pt_akm">
+            <h2 className="text-3xl font-bold font-poppins text_black">
               How it works?
             </h2>
           </div>
 
-          <div className="grid grid-cols-2  md:grid-cols-3 gap_akm  pb_akm">
-            <div className="  rounded_akm flex flex-col items-center justify-center gap-1 pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 1</div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap_akm pb_akm">
+            <div className="flex flex-col items-center justify-center gap-1 rounded_akm pad_akm text_black">
+              <div className="font-bold h3_akm font-poppins">Step 1</div>
               <div className="pb_akm">You Place Pre-order</div>
               <div>
                 <Image
@@ -293,8 +285,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="  flex flex-col items-center justify-center gap-1 pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 2</div>
+            <div className="flex flex-col items-center justify-center gap-1 pad_akm text_black">
+              <div className="font-bold h3_akm font-poppins">Step 2</div>
               <div className="pb_akm"> We Cook Your Meal</div>
               <div>
                 <Image
@@ -308,8 +300,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hidden md:flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 3</div>
+            <div className="flex-col items-center justify-center hidden gap-1 text-center md:flex pad_akm text_black">
+              <div className="font-bold h3_akm font-poppins">Step 3</div>
               <div className="pb_akm">We Deliver to You</div>
               <div>
                 <Image
@@ -324,10 +316,10 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="md:hidden flex items-center justify-center">
+          <div className="flex items-center justify-center md:hidden">
             {" "}
-            <div className="   flex flex-col items-center justify-center text-center gap-1 pad_akm text_black">
-              <div className="h3_akm font-bold font-poppins">Step 3</div>
+            <div className="flex flex-col items-center justify-center gap-1 text-center pad_akm text_black">
+              <div className="font-bold h3_akm font-poppins">Step 3</div>
               <div className="pb_akm">We Deliver to You</div>
               <div>
                 <Image
@@ -344,16 +336,16 @@ export default function Home() {
         </div>
       </section>
 
-      <AnimatedSection className="md:h-screen py-12 bg_green flex items-center">
-        <div className="grid md:grid-cols-2 items-center justify-center max-w-7xl mx-auto h-full">
+      <AnimatedSection className="flex items-center py-12 md:h-screen bg_green">
+        <div className="grid items-center justify-center h-full mx-auto md:grid-cols-2 max-w-7xl">
           <AnimatedContent
             direction="left"
-            className="flex flex-col gap-6 md:gap-8 pl-8"
+            className="flex flex-col gap-6 pl-8 md:gap-8"
           >
             <AnimatedContent
               direction="up"
               delay={0.3}
-              className=" text-7xl md:text-8xl font-bebas flex"
+              className="flex text-7xl md:text-8xl font-bebas"
             >
               Fresh, quality <br />
               ingredients
@@ -382,8 +374,8 @@ export default function Home() {
       </AnimatedSection>
 
       <section className="bg_beige py_akm">
-        <div className="max-w-7xl mx-auto px_akm py_akm my_akm">
-          <h2 className="text-3xl lg:text-3xl font-poppins font-bold text-center text_green">
+        <div className="mx-auto max-w-7xl px_akm py_akm my_akm">
+          <h2 className="text-3xl font-bold text-center lg:text-3xl font-poppins text_green">
             What Our Customers Say
           </h2>
 
@@ -409,14 +401,14 @@ export default function Home() {
             >
               {testimonials.map(({ id, quote, name, title, image }) => (
                 <SwiperSlide key={id} className="h-auto py_akm">
-                  <div className="bg-white p-6 rounded_akm shadow_akm flex flex-col items-center text-center min-h-72">
+                  <div className="flex flex-col items-center p-6 text-center bg-white rounded_akm shadow_akm min-h-72">
                     <img
                       src={image}
                       alt={name}
-                      className="w-20 h-20 rounded-full object-cover shadow-lg"
+                      className="object-cover w-20 h-20 rounded-full shadow-lg"
                     />
-                    <p className="mt-4 text-gray-700 italic">{quote}</p>
-                    <div className="mt-auto pt-4">
+                    <p className="mt-4 italic text-gray-700">{quote}</p>
+                    <div className="pt-4 mt-auto">
                       <h3 className="font-bold text-gray-900">{name}</h3>
                       <p className="text-sm text-gray-500">{title}</p>
                     </div>
@@ -428,13 +420,13 @@ export default function Home() {
         </div>
       </section>
 
-      <AnimatedSection className="  bg_light_orange  flex items-center px-6 py-8">
+      <AnimatedSection className="flex items-center px-6 py-8 bg_light_orange">
         {" "}
-        <div className="max-w-7xl flex flex-col-reverse lg:grid lg:grid-cols-7  mx-auto w-full">
+        <div className="flex flex-col-reverse w-full mx-auto max-w-7xl lg:grid lg:grid-cols-7">
           <AnimatedContent
             direction="left"
             delay={0.6}
-            className=" col-span-3 flex flex-col gap-8"
+            className="flex flex-col col-span-3 gap-8 "
           >
             <Image
               src={"/images/boy_chilling.png"}
@@ -448,65 +440,65 @@ export default function Home() {
           <AnimatedContent
             direction="right"
             delay={0.6}
-            className="col-span-4 flex flex-col gap_akm justify-center lg:px-6"
+            className="flex flex-col justify-center col-span-4 gap_akm lg:px-6"
           >
-            <div className="text-7xl  lg:text-8xl font-bebas text_green text-left">
+            <div className="text-left text-7xl lg:text-8xl font-bebas text_green">
               We Simplify <br /> Your Life!
             </div>
 
             <AnimatedContent
               direction="up"
               delay={0.8}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 w-full justify-center "
+              className="grid justify-center w-full grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-6 "
             >
-              <div className="bg_beige shadow-lg hover:shadow-xl  text_black rounded_akm p-4 lg:p-6 font-poppins  transform transition duration-500 hover:-translate-y-1 ">
+              <div className="p-4 transition duration-500 transform shadow-lg bg_beige hover:shadow-xl text_black rounded_akm lg:p-6 font-poppins hover:-translate-y-1 ">
                 <div className=" font-bold pl_akm pb-0.5 text-xl font-bebas tracking-widest">
                   Money Saved
                 </div>
                 <ul>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} className="text-xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} className="text-xs" /> */}
                     No grocery shopping
                   </li>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} size="xs" /> */}
                     No gas refills
                   </li>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} size="xs" /> */}
                     No maid hiring
                   </li>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} size="xs" /> */}
                     No kitchen setup
                   </li>
                 </ul>
               </div>
-              <div className="bg_green  text-white rounded_akm p-4 lg:p-6   font-poppins transform transition duration-500 hover:-translate-y-1 shadow-lg hover:shadow-xl">
+              <div className="p-4 text-white transition duration-500 transform shadow-lg bg_green rounded_akm lg:p-6 font-poppins hover:-translate-y-1 hover:shadow-xl">
                 <div className=" font-bold pl_akm pb-0.5 text-lg font-bebas tracking-widest">
                   App Benefits
                 </div>
 
                 <ul>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} className="text-xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} className="text-xs" /> */}
                     Meal Reminder via SMS
                   </li>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} size="xs" /> */}
                     One Touch Pre-order
                   </li>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} size="xs" /> */}
                     Mealbox from Day 1
                   </li>
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} size="xs" /> */}
                     Easy Cancellation
                   </li>
 
                   <li className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faAngleRight} size="xs" />
+                    {/* <FontAwesomeIcon icon={faAngleRight} size="xs" /> */}
                     Pay from Dalbhath Wallet
                   </li>
                 </ul>
@@ -516,8 +508,8 @@ export default function Home() {
         </div>
       </AnimatedSection>
 
-      {/* <AnimatedSection className="h-screen bg_green flex items-center">
-        <div className="max-w-5xl grid grid-cols-2 items-center justify-center  mx-auto  border-blue-600 border">
+      {/* <AnimatedSection className="flex items-center h-screen bg_green">
+        <div className="grid items-center justify-center max-w-5xl grid-cols-2 mx-auto border border-blue-600">
           <AnimatedContent direction="left" className="flex flex-col gap-8">
             <AnimatedContent direction="left" className="flex flex-col gap-8">
               <Image
@@ -530,26 +522,26 @@ export default function Home() {
             </AnimatedContent>
           </AnimatedContent>
 
-          <AnimatedContent direction="right" className="w-full grid">
+          <AnimatedContent direction="right" className="grid w-full">
             
           </AnimatedContent>
         </div>
       </AnimatedSection> */}
 
-      {/* <section className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
+      {/* <section className="py-12 bg-gray-50">
+        <div className="container px-4 mx-auto">
+          <div className="mb-8 text-center">
             <h2 className="text-3xl font-extrabold text-gray-800">
               Our Mission & Vision
             </h2>
-            <p className="text-gray-600 mt-2">
+            <p className="mt-2 text-gray-600">
               Delivering nutritious meals while fostering a community that
               values health, convenience, and sustainability.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
-            <div className="bg-white shadow-md rounded-lg p-6 text-center">
-              <h3 className="text-2xl font-semibold text-blue-700 mb-4">
+            <div className="p-6 text-center bg-white rounded-lg shadow-md">
+              <h3 className="mb-4 text-2xl font-semibold text-blue-700">
                 Our Mission
               </h3>
               <p className="text-gray-600">
@@ -559,8 +551,8 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="bg-white shadow-md rounded-lg p-6 text-center">
-              <h3 className="text-2xl font-semibold text-green-700 mb-4">
+            <div className="p-6 text-center bg-white rounded-lg shadow-md">
+              <h3 className="mb-4 text-2xl font-semibold text-green-700">
                 Our Vision
               </h3>
               <p className="text-gray-600">
@@ -589,7 +581,7 @@ export default function Home() {
             colors={["#FFC107", "#FF9800", "#FF5722", "#F44336", "#FFEB3B"]}
           />
         </div> */}
-        <div className="max-w-7xl  mx-auto flex justify-center items-center flex-col px-6 pb-4 relative z-10">
+        <div className="relative z-10 flex flex-col items-center justify-center px-6 pb-4 mx-auto max-w-7xl">
           <h2 className="text-7xl font-bebas">
             {discount !== null
               ? `First Meal ${discount}% Off!`
@@ -603,7 +595,7 @@ export default function Home() {
 
           <Link href={"/menu"}>
             <motion.button
-              className="btn btn-md mt-2 rounded_akm"
+              className="mt-2 btn btn-md rounded_akm"
               animate={{
                 scale: [1, 1.1, 1],
               }}
@@ -617,7 +609,7 @@ export default function Home() {
             </motion.button>
           </Link>
         </div>
-        <div className="overflow-hidden w-full relative">
+        <div className="relative w-full overflow-hidden">
           <motion.div
             className="flex w-max"
             animate={{ x: ["0%", "-100%"] }}
@@ -643,7 +635,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className=" bg_beige hidden md:block text_black">
+      <footer className="hidden bg_beige md:block text_black">
         <FooterMain />
       </footer>
 

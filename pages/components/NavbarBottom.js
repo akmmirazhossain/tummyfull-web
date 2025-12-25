@@ -1,32 +1,13 @@
 import React from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUtensils,
-  faGear,
-  faEllipsisVertical,
-} from "@fortawesome/free-solid-svg-icons";
-
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-
 import { useRouter } from "next/router";
-import { Button, ButtonGroup } from "@nextui-org/react";
 
 const NavbarBottom = () => {
-  // useEffect(() => {
-  //   const token = Cookies.get("TFLoginToken");
-  //   if (token) {
-  //     setIsLoggedIn(true);
-  //   }
-  // }, []);
-
   const router = useRouter();
 
-  // Handle click event, preserving the button's native effects
-  const handleNavigation = (href, event) => {
-    event.preventDefault(); // Prevent default link behavior
+  // Handle navigation with delay to allow ripple effect
+  const handleNavigation = (href) => {
     setTimeout(() => {
-      // Delay navigation to allow ripple effect
       router.push(href);
     }, 300); // Adjust delay as needed
   };
@@ -62,9 +43,9 @@ const NavbarBottom = () => {
   ];
 
   return (
-    <header className="bg_beige text-black md:hidden fixed w-full z-20  bottom-0">
-      <div className="max-w-5xl mx-auto  ">
-        <div className="flex justify-center items-center  ">
+    <header className="fixed bottom-0 z-20 w-full text-black bg_beige md:hidden">
+      <div className="max-w-5xl mx-auto ">
+        <div className="flex items-center justify-center ">
           <nav className="flex items-center justify-center ">
             <ButtonGroup>
               {navbarItems.map((item, index) => (
@@ -76,22 +57,12 @@ const NavbarBottom = () => {
                   startContent={
                     <FontAwesomeIcon className="w-5 h-5" icon={item.icon} />
                   }
-                  onClick={(event) => handleNavigation(item.href, event)}
+                  onPress={() => handleNavigation(item.href)}
                 >
                   {item.text}
                 </Button>
               ))}
             </ButtonGroup>
-
-            {/* {navbarItems.map((item, index) => (
-              <Link
-                href={item.href}
-                className=" gap-2 py-6 px-6 flex justify-center items-center"
-              >
-                <FontAwesomeIcon icon={item.icon} />
-                {item.text}
-              </Link>
-            ))} */}
           </nav>
         </div>
       </div>

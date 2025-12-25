@@ -3,23 +3,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
 import dayjs from "dayjs";
-import { Chip } from "@nextui-org/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import {
-  faLocationDot,
-  faStickyNote,
-  faReceipt,
-  faUser,
-  faMobileScreenButton,
-  faBoxOpen,
-  faBowlFood,
-  faCoins,
-  faMoneyBill,
-  faWallet,
-} from "@fortawesome/free-solid-svg-icons";
-
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 const DeliveryList = () => {
   const [deliveries, setDeliveries] = useState([]);
@@ -216,7 +199,7 @@ const DeliveryList = () => {
 
             {["lunch", "dinner"].map((mealType) => (
               <div key={mealType}>
-                <h3 className="h3_akm py_akm capitalize flex items-center  gap_akm">
+                <h3 className="flex items-center capitalize h3_akm py_akm gap_akm">
                   {mealType == "lunch" ? (
                     <>
                       <svg
@@ -278,9 +261,9 @@ const DeliveryList = () => {
                             }
                           />
 
-                          <div className="collapse-title p-0">
+                          <div className="p-0 collapse-title">
                             {/* All your clickable card UI goes here */}
-                            <div className="flex justify-between items-center">
+                            <div className="flex items-center justify-between">
                               <div
                                 role="alert"
                                 className={`flex justify-between alert ${
@@ -306,7 +289,7 @@ const DeliveryList = () => {
                                   <span>
                                     <FontAwesomeIcon icon={faUser} />
                                   </span>
-                                  <span> {delivery.mrd_user_first_name}</span>
+                                  <span> {delivery.mrd_user_full_name}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <span>
@@ -326,7 +309,7 @@ const DeliveryList = () => {
                                   </span>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 shrink-0 stroke-current"
+                                    className="w-6 h-6 stroke-current shrink-0"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                   >
@@ -358,7 +341,7 @@ const DeliveryList = () => {
 
                           <div className="collapse-content ">
                             <div className="flex items-center ">
-                              <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                              <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                 <FontAwesomeIcon icon={faLocationDot} />
                                 <span>ঠিকানা:</span>
                               </div>
@@ -373,7 +356,7 @@ const DeliveryList = () => {
                                         delivery.mrd_order_cash_to_get
                                       )
                                     }
-                                    className="btn btn-success btn-xs text-white"
+                                    className="text-white btn btn-success btn-xs"
                                   >
                                     <FontAwesomeIcon icon={faWhatsapp} /> Notify
                                   </div>
@@ -383,42 +366,42 @@ const DeliveryList = () => {
 
                             {delivery.mrd_user_delivery_instruction && (
                               <div className="flex items-center ">
-                                <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                                <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                   <FontAwesomeIcon icon={faStickyNote} />
                                   <span>ডেলিভারি নির্দেশনা:</span>
                                 </div>
-                                <div className=" w-3/4 py-1">
+                                <div className="w-3/4 py-1 ">
                                   {delivery.mrd_user_delivery_instruction}
                                 </div>
                               </div>
                             )}
 
                             <div className="flex items-center">
-                              <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                              <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                 <FontAwesomeIcon icon={faWallet} />
                                 <span>ওয়ালেট:</span>
                               </div>
-                              <div className=" w-3/4 py-1">
+                              <div className="w-3/4 py-1 ">
                                 ৳{delivery.mrd_user_credit}
                               </div>
                             </div>
 
                             <div className="flex items-center ">
-                              <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                              <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                 <FontAwesomeIcon icon={faMobileScreenButton} />
                                 <span>ফোন:</span>
                               </div>
-                              <div className=" w-3/4 py-1">
+                              <div className="w-3/4 py-1 ">
                                 {delivery.mrd_user_phone}
                               </div>
                             </div>
 
                             <div className="flex items-center ">
-                              <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                              <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                 <FontAwesomeIcon icon={faBoxOpen} />
                                 <span>মিলবক্স ফেরত:</span>
                               </div>
-                              <div className=" w-3/4 py-1">
+                              <div className="w-3/4 py-1 ">
                                 <div className="flex items-center gap-2">
                                   <div className="flex flex-wrap gap-2">
                                     {[
@@ -489,23 +472,24 @@ const DeliveryList = () => {
                             </div>
 
                             <div className="flex items-center ">
-                              <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                              <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                 <FontAwesomeIcon icon={faBowlFood} />
                                 <span>মিল দিন:</span>
                               </div>
-                              <div className=" w-3/4  flex flex-col items-center py_akm">
+                              <div className="flex flex-col items-center w-3/4 py_akm">
                                 <div className="grid grid-cols-2">
                                   <div>
                                     মিলবক্স সহ:{" "}
                                     <Chip size="lg" variant="bordered">
-                                      {delivery.mrd_order_mealbox}
+                                      {delivery.mrd_order_mealbox_give}
                                     </Chip>
                                   </div>
                                   <div>
                                     ওয়ান টাইম বক্স:{" "}
                                     <Chip size="lg" variant="bordered">
-                                      {delivery.mrd_order_mealbox === 0 ||
-                                      delivery.mrd_order_mealbox === null ? (
+                                      {delivery.mrd_order_mealbox_give === 0 ||
+                                      delivery.mrd_order_mealbox_give ===
+                                        null ? (
                                         delivery.mrd_order_quantity
                                       ) : (
                                         <>0</>
@@ -513,11 +497,6 @@ const DeliveryList = () => {
                                     </Chip>
                                   </div>
                                 </div>
-                                {/* {delivery.mrd_order_mealbox != "" &&
-                              delivery.mrd_user_has_mealbox <
-                                delivery.mrd_order_quantity && (
-                                
-                              )} */}
 
                                 {delivery.food_details ? (
                                   <div className="flex flex-row gap-1">
@@ -543,13 +522,13 @@ const DeliveryList = () => {
                               </div>
                             </div>
 
-                            {delivery.mrd_order_mealbox && (
+                            {delivery.mrd_order_mealbox_give && (
                               <div className="flex items-center ">
-                                <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                                <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                   <FontAwesomeIcon icon={faCoins} />
                                   <span>নতুন মিলবক্সের দাম:</span>
                                 </div>
-                                <div className=" w-3/4 py-1 flex items-center gap_akm">
+                                <div className="flex items-center w-3/4 py-1 gap_akm">
                                   {delivery.mrd_order_mealbox_extra}x
                                   {delivery.mrd_setting_mealbox_price} = ৳
                                   {delivery.mrd_setting_mealbox_price *
@@ -573,11 +552,11 @@ const DeliveryList = () => {
                             )}
 
                             <div className="flex items-center ">
-                              <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                              <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                 <FontAwesomeIcon icon={faMoneyBill} />
                                 <span>মোট মিলের দাম:</span>
                               </div>
-                              <div className=" w-3/4 py-1 flex gap-2">
+                              <div className="flex w-3/4 gap-2 py-1 ">
                                 ৳{delivery.mrd_order_total_price}
                                 <div className="text-xs font-normal">
                                   (ডেলিভারি চার্জ সহ)
@@ -585,8 +564,8 @@ const DeliveryList = () => {
                               </div>
                             </div>
 
-                            <div className="flex items-center flex-row">
-                              <div className="flex items-center  w-1/4 py-1 font-bold gap_akm">
+                            <div className="flex flex-row items-center">
+                              <div className="flex items-center w-1/4 py-1 font-bold gap_akm">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   height="24px"
@@ -598,10 +577,10 @@ const DeliveryList = () => {
                                 </svg>
                                 <span> টাকা নিন:</span>
                               </div>
-                              <div className=" w-3/4 py-1 h2_akm flex items-center flex-row gap_akm">
+                              <div className="flex flex-row items-center w-3/4 py-1 h2_akm gap_akm">
                                 <div>{delivery.mrd_order_cash_to_get}</div>
 
-                                {/* <div className=" w-3/4 py-1 text-xs font-normal">
+                                {/* <div className="w-3/4 py-1 text-xs font-normal ">
                                   {delivery.mrd_order_cash_to_get == "0" ? (
                                     <div className="text-xs font-normal">
                                       (মিলের ৳{delivery.mrd_order_total_price}{" "}
@@ -636,11 +615,11 @@ const DeliveryList = () => {
                             <div className="flex items-center ">
                               <div
                                 htmlFor={`status-${delivery.mrd_order_id}`}
-                                className="flex items-center  w-1/5 py-1 font-bold gap_akm"
+                                className="flex items-center w-1/5 py-1 font-bold gap_akm"
                               >
                                 <span> ডেলিভারি স্ট্যাটাস:</span>
                               </div>
-                              <div className=" w-4/5 py-1 flex items-center gap_akm">
+                              <div className="flex items-center w-4/5 py-1 gap_akm">
                                 <select
                                   id={`status-${delivery.mrd_order_id}`}
                                   value={orderStatus[delivery.mrd_order_id]}
@@ -650,7 +629,7 @@ const DeliveryList = () => {
                                       [delivery.mrd_order_id]: e.target.value,
                                     }))
                                   }
-                                  className="ml-2 p-3 text-lg border rounded w-48"
+                                  className="w-48 p-3 ml-2 text-lg border rounded"
                                   disabled={[
                                     "cancelled",
                                     "delivered",

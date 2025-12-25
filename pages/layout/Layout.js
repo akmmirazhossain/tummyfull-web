@@ -1,6 +1,6 @@
 // ./layout/Layout.js
 import React from "react";
-import PropTypes from "prop-types";
+
 import Head from "next/head";
 import NavbarTop from "../components/NavbarTop";
 import NavbarBottom from "../components/NavbarBottom";
@@ -36,14 +36,14 @@ const Layout = ({ children, title }) => {
           content="https://dalbhath.com/images/og-main.png"
         />
       </Head> */}
-      <header className="fixed w-full z-20">
+      <header className="fixed z-20 w-full">
         <NavbarTop className="" />
       </header>
-      <main className="max-w-5xl mx-auto min-h-screen pt-16 pb-20 md:pb-10 px_akm">
+      <main className="max-w-5xl min-h-screen pt-16 pb-20 mx-auto md:pb-10 px_akm">
         {children}
       </main>
       <NavbarBottom />
-      <footer className=" bg_beige hidden md:block">
+      <footer className="hidden bg_beige md:block">
         <FooterMain />
       </footer>
 
@@ -52,7 +52,7 @@ const Layout = ({ children, title }) => {
         href="https://wa.me/8801748417178?text=Hello"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed z-30 bottom-16 right-2 md:bottom-4 md:right-4  p-1 rounded-full hover:scale-110 transition-transform duration-300"
+        className="fixed z-30 p-1 transition-transform duration-300 rounded-full bottom-16 right-2 md:bottom-4 md:right-4 hover:scale-110"
       >
         <img
           src="/images/whatsapp-icon.png"
@@ -64,9 +64,9 @@ const Layout = ({ children, title }) => {
   );
 };
 
-Layout.propTypes = {
-  children: PropTypes.node.isRequired, // Validate children
-  title: PropTypes.string, // Validate title
-};
+// Layout.propTypes = {
+//   children: PropTypes.node.isRequired, // Validate children
+//   title: PropTypes.string, // Validate title
+// };
 
 export default Layout;

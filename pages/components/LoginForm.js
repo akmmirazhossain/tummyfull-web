@@ -1,11 +1,12 @@
 // ./components/LoginForm.js
 import React, { useState, useEffect, useMemo } from "react";
-import { Input, Spacer, Button, Textarea } from "@nextui-org/react";
 import MealSettings from "./MealSettings";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Head from "next/head";
+import Link from "next/link";
 import axios from "axios";
+import { useSnackbar } from "./ui/Snackbar";
 
 const LoginForm = () => {
   const [value, setValue] = useState("");
@@ -14,30 +15,11 @@ const LoginForm = () => {
   const [newUser, setNewUser] = useState(false);
   const [showNameAddrInput, setShowNameAddrInput] = useState(false);
   const [error, setError] = useState(null);
-  const [config, setConfig] = useState(null);
-
+  const { showSnackbar } = useSnackbar();
   const [formData, setFormData] = useState({ first_name: "", address: "" });
 
   const router = useRouter();
   const { fromHomePage } = router.query;
-
-  useEffect(() => {
-    // Fetch config.json on component mount
-    const fetchConfig = async () => {
-      try {
-        const response = await fetch("../../config.json"); // Adjust URL as needed
-        if (!response.ok) {
-          throw new Error("Failed to fetch config");
-        }
-        const data = await response.json();
-        setConfig(data);
-      } catch (error) {
-        console.error("Error fetching config:", error);
-      }
-    };
-
-    fetchConfig();
-  }, []);
 
   const validatePhoneNumber = (value) => /^(01)\d{9}$/.test(value);
   const isInvalid = useMemo(() => {
@@ -50,13 +32,16 @@ const LoginForm = () => {
     if (isInvalid) return;
 
     try {
-      const response = await fetch(`${config.apiBaseUrl}send-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ phoneNumber: value }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/send-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ phoneNumber: value }),
+        }
+      );
 
       console.log("Response status:", response.status);
 
@@ -86,13 +71,16 @@ const LoginForm = () => {
   //MARK: VerifyOTP
   const handleVerifyOTP = async () => {
     try {
-      const response = await fetch(`${config.apiBaseUrl}verify-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ phoneNumber: value, otp: otp }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/verify-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ phoneNumber: value, otp: otp }),
+        }
+      );
 
       console.log("handleVerifyOTP -> Response status:", response.status);
 
@@ -108,11 +96,18 @@ const LoginForm = () => {
 
         //SHOW THE USER NAME & ADDRESS INPUT FIELDS, IF THE USER IS NEW
         if (newUser) {
-          setShowNameAddrInput(true);
+          showSnackbar(
+            "Account created successfully! Please complete your profile details",
+            "success"
+          );
+          router.push({
+            pathname: "/settings",
+          });
+          // setShowNameAddrInput(true);
         } else {
           window.location.href = "/menu";
         }
-        console.log("🚀 ~ handleVerifyOTP ~", newUser);
+
         // router.push("/settings");
       } else {
         setError(data.message || "Failed to verify OTP. Please try again.");
@@ -137,7 +132,7 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        `${config.apiBaseUrl}user-update`,
+        `${process.env.NEXT_PUBLIC_API_URL}user-update`,
         {
           name: formData.first_name,
           address: formData.address,
@@ -180,7 +175,7 @@ const LoginForm = () => {
         <>
           {" "}
           <div className="h1_akm ">Login</div>
-          <div className="card_akm p-8">
+          <div className="p-8 card_akm">
             <div>
               {fromHomePage ? (
                 <p>Please log in to place an order.</p>
@@ -200,9 +195,31 @@ const LoginForm = () => {
               errorMessage="Please enter a valid 11 digit phone number"
               onValueChange={setValue}
             />
+
+            {!isOtpSent && (
+              <>
+                <Spacer y={3} />
+                <span className="h4info_akm">
+                  Our service is currently available only in{" "}
+                  <span className="font-bold">Bashundhara R/A</span>. We’re
+                  expanding across Dhaka soon and will notify you once we reach
+                  your area. Follow our{" "}
+                  <Link
+                    href={"https://www.facebook.com/dalbhath/"}
+                    target="_blank"
+                    className="underline"
+                  >
+                    Facebook page
+                  </Link>{" "}
+                  for the latest updates and more.
+                </span>
+              </>
+            )}
+
             {isOtpSent && (
               <>
-                <p className="text-xs">
+                <Spacer y={3} />
+                <p className="h4info_akm">
                   Enter the 4 digit OTP sent on your phone
                 </p>
                 <Input
@@ -218,7 +235,7 @@ const LoginForm = () => {
             )}
 
             {error && <p className="text-xs text-red-500">{error}</p>}
-            <div className="flex justify-end items-center mt-4">
+            <div className="flex items-center justify-end mt-4">
               <>
                 {!isOtpSent ? (
                   <Button onPress={handleSendOTP} disabled={isInvalid}>
@@ -237,10 +254,10 @@ const LoginForm = () => {
 
       {/* SHOW THE USER / ADDRESS INPUTS IF THE USER IS NEW */}
 
-      {showNameAddrInput && (
+      {/* {showNameAddrInput && (
         <>
           <div className="h1_akm ">Welcome!</div>
-          <div className="flex flex-col gap_akm card_akm p-8">
+          <div className="flex flex-col p-8 gap_akm card_akm">
             <p>Please enter your name and address to continue.</p>
             <Input
               name="first_name"
@@ -253,7 +270,7 @@ const LoginForm = () => {
             />
 
             <div>
-              <span className="pl_akm text-xs text_grey">
+              <span className="text-xs pl_akm text_grey">
                 Flat no, Lift floor, House no, Road no, Block, Area
               </span>
             </div>
@@ -278,7 +295,7 @@ const LoginForm = () => {
               </p>
             </div>
 
-            <div className="flex justify-end items-center">
+            <div className="flex items-center justify-end">
               <Button
                 color="success"
                 className=""
@@ -290,7 +307,7 @@ const LoginForm = () => {
           </div>
           <MealSettings />
         </>
-      )}
+      )} */}
     </div>
   );
 };

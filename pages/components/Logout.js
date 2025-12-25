@@ -1,21 +1,23 @@
-// ./components/LoginForm.js
+// pages/components/Logout.js
 import React from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import { Button } from "@nextui-org/react";
+import { useUser } from "../contexts/UserContext";
 
 const LogoutBlock = () => {
   const router = useRouter();
-  const handleLogout = () => {
+  const { user, loadingUser, error, isLoggedIn, refreshUser, loginToken } =
+    useUser();
+
+  const handleLogout = async () => {
     Cookies.remove("TFLoginToken"); // Remove the cookie
-    // setIsLoggedIn(false); // Update the state
-    router.push("/menu"); // Redirect to the login page or home page
+    window.location.href = "/menu";
   };
+
   return (
     <div>
       <div className="h1_akm">Logout</div>
-      <div className="card_akm pad_akm flex justify-end">
-        {" "}
+      <div className="flex justify-end card_akm pad_akm">
         <Button onClick={handleLogout} size="lg">
           Logout
         </Button>
@@ -24,4 +26,4 @@ const LogoutBlock = () => {
   );
 };
 
-export default LogoutBlock; // Making LoginForm the default export
+export default LogoutBlock;

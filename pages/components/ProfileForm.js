@@ -1,71 +1,87 @@
 // components/ProfileForm.js
-import { Button, Input, Spacer, Textarea } from "@nextui-org/react";
+import React, { useRef } from "react";
+
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router"; // Import useRouter
-import React from "react";
-import Cookies from "js-cookie";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+
 import Head from "next/head";
 import Link from "next/link";
-import { ApiContext } from "../contexts/ApiContext";
 import { useUser } from "../contexts/UserContext";
+import ReverseGeocodingMap from "./map/ReverseGeocodingMap";
+import { useSnackbar } from "./ui/Snackbar";
+import GeolocationTracker from "./map/GeolocationTracker";
 
 const ProfileForm = () => {
   const router = useRouter();
-  const apiConfig = useContext(ApiContext);
-  const { refreshUser } = useUser();
+  const { user, loadingUser, error, isLoggedIn, refreshUser, loginToken } =
+    useUser();
   const [no_address, setNoAddress] = useState("");
-
-  useEffect(() => {
-    if (router.query.no_address) {
-      setNoAddress(router.query.no_address); // Extract message from query params
-    }
-  }, [router.query.no_address]);
-
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     address: "",
     delivery_instruction: "",
+    user_type: "",
+    userLatitude: null, // Start with null
+    userLongitude: null,
   });
+  const mapRef = useRef(null);
+  const [addressMapData, setAddressMapData] = useState("");
+  const [mapClicked, setMapClicked] = useState(false);
+  const { showSnackbar } = useSnackbar();
+  const [fromGeoTracker, setFromGeoTracker] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = Cookies.get("TFLoginToken");
-      if (!apiConfig) return;
-      try {
-        const response = await fetch(`${apiConfig.apiBaseUrl}user-fetch`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    if (!loadingUser) {
+      // wait until user is loaded
+      if (user?.data) {
+        setFormData({
+          name: user.data.first_name || "",
+          phone: user.data.phone || "",
+          address: user.data.address || "",
+          delivery_instruction: user.data.delivery_instruction || "",
+          user_type: user.data.user_type || "",
+          userLatitude: user.data.userLatitude || "",
+          userLongitude: user.data.userLongitude || "",
         });
-
-        const data = await response.json();
-        console.log("🚀 ~ fetchUserData ~ data:", data);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data");
-        } else {
-          setFormData({
-            name: data.data.first_name || "",
-            phone: data.data.phone || "",
-            address: data.data.address || "",
-            delivery_instruction: data.data.delivery_instruction || "",
-            user_type: data.data.user_type || "",
-          });
-        }
-
-        return data;
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        return null;
       }
-    };
+    }
+  }, [loadingUser, user]);
 
-    fetchUserData();
-  }, [apiConfig]);
+  useEffect(() => {
+    if (mapClicked && addressMapData) {
+      console.log("MAP CLICKED: updating address with latest data");
+      setFromGeoTracker(false);
+      setFormData((prev) => ({
+        ...prev,
+        address: addressMapData.formatted,
+        userLatitude: addressMapData.lat,
+        userLongitude: addressMapData.lon,
+      }));
+    }
+  }, [mapClicked, addressMapData]);
+
+  //Refresh user data when redirected from login page
+  useEffect(() => {
+    if (router.isReady && router.asPath === "/settings") {
+      refreshUser();
+    }
+  }, [router.isReady]);
+
+  const handleAddressChange = (data) => {
+    setAddressMapData(data);
+  };
+
+  //Handle Geolocation Update
+  const handleGeoLocationUpdate = (location) => {
+    console.log("📍 Location from GeolocationTracker:", location);
+    setFromGeoTracker(true);
+    setFormData((prev) => ({
+      ...prev,
+      userLatitude: location.lat,
+      userLongitude: location.lng,
+    }));
+  };
 
   // Function to fetch user data using the token
 
@@ -79,40 +95,52 @@ const ProfileForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = Cookies.get("TFLoginToken");
 
-    if (!token) {
+    //if map click, and lat
+
+    if (fromGeoTracker) {
+      showSnackbar("Please pin the delivery address on the map", "warning");
+      return;
+    }
+    console.log("ProfileForm.js ->", formData.userLatitude);
+
+    if (!loginToken) {
       console.error("No login token found, redirecting to login");
       router.push("/login");
       return;
     }
 
     try {
-      const response = await fetch(`${apiConfig.apiBaseUrl}user-update`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          address: formData.address,
-          delivery_instruction: formData.delivery_instruction,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user-update`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${loginToken}`,
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            address: formData.address,
+            delivery_instruction: formData.delivery_instruction,
+            userLatitude: formData.userLatitude,
+            userLongitude: formData.userLongitude,
+          }),
+        }
+      );
 
       const result = await response.json();
+
       if (response.ok) {
-        console.log("User data updated successfully:", result);
-        alert("Profile updated successfully!");
+        showSnackbar("Profile Updated Successfully!", "success");
         await refreshUser();
       } else {
         console.error("Failed to update user data:", result);
-        alert(result.message || "Failed to update profile. Please try again.");
+        showSnackbar("Failed to update profile. Please try again.", "error");
       }
     } catch (error) {
       console.error("Error updating user data:", error);
-      alert("An error occurred while updating the profile. Please try again.");
+      showSnackbar("Failed to update profile. Please try again.", "error");
     }
   };
 
@@ -122,11 +150,11 @@ const ProfileForm = () => {
         <meta name="viewport" content="width=device-width, user-scalable=no" />
       </Head>
       <div className="h1_akm ">Profile Settings</div>
-      <form onSubmit={handleSubmit} className="card_akm p-8">
+      <form onSubmit={handleSubmit} className="p-8 card_akm">
         <div>
           {" "}
           {formData.user_type === "chef" && (
-            <div className=" flex flex-col gap_akm">
+            <div className="flex flex-col gap_akm">
               <div> আপনি একজন শেফ হিসাবে লগ ইন করেছেন।</div>
               <div>
                 {" "}
@@ -148,9 +176,9 @@ const ProfileForm = () => {
             </div>
           )}
           {formData.user_type === "delivery" && (
-            <div className=" flex flex-col gap_akm ">
+            <div className="flex flex-col gap_akm">
               <div> আপনি ডেলিভারি পার্সন হিসেবে লগ ইন করেছেন।</div>
-              <div className="flex gap_akm flex-col md:flex-row">
+              <div className="flex flex-col gap_akm md:flex-row">
                 <Link href="/delivery" target="_blank">
                   <Button size="lg" color="secondary">
                     <svg
@@ -203,7 +231,7 @@ const ProfileForm = () => {
           <div className="lg:tooltip" data-tip="Phone number verified">
             <FontAwesomeIcon
               icon={faCircleCheck}
-              className=" text-green-600 ml-1"
+              className="ml-1 text-green-600 "
             />
           </div>
         </div>
@@ -217,37 +245,60 @@ const ProfileForm = () => {
           disabled // Phone field is disabled since it is not being updated
         />
         <Spacer y={4} />
-        <div>
-          <span>Address </span>
-          <span className="text-red-500">
-            {" "}
-            {no_address && <> ({no_address})</>} *
-          </span>
-        </div>
-        <div>
-          <span className="pl_akm text-xs text_grey">
-            Flat no, Lift floor, House no, Road no, Block, Area
-          </span>
-        </div>
-        <Input
-          clearable
-          required
-          variant="bordered"
-          underlined
-          labelPlaceholder="Address"
-          placeholder="Flat no, Lift floor, House no, Road no, Block, Area
+
+        <div className="justify-center flex-none lg:flex gap_akm">
+          <div className="lg:w-1/2">
+            <div>
+              <span>Delivery Address </span>
+              <span className="text-red-500">*</span>
+            </div>
+            <div>
+              <span className="text-xs pl_akm text_grey">
+                Flat no, Lift floor, House no, Road no, Block, Area
+              </span>
+            </div>
+            {/* //MARK: Address*/}
+            <Input
+              clearable
+              required
+              variant="bordered"
+              underlined
+              labelPlaceholder="Address"
+              placeholder="Flat no, Lift floor, House no, Road no, Block, Area
 "
-          fullWidth
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-        />
-        <span className="h4info_akm">
-          Our service is currently available only in{" "}
-          <span className="font-bold">Bashundhara R/A</span>. We’re expanding
-          across Dhaka soon and will notify you once we reach your area. Kindly
-          provide your address to receive updates.
-        </span>
+              fullWidth
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+
+            {!loadingUser &&
+              (formData.userLatitude && formData.userLongitude ? (
+                <ReverseGeocodingMap
+                  initialLat={parseFloat(formData.userLatitude)}
+                  initialLon={parseFloat(formData.userLongitude)}
+                  onAddressChange={handleAddressChange}
+                  mapClicked={setMapClicked}
+                  mapRef={mapRef}
+                />
+              ) : (
+                <GeolocationTracker
+                  useGoogleAPI={true}
+                  onGeoLocationUpdate={handleGeoLocationUpdate}
+                />
+              ))}
+
+            <Spacer y={4} />
+          </div>
+          <div className="lg:w-1/2">
+            {" "}
+            <div
+              ref={mapRef}
+              className="w-full mb-6 border-gray-300 rounded-lg h-96 border-1"
+            />
+          </div>
+        </div>
+
         <Spacer y={4} />
 
         <div>
@@ -266,12 +317,8 @@ const ProfileForm = () => {
 
         <Spacer y={3} />
 
-        <div>
-          <div></div>
-          <div></div>
-        </div>
         <Button type="submit" size="lg">
-          Save
+          Update Profile
         </Button>
       </form>
     </>

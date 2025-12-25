@@ -1,17 +1,7 @@
 import React from "react";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 
-import {
-  Button,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@nextui-org/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBox } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "../contexts/UserContext";
 
 const MealboxNavTop = () => {

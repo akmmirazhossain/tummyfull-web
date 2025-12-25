@@ -1,6 +1,7 @@
+// pages/contexts/UserContext.js
+
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { ApiContext } from "./ApiContext";
 import Cookies from "js-cookie"; // Import js-cookie to check for cookies
 
 const UserContext = createContext();
@@ -10,35 +11,34 @@ export function useUser() {
 }
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Store user data
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const apiConfig = useContext(ApiContext); // Consume the ApiConfig
+  const [loginToken, setLoginToken] = useState(null);
 
   // Fetch user data from the API
   const fetchUserData = async () => {
-    if (!apiConfig) {
-      setError("API config is not loaded");
-      setLoading(false);
-      return;
-    }
+    const loginToken = Cookies.get("TFLoginToken"); // Check for the TFLoginToken cookie
 
-    const token = Cookies.get("TFLoginToken"); // Check for the TFLoginToken cookie
-    if (!token) {
+    if (!loginToken) {
       setError("No login token found");
-      setLoading(false);
+      setLoadingUser(false);
       return; // Do not proceed if the token is missing
     }
+    setLoginToken(loginToken);
 
     try {
-      const response = await axios.get(`${apiConfig.apiBaseUrl}user-fetch`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request header
-        },
-      });
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/user-fetch`,
+        {
+          params: {
+            loginToken: loginToken, // send token as query param
+          },
+        }
+      );
       setUser(response.data);
+      // console.log("🚀 ~ fetchUserData ~ response.data:", response.data);
 
       if (response.data != null) {
         setIsLoggedIn(true);
@@ -46,15 +46,13 @@ export const UserProvider = ({ children }) => {
     } catch (err) {
       setError(err);
     } finally {
-      setLoading(false);
+      setLoadingUser(false);
     }
   };
 
   useEffect(() => {
-    if (apiConfig) {
-      fetchUserData(); // Fetch user data if apiConfig is available
-    }
-  }, [apiConfig]); // Run when apiConfig changes
+    fetchUserData();
+  }, []);
 
   const refreshUser = async () => {
     fetchUserData();
@@ -62,7 +60,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, loading, error, isLoggedIn, refreshUser }}
+      value={{ user, loadingUser, error, isLoggedIn, refreshUser, loginToken }}
     >
       {children}
     </UserContext.Provider>

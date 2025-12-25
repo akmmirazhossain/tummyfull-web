@@ -3,24 +3,16 @@ import Link from "next/link";
 import Image from "next/image";
 import NotificationBell from "./NotificationBell";
 import MealboxNavTop from "./MealboxNavTop";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUtensils,
-  faRightToBracket,
-  faGear,
-  faEllipsisVertical,
-} from "@fortawesome/free-solid-svg-icons";
-import { Button } from "@nextui-org/react";
 
 import { ApiContext } from "../contexts/ApiContext";
-import { useUser } from "../contexts/UserContext";
+// import { useUser } from "../contexts/UserContext";
 import WalletCredit from "./WalletCredit";
 
 const NavbarTop = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [userData, setUserData] = useState(null);
   // const [isLoading, setIsLoading] = useState(true);
-  const { user, loading, error, isLoggedIn, refreshUser } = useUser();
+  // const { user, loading, error, isLoggedIn, refreshUser } = useUser();
 
   const apiConfig = useContext(ApiContext);
   // const token = Cookies.get("TFLoginToken");
@@ -81,11 +73,11 @@ const NavbarTop = () => {
   ];
 
   return (
-    <header className="bg_beige text-black shadow_akm">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-6">
-        <div className="flex justify-between items-center py-2  ">
+    <header className="text-black bg_beige shadow_akm">
+      <div className="max-w-5xl px-4 mx-auto sm:px-6 lg:px-6">
+        <div className="flex items-center justify-between py-2 ">
           {/* Puzzler */}
-          <div className="flex justify-start items-center ">
+          <div className="flex items-center justify-start ">
             <Image
               className="mr-1"
               width={50}
@@ -102,14 +94,14 @@ const NavbarTop = () => {
                 }
               }}
             >
-              <p className="font-niljannati text-2xl">ডালভাত.com</p>
+              <p className="text-2xl font-niljannati">ডালভাত.com</p>
             </Link>
           </div>
-          <nav className="hidden md:flex space-x-6 pr-6">
+          <nav className="hidden pr-6 space-x-6 md:flex">
             {/* Replace with your menu items */}
             {navbarItems.map((item) => (
               <Link key={item.text} href={item.href}>
-                <div className="gap-2  flex justify-center items-center">
+                <div className="flex items-center justify-center gap-2">
                   <FontAwesomeIcon icon={item.icon} />
                   {item.text}
                 </div>
@@ -121,7 +113,7 @@ const NavbarTop = () => {
             {!isLoggedIn && !loading && (
               <Link
                 href="/login"
-                className="gap-2  flex justify-center items-center"
+                className="flex items-center justify-center gap-2"
               >
                 <FontAwesomeIcon icon={faRightToBracket} />
                 Login
@@ -141,7 +133,7 @@ const NavbarTop = () => {
                 {/* <Link
                   onClick={handleLogout}
                   href="/"
-                  className="gap-2 flex justify-center items-center"
+                  className="flex items-center justify-center gap-2"
                 >
                   <FontAwesomeIcon icon={faRightFromBracket} />
                   Logout

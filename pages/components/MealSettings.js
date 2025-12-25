@@ -1,26 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import {
-  Image,
-  Switch,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Spinner,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "@nextui-org/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoneyBill } from "@fortawesome/free-solid-svg-icons";
+import DoorstepDrop from "./meal/DoorstepDrop";
+
 import axios from "axios";
 import { useNotification } from "../contexts/NotificationContext";
 import { ApiContext } from "../contexts/ApiContext";
-import { useUser } from "../contexts/UserContext"; // Adjust the path
+import { useUser } from "../contexts/UserContext";
+import { useSettings } from "../contexts/SettingContext";
+import { useSnackbar } from "./ui/Snackbar";
 
 const MealSettings = () => {
   const [isOn, setIsOn] = useState(false);
@@ -29,76 +17,108 @@ const MealSettings = () => {
   const [pendingDeactivation, setPendingDeactivation] = useState(false);
 
   const [userData, setUserData] = useState(null);
-  const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const apiConfig = useContext(ApiContext);
-  const { refreshUser } = useUser();
+  const { user, loadingUser, error, isLoggedIn, refreshUser, loginToken } =
+    useUser();
+  const { settings, loadingSettings } = useSettings();
 
-  const [config, setConfig] = useState(null);
   const { shakeBell, notifLoadTrigger } = useNotification();
   const [showEnforceMessage, setShowEnforceMessage] = useState(false);
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
 
+  //
   useEffect(() => {
-    setConfig("");
-  }, []);
+    if (router.isReady) {
+      if (
+        "rechargeWallet" in router.query ||
+        "mealboxEnforceLimit" in router.query
+      ) {
+        setShowEnforceMessage(true);
 
-  useEffect(() => {
-    if (router.isReady && "rechargeWallet" in router.query) {
-      setShowEnforceMessage(true);
+        // Scroll to the mealbox section if hash is present
+        if (router.asPath.includes("#mealbox")) {
+          setTimeout(() => {
+            const element = document.getElementById("mealbox");
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }, 100);
+        }
+      }
     }
-  }, [router.isReady, router.query]);
+  }, [router.isReady, router.query, router.asPath]);
+
+  useEffect(() => {
+    if (!loadingUser) {
+      if (user?.data) {
+        setUserData({
+          mealboxHas: user.data.mrd_user_has_mealbox,
+          mealboxPaid: user.data.mrd_user_mealbox_paid,
+        });
+
+        setIsOn(user.data.mrd_user_mealbox);
+      }
+    }
+
+    if (!loadingSettings) {
+      if (settings?.data) {
+        setSettings(settings);
+      }
+    }
+  }, [user, loadingUser, settings, loadingSettings]);
 
   //MARK: FETCH USER
-  const fetchUserData = async () => {
-    if (!apiConfig) return;
-    const token = Cookies.get("TFLoginToken");
-    try {
-      const resUserData = await axios.get(`${apiConfig.apiBaseUrl}user-fetch`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const mealboxStatus = resUserData.data.data.mrd_user_mealbox;
+  // const fetchUserData = async () => {
+  //   if (!apiConfig) return;
+  //   const token = Cookies.get("TFLoginToken");
+  //   try {
+  //     const resUserData = await axios.get(`${apiConfig.apiBaseUrl}user-fetch`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     const mealboxStatus = resUserData.data.data.mrd_user_mealbox;
 
-      setUserData(resUserData.data.data);
-      setLoading(false);
-      setIsOn(mealboxStatus);
-    } catch (error) {
-      console.error("fetchUserData -> API Error:", error);
-      setLoading(false);
-    }
-  };
+  //     setUserData(resUserData.data.data);
+  //     setLoading(false);
+  //     setIsOn(mealboxStatus);
+  //   } catch (error) {
+  //     console.error("fetchUserData -> API Error:", error);
+  //     setLoading(false);
+  //   }
+  // };
 
   //MARK: FETCH SETTINGS
-  const fetchSettings = async () => {
-    if (!apiConfig) return;
+  // const fetchSettings = async () => {
+  //   if (!apiConfig) return;
 
-    try {
-      const resSettings = await axios.get(`${apiConfig.apiBaseUrl}setting`);
+  //   try {
+  //     const resSettings = await axios.get(`${apiConfig.apiBaseUrl}setting`);
 
-      setSettings(resSettings.data);
-    } catch (error) {
-      console.error("fetchSettings -> API Error:", error);
-      setLoading(false);
-    }
-  };
+  //     setSettings(resSettings.data);
+  //   } catch (error) {
+  //     console.error("fetchSettings -> API Error:", error);
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible" && apiConfig) {
-        fetchSettings();
-        fetchUserData();
-      }
-    };
+  // useEffect(() => {
+  //   const handleVisibilityChange = () => {
+  //     if (document.visibilityState === "visible" && apiConfig) {
+  //       fetchSettings();
+  //       fetchUserData();
+  //     }
+  //   };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () =>
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [apiConfig]);
+  //   document.addEventListener("visibilitychange", handleVisibilityChange);
+  //   return () =>
+  //     document.removeEventListener("visibilitychange", handleVisibilityChange);
+  // }, [apiConfig]);
 
-  useEffect(() => {
-    fetchSettings();
-    fetchUserData();
-  }, [apiConfig]);
+  // useEffect(() => {
+  //   fetchSettings();
+  //   fetchUserData();
+  // }, [apiConfig]);
 
   //MARK: mealboxSw
   const handleSwitchChange = (value) => {
@@ -127,40 +147,40 @@ const MealSettings = () => {
   };
 
   const mealboxSwitchChange = async (value) => {
+    console.log("MealSettings.js -> MBOX SWTICH");
     shakeBell();
     notifLoadTrigger();
-
     setIsOn(value);
-
-    if (value == true) {
-      setPopOverOpen(true);
-      setTimeout(() => {
-        setPopOverOpen(false);
-      }, 10000);
-    } else {
-      setPopOverOpen(false);
-    }
 
     try {
       const response = await axios.post(
         `${apiConfig.apiBaseUrl}mealbox-switch`,
         {
           switchValue: value,
-          TFLoginToken: Cookies.get("TFLoginToken"),
+          loginToken: Cookies.get("TFLoginToken"),
         }
       );
       console.log("Mealbox:", response.data);
+
+      if (value) {
+        showSnackbar(
+          "Mealbox swap activated. Future meals will be delivered in mealboxes.",
+          "success"
+        );
+      } else {
+        showSnackbar("Mealbox deactivated", "warning");
+      }
     } catch (error) {
       console.error("mealboxSwitchChange -> API Error:", error);
     }
-    fetchUserData();
+
     refreshUser();
   };
 
   return (
     <>
       <div className="h1_akm">Meal Settings</div>
-      <div className="card_akm p-8">
+      <div className="p-8 card_akm">
         <div>
           {" "}
           {showEnforceMessage && (
@@ -169,7 +189,7 @@ const MealSettings = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                className="h-6 w-6 shrink-0 stroke-current"
+                className="w-6 h-6 stroke-current shrink-0"
               >
                 <path
                   strokeLinecap="round"
@@ -189,39 +209,21 @@ const MealSettings = () => {
           <div className="flex items-center ">
             <div className="h2_akm">
               Activate mealbox swap
-              <span className="ml-2 font-normal text-xl">
-                (৳{settings && <>{settings.mealbox_price})</>}
+              <span className="ml-2 text-xl font-normal">
+                (৳{settings && <>{settings.settingMealboxPrice})</>}
               </span>
             </div>
           </div>
-          <div className=" flex items-center gap-2">
-            <Popover
-              color="foreground"
-              isOpen={popOverOpen}
-              offset={26}
-              crossOffset={22}
-            >
-              <PopoverTrigger>
-                <Switch
-                  //MARK: MEALBOX SW
-                  isSelected={isOn}
-                  size="lg"
-                  color="success"
-                  onValueChange={handleSwitchChange}
-                ></Switch>
-              </PopoverTrigger>
-              <PopoverContent className="w-64 ">
-                <div className="px-1 py-2">
-                  <div className="text-small font-bold">Mealbox activated!</div>
-                  <div className="text-tiny">
-                    Your upcoming meals will be delivered in a mealbox.
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+          <div className="flex items-center gap-2 ">
+            <Switch
+              //MARK: MEALBOX SW
+              isSelected={isOn}
+              size="lg"
+              color="success"
+              onValueChange={handleSwitchChange}
+            ></Switch>
           </div>
         </div>
-
         <div className="flex flex-col gap_akm">
           <div className="mt_akm">
             <p>
@@ -232,11 +234,13 @@ const MealSettings = () => {
 
             <p>
               If you deactivate the mealbox at any time,{" "}
-              <span className="font-bold">৳{settings?.mealbox_price}</span> will
-              be refunded.
+              <span className="font-bold">
+                ৳{settings?.settingMealboxPrice}
+              </span>{" "}
+              will be refunded.
             </p>
           </div>
-          <div className=" flex flex-col gap_akm">
+          <div className="flex flex-col gap_akm">
             <div className="flex gap_akm items-center bg-[#cce8cd] h4_akm py-2 px-4  rounded_akm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -246,9 +250,9 @@ const MealSettings = () => {
               >
                 <path d="M312-240h338l19-280H292l20 280Zm-26-360h389l3-50-112-110H394L282-650l4 50Zm-76 68L80-662l56-56 64 64-2-24 162-162h240l162 162-2 24 64-64 56 56-130 130H210Zm28 372-28-372h540l-28 372H238Zm242-440Zm1 80Z" />
               </svg>
-              {typeof userData?.mrd_user_has_mealbox === "number" ? (
-                `You have ${userData.mrd_user_has_mealbox} mealbox${
-                  userData.mrd_user_has_mealbox !== 1 ? "es" : ""
+              {typeof userData?.mealboxHas === "number" ? (
+                `You have ${userData.mealboxHas} mealbox${
+                  userData.mealboxHas !== 1 ? "es" : ""
                 } with you.`
               ) : (
                 <Spinner size="sm" />
@@ -270,7 +274,7 @@ const MealSettings = () => {
             </div>
             <div className="col-span-5 md:col-span-3">
               <p className="h3_akm pt_akm md:pt-0">Why choose a mealbox?</p>
-              <ul className="list-disc p-4">
+              <ul className="p-4 list-disc">
                 <li>
                   A healthier alternative to single-use plastic containers.
                 </li>
@@ -278,13 +282,18 @@ const MealSettings = () => {
                 <li>Simple, clean, and ready to eat.</li>
                 <li>Less plastic in landfills. Better for the planet.</li>
                 {/* <li>
-                  A refund of ৳{settings && <>{settings.mealbox_price}</>} is
+                  A refund of ৳{settings && <>{settings.settingMealboxPrice}</>} is
                   available if you deactivate the mealbox at any time.
                 </li> */}
               </ul>
             </div>
           </div>
         </div>
+
+        {/* <Divider className="my_akm" />
+        <div>
+          <DoorstepDrop />
+        </div> */}
       </div>
 
       {/* Confirmation Modal for Deactivation */}

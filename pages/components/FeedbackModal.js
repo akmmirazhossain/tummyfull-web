@@ -1,12 +1,10 @@
 // components/FeedbackModal
 
 import React, { useState, useContext, useEffect } from "react";
-import { Skeleton } from "@nextui-org/react";
 
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
-import { Rating } from "@mui/material";
 
 export default function FeedbackModal({
   isOpen,
@@ -18,6 +16,18 @@ export default function FeedbackModal({
   const apiConfig = useContext(ApiContext);
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
+
+  const initialTags = [
+    "Too spicy",
+    "Too oily",
+    "Bland taste",
+    "Delivery delay",
+    "Less salt",
+    "Portion small",
+    "Cold when delivered",
+    "Loved it!❤️",
+  ];
+  const [tags, setTags] = useState(initialTags);
 
   const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -82,19 +92,19 @@ export default function FeedbackModal({
 
   if (!isOpen) return null;
   return (
-    <div className="modal modal-open z-30" onClick={onClose}>
+    <div className="z-30 modal modal-open" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        <h3 className="font-bold text-lg mb-2">{message}</h3>
+        <h3 className="mb-2 text-lg font-bold">{message}</h3>
         <p className="">How would you rate this meal?</p>
 
         {/* Rating stars */}
-        <div className="min-h-40 flex items-center justify-center">
+        <div className="flex items-center justify-center min-h-40">
           {loading ? (
             <span className="loading loading-bars loading-xl text_green"></span>
           ) : (
             <div className="flex flex-col w-full">
               {ratingError && (
-                <span className="text_green h4_akm mt-1">
+                <span className="mt-1 text_green h4_akm">
                   Please provide a rating.
                 </span>
               )}
@@ -108,8 +118,31 @@ export default function FeedbackModal({
                 required
                 max={5}
               />
+
+              <div className="flex flex-wrap gap-2 mt-4">
+                {tags.map((tag, index) => (
+                  <Chip
+                    key={index}
+                    variant="flat"
+                    className="cursor-pointer bg_green text_white"
+                    onClick={() => {
+                      if (!feedback.includes(tag)) {
+                        setFeedback((prev) =>
+                          prev.length > 0 ? `${prev}, ${tag}` : tag
+                        );
+                      }
+                    }}
+                    // onClose={() => {
+                    //   setTags(tags.filter((t) => t !== tag));
+                    // }}
+                  >
+                    {tag}
+                  </Chip>
+                ))}
+              </div>
+
               <textarea
-                className="textarea textarea-bordered w-full mt-4 text-base"
+                className="w-full mt-4 text-base textarea textarea-bordered"
                 rows={3}
                 placeholder="Leave a comment (optional)"
                 value={feedback}
@@ -122,9 +155,10 @@ export default function FeedbackModal({
         <div>
           {" "}
           {successMsg && (
-            <div className="mt-4 text_green font-bold">{successMsg}</div>
+            <div className="mt-4 font-bold text_green">{successMsg}</div>
           )}
         </div>
+        <div></div>
         <div className="modal-action">
           <button
             className="btn btn-secondary"

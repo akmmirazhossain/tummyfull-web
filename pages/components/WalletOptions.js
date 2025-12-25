@@ -2,14 +2,8 @@ import { React, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { ApiContext } from "../contexts/ApiContext";
-import { Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import WalletCredit from "./WalletCredit";
-
-import { Button } from "@nextui-org/react";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const CreditDisplay = () => {
   // const apiConfig = useContext(ApiContext);
@@ -33,7 +27,7 @@ const CreditDisplay = () => {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            className="h-6 w-6 shrink-0 stroke-current"
+            className="w-6 h-6 stroke-current shrink-0"
           >
             <path
               strokeLinecap="round"
@@ -49,7 +43,7 @@ const CreditDisplay = () => {
           </span>
         </div>
       )}
-      <div className="card_akm   p-8 flex items-center justify-between">
+      <div className="flex items-center justify-between p-8 card_akm">
         <div className="flex flex-col items-start justify-start">
           <div className="h3_akm">Current credit</div>
           <span className="h2_akm">
@@ -63,7 +57,7 @@ const CreditDisplay = () => {
       </div>
 
       <div className="h1_akm ">Recharge Wallet</div>
-      <div className="card_akm  p-8">
+      <div className="p-8 card_akm">
         <div className="">
           We accept cash on delivery and MFS payments. To simplify regular
           payments, you can periodically recharge your wallet. If your wallet
@@ -72,7 +66,7 @@ const CreditDisplay = () => {
         </div>
 
         <div className=" mt_akm py_akm h2_akm">Steps to recharge wallet:</div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div>
             <div>
               <Image
@@ -167,7 +161,7 @@ const CreditDisplay = () => {
             </div>
           </div>
         </div>
-        <p className="h3_akm font-semibold">
+        <p className="font-semibold h3_akm">
           Note: We will recharge your wallet within one hour of receiving the
           money.
         </p>

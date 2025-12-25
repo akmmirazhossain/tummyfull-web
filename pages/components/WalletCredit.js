@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
 import { useUser } from "../contexts/UserContext";
 
 export default function WalletCredit() {

@@ -1,18 +1,7 @@
 //components/NotificationBell.js
 
 import React, { useRef, useEffect, useState, useContext } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { faStar } from "@fortawesome/free-regular-svg-icons";
-import {
-  Button,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@nextui-org/react";
 
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Link from "next/link";
 import { useNotification } from "../contexts/NotificationContext";
 import Cookies from "js-cookie";
@@ -156,7 +145,7 @@ const NotificationBell = () => {
             </Badge>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="flex justify-start items-start text_black text-left max-w-80 min-w-72">
+        <PopoverContent className="flex items-start justify-start text-left text_black max-w-80 min-w-72">
           {notif && notif.notifications.length > 0 ? (
             <div className="">
               {notif.notifications.slice(0, 5).map((notification, index) => (
@@ -177,7 +166,7 @@ const NotificationBell = () => {
                     {formatNotificationDate(notification.mrd_notif_date_added)}
                   </p>
                   <div className="flex items-center gap_akm">
-                    {notification.mrd_notif_type == "order" &&
+                    {notification.mrd_notif_category == "order" &&
                       notification.mrd_notif_action == "payment" && (
                         <Link href={"/wallet"}>
                           <p className="text-xs">Recharge wallet</p>
@@ -202,7 +191,7 @@ const NotificationBell = () => {
                       </p>
                     )}
 
-                    {notification.mrd_notif_type == "order" &&
+                    {notification.mrd_notif_category == "order" &&
                       notification.mrd_notif_action == "delivery" && (
                         <FontAwesomeIcon
                           onClick={() => {
@@ -223,14 +212,14 @@ const NotificationBell = () => {
               ))}
               {notif.notifications.length > 5 && (
                 <Link href={"/notification"}>
-                  <div className="h4info_akm text-center pad_akm">
+                  <div className="text-center h4info_akm pad_akm">
                     Show all notifications
                   </div>
                 </Link>
               )}
             </div>
           ) : (
-            <div className="text-sm text-gray-500 p-3">
+            <div className="p-3 text-sm text-gray-500">
               You have no notifications yet.
             </div>
           )}
